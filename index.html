@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2563eb">
+<meta name="description" content="Python3エンジニア認定基礎試験向け 1対1対応ドリル">
+<title>Python ペアドリル</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Python ペアドリル</h1>
+  <button id="theme-toggle" class="btn-icon" aria-label="テーマ切替">🌙</button>
+</header>
+<main>
+  <section id="home-screen" class="screen active">
+    <div class="card">
+      <h2>1問1答クイズ</h2>
+      <p class="lead">1対1対応の文法・用語を4択でドリル</p>
+
+      <div class="stats">
+        <div class="stat"><span class="stat-label">ベスト</span><span id="best-score">-</span></div>
+        <div class="stat"><span class="stat-label">挑戦回数</span><span id="attempt-count">0</span></div>
+        <div class="stat"><span class="stat-label">問題数</span><span id="total-questions">-</span></div>
+      </div>
+
+      <div class="form-group">
+        <label>出題数</label>
+        <div class="segmented" id="count-select">
+          <button data-count="10" class="active">10問</button>
+          <button data-count="20">20問</button>
+          <button data-count="0">全問</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>カテゴリ</label>
+        <div id="category-filter" class="chips"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="weak-mode">
+          <span>弱点優先モード（間違えた問題を多めに出す）</span>
+        </label>
+      </div>
+
+      <button class="btn-primary" id="start-btn">スタート</button>
+      <button class="btn-secondary" id="stats-btn">統計を見る</button>
+    </div>
+  </section>
+
+  <section id="quiz-screen" class="screen">
+    <div class="quiz-header">
+      <button id="quit-btn" class="btn-icon" aria-label="中断">✕</button>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+    <div class="quiz-meta">
+      <span class="meta-item"><span class="meta-label">問</span><span id="quiz-progress">0/0</span></span>
+      <span class="meta-item"><span class="meta-label">正解</span><span id="quiz-score">0</span></span>
+      <span class="meta-item"><span class="meta-label">連続</span><span id="quiz-streak">0</span></span>
+    </div>
+    <div class="card quiz-card">
+      <div class="category-tag" id="quiz-category"></div>
+      <h2 class="question-text" id="question-text"></h2>
+      <div class="choices" id="choices"></div>
+      <div class="feedback" id="feedback" hidden>
+        <div class="feedback-result" id="feedback-result"></div>
+        <div class="feedback-explanation" id="feedback-explanation"></div>
+        <button class="btn-primary" id="next-btn">次へ</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="result-screen" class="screen">
+    <div class="card">
+      <h2 id="result-title">結果</h2>
+      <div class="result-score">
+        <div class="big-score" id="big-score">0/0</div>
+        <div class="score-rate" id="score-rate">0%</div>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="stat-label">正解</span><span id="result-correct">0</span></div>
+        <div class="stat"><span class="stat-label">不正解</span><span id="result-wrong">0</span></div>
+        <div class="stat"><span class="stat-label">最大連続</span><span id="result-best-streak">0</span></div>
+        <div class="stat"><span class="stat-label">時間</span><span id="result-time">0:00</span></div>
+      </div>
+
+      <div id="wrong-section">
+        <h3>間違えた問題</h3>
+        <div id="wrong-list"></div>
+      </div>
+
+      <button class="btn-primary" id="retry-wrong-btn">間違えた問題だけ再挑戦</button>
+      <button class="btn-secondary" id="retry-all-btn">同じ条件でもう一度</button>
+      <button class="btn-secondary" id="home-btn">ホームへ</button>
+    </div>
+  </section>
+
+  <section id="stats-screen" class="screen">
+    <div class="card">
+      <h2>統計</h2>
+      <div class="stats">
+        <div class="stat"><span class="stat-label">総挑戦</span><span id="total-attempts">0</span></div>
+        <div class="stat"><span class="stat-label">総正答率</span><span id="overall-rate">-</span></div>
+        <div class="stat"><span class="stat-label">直近5回平均</span><span id="recent-rate">-</span></div>
+      </div>
+
+      <h3>問題別正答率（低い順）</h3>
+      <div id="question-stats"></div>
+
+      <h3>挑戦履歴（直近10件）</h3>
+      <div id="history-list"></div>
+
+      <button class="btn-secondary danger" id="reset-stats-btn">統計をリセット</button>
+      <button class="btn-secondary" id="stats-back-btn">戻る</button>
+    </div>
+  </section>
+</main>
+<footer>
+  <small>Python ペアドリル · <a href="https://github.com/tatsunoritojo/python-pair-drill" target="_blank" rel="noopener">GitHub</a></small>
+</footer>
+<script src="questions.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
