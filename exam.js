@@ -94,10 +94,9 @@ function renderExamList() {
     fetch(e.file).then(r => r.json()).then(data => {
       const btn = el.querySelector(`[data-id="${e.id}"]`);
       const total = data.questions.length;
-      const past = data.result;
       btn.innerHTML = `
         <span class="exam-title">${data.title}</span>
-        <span class="exam-meta">${total}問 · 過去成績 ${past.correct}/${past.total}</span>
+        <span class="exam-meta">${total}問</span>
       `;
     }).catch(err => {
       const btn = el.querySelector(`[data-id="${e.id}"]`);

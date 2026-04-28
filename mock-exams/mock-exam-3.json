@@ -2,14 +2,6 @@
   "id": "mock-exam-3",
   "title": "模擬演習3",
   "source": "Python3エンジニア認定基礎試験 模擬演習3",
-  "attempt_date": "2026-04-27",
-  "result": {
-    "correct": 20,
-    "incorrect": 13,
-    "unanswered": 7,
-    "total": 40,
-    "note": "27日に出先で実施、時間切れにより問34以降は未回答"
-  },
   "questions": [
     {
       "no": 1,
@@ -23,8 +15,6 @@
         "Pythonはコンパイルが不要な言語であるため、プログラム開発に必要な時間を短縮することができる"
       ],
       "correct_index": 0,
-      "user_answer_index": 0,
-      "user_result": "correct",
       "explanation": "PythonはWindows、Mac OS X、UNIXなど様々なOSで動作する。インタープリタは逐次解釈実行。データ分析にはNumPy/Pandas/Matplotlib等が豊富。コンパイル不要なため開発時間が短いが実行速度は遅め。"
     },
     {
@@ -39,8 +29,6 @@
         "Pythonのソースファイルは、デフォルトでUTF-8でエンコードされているものとして扱われる"
       ],
       "correct_index": 1,
-      "user_answer_index": 1,
-      "user_result": "correct",
       "explanation": "一次プロンプトは「>>>」、二次プロンプトは「...」。一次は通常コマンド入力用、二次は複数行文の入力用。"
     },
     {
@@ -56,8 +44,6 @@
         "c: 7 d: 11"
       ],
       "correct_index": 2,
-      "user_answer_index": 2,
-      "user_result": "correct",
       "explanation": "演算子優先順位: () > ** > *,/,//,% > +,-。c=(3+2)*2-3=7, d=3**2+5=14。"
     },
     {
@@ -73,8 +59,6 @@
         "エラーになる"
       ],
       "correct_index": 2,
-      "user_answer_index": 2,
-      "user_result": "correct",
       "explanation": "\\' でシングルクォート自体を文字として扱える。エスケープ後の出力は It's my 'car'。"
     },
     {
@@ -89,8 +73,6 @@
         "\"python'"
       ],
       "correct_index": 3,
-      "user_answer_index": 3,
-      "user_result": "correct",
       "explanation": "開始と終了のクォートは一致が必要。\"python' は不一致でエラー。"
     },
     {
@@ -106,8 +88,6 @@
         "エラーになる"
       ],
       "correct_index": 0,
-      "user_answer_index": 0,
-      "user_result": "correct",
       "explanation": "文字列リテラル同士はスペース区切りで自動連結（'edo' 'heisei' → 'edoheisei'）。変数と文字列の連結には + が必須。"
     },
     {
@@ -122,8 +102,6 @@
         "print()関数は、文字列中のエスケープシーケンスを解釈して、それぞれの特殊な意味を持つ動作として出力する"
       ],
       "correct_index": 1,
-      "user_answer_index": 1,
-      "user_result": "correct",
       "explanation": "文字列はイミュータブルだが、スライス（切り出し）は可能。スライスは新しい文字列を返すだけで元を変更しない。"
     },
     {
@@ -139,8 +117,6 @@
         "エラーになる"
       ],
       "correct_index": 1,
-      "user_answer_index": 1,
-      "user_result": "correct",
       "explanation": "スライス代入は範囲を別リストで置換できる（長さが違ってもOK）。num[5:8]=[11,12] で要素3つを2つに置換、num[:]=[] は中身を全消去（idは保持）。"
     },
     {
@@ -156,8 +132,6 @@
         "4 / 7 1 / 1"
       ],
       "correct_index": 3,
-      "user_answer_index": 3,
-      "user_result": "correct",
       "explanation": "len() はトップレベルの要素数のみ数える（ネストの中身は数えない）。num は4要素、score は1要素。"
     },
     {
@@ -173,8 +147,6 @@
         "orange / apple / lemon"
       ],
       "correct_index": 2,
-      "user_answer_index": 2,
-      "user_result": "correct",
       "explanation": "end=\",\" は print の末尾を改行からカンマに変える。各反復でカンマが追加されるので末尾にもカンマが残る。"
     },
     {
@@ -190,8 +162,6 @@
         "エラーが発生する"
       ],
       "correct_index": 1,
-      "user_answer_index": 1,
-      "user_result": "correct",
       "explanation": "range(start, stop, step) は start を含み stop を含まない。range(-3, -13, -3) は -3, -6, -9, -12。"
     },
     {
@@ -207,8 +177,6 @@
         "apple water / apple coffee / orange water / orange coffee"
       ],
       "correct_index": 3,
-      "user_answer_index": 3,
-      "user_result": "correct",
       "explanation": "ネストfor: 外側1反復ごとに内側が全反復。apple×{water,coffee} → orange×{water,coffee}。"
     },
     {
@@ -224,8 +192,6 @@
         "1"
       ],
       "correct_index": 1,
-      "user_answer_index": 1,
-      "user_result": "correct",
       "explanation": "return がない関数は None を返す。pass は何もしないだけ。print は None をそのまま出力する。"
     },
     {
@@ -241,8 +207,6 @@
         "[1, 2, 3]"
       ],
       "correct_index": 3,
-      "user_answer_index": 3,
-      "user_result": "correct",
       "explanation": "デフォルト引数の落とし穴: 既定値のリストは関数定義時に1度だけ作られ、呼び出し間で共有される。3回目までに [1,2,3] が蓄積される。"
     },
     {
@@ -258,8 +222,6 @@
         "aとbにキーワード引数として値を渡すとエラーが発生してしまう"
       ],
       "correct_index": 1,
-      "user_answer_index": 1,
-      "user_result": "correct",
       "explanation": "/ より前 = 位置のみ、* より後 = キーワードのみ、間 = どちらでもOK。c は両方可。"
     },
     {
@@ -275,8 +237,6 @@
         "name : Yamada / job : デザイナー / age : 18"
       ],
       "correct_index": 3,
-      "user_answer_index": 2,
-      "user_result": "incorrect",
       "explanation": "for kw in kwargs はキーを反復する（dict をループするとキーが出る）。kwargs[kw] が値。出力は「キー : 値」の順。"
     },
     {
@@ -291,8 +251,6 @@
         "def test(a: int=18):\\n  pass"
       ],
       "correct_index": 0,
-      "user_answer_index": 1,
-      "user_result": "incorrect",
       "explanation": "戻り値注釈は -> （矢印）。=> は使わない。引数注釈は引数名:型、デフォルト値は型の後ろに =値。"
     },
     {
@@ -307,8 +265,6 @@
         "引数のアノテーションは引数名の後ろに「:」を置き、その後に設定する"
       ],
       "correct_index": 0,
-      "user_answer_index": 3,
-      "user_result": "incorrect",
       "explanation": "Python本体に型チェック機能はない。アノテーションは情報として __annotations__ に入るだけで、実行時の型強制はしない（mypy 等の外部ツール任せ）。"
     },
     {
@@ -324,8 +280,6 @@
         "count(colors, 'red')"
       ],
       "correct_index": 1,
-      "user_answer_index": 0,
-      "user_result": "incorrect",
       "explanation": "count はリストのメソッドなので obj.count(x) の形。x は文字列ならクォート必須（'red'）。クォートなしの red は変数扱いされて NameError。"
     },
     {
@@ -341,8 +295,6 @@
         "numbers = [x ** 2 for x in range(5)]"
       ],
       "correct_index": 3,
-      "user_answer_index": 3,
-      "user_result": "correct",
       "explanation": "リスト内包表記の構文: [式 for 変数 in iterable]。"
     },
     {
@@ -358,8 +310,6 @@
         "[]"
       ],
       "correct_index": 0,
-      "user_answer_index": 3,
-      "user_result": "incorrect",
       "explanation": "colors[:] はコピーなのでループは元の4要素を最後まで回る。'black'(5字)で末尾blueを削除→先頭blackを挿入。'green'で末尾を削除→先頭greenを挿入。最終 ['green', 'black', 'red', 'black']。"
     },
     {
@@ -375,8 +325,6 @@
         "(\"ok\", [2, 2], [1, 3]) / (3, 5, 2, 3)"
       ],
       "correct_index": 0,
-      "user_answer_index": 1,
-      "user_result": "incorrect",
       "explanation": "タプルはイミュータブル（要素を差し替えられない）が、タプル内のミュータブル要素（リスト）の中身は変更可能。t_1[0][0]=... はリスト内の操作なのでOK、t_2[0]=... はタプル要素の差し替えなので TypeError。"
     },
     {
@@ -392,8 +340,6 @@
         "{'green', 'black'} / {'white', 'orange', 'green', 'black', 'red'} / {'orange', 'white', 'red'}"
       ],
       "correct_index": 2,
-      "user_answer_index": 2,
-      "user_result": "correct",
       "explanation": "集合演算: | 和集合、& 積集合、^ 対称差集合、- 差集合。"
     },
     {
@@ -409,8 +355,6 @@
         "{1: 1, 2: 3, 3: 5}"
       ],
       "correct_index": 3,
-      "user_answer_index": 0,
-      "user_result": "incorrect",
       "explanation": "辞書内包表記の構文: {キー: 値 for 変数 in iterable}。x*2-1 で x=1→1, x=2→3, x=3→5。"
     },
     {
@@ -426,8 +370,6 @@
         "Falseです"
       ],
       "correct_index": 0,
-      "user_answer_index": 0,
-      "user_result": "correct",
       "explanation": "2 not in a → True、10>5 and not 5>7 → True and not False → True and True → True。"
     },
     {
@@ -442,8 +384,6 @@
         "「from パッケージ import アイテム」の構文を使うとき、アイテムはパッケージのサブモジュールだけでなく、関数、クラス、変数など、パッケージで定義された名前でも指定することができる"
       ],
       "correct_index": 0,
-      "user_answer_index": 1,
-      "user_result": "incorrect",
       "explanation": "検索順序はビルトイン → sys.path のディレクトリ。シンボリックリンク自体は検索パスに含まれない。"
     },
     {
@@ -459,8 +399,6 @@
         "if __name__ == '__main__':\\n  test_print()"
       ],
       "correct_index": 3,
-      "user_answer_index": 2,
-      "user_result": "incorrect",
       "explanation": "スクリプトを直接実行すると __name__ に '__main__' が入る。インポート時はモジュール名が入る。これでスクリプト実行時のみ走るブロックを書ける。"
     },
     {
@@ -475,8 +413,6 @@
         "with open(\"file.txt\", \"r\") as file:\\n  data = f.read()"
       ],
       "correct_index": 2,
-      "user_answer_index": 0,
-      "user_result": "incorrect",
       "explanation": "ファイルを開く組み込み関数は open()（fileopen ではない）。as の後の名前が以降の参照名になる。"
     },
     {
@@ -492,8 +428,6 @@
         "NameError"
       ],
       "correct_index": 2,
-      "user_answer_index": 2,
-      "user_result": "correct",
       "explanation": "numbers[5] は IndexError。except (A, B) はタプルで複数捕捉可能。"
     },
     {
@@ -509,8 +443,6 @@
         "ValueError"
       ],
       "correct_index": 1,
-      "user_answer_index": 1,
-      "user_result": "correct",
       "explanation": "0除算で ZeroDivisionError 発生。Exception で捕捉、e を print するとメッセージ 'division by zero' が出る。"
     },
     {
@@ -526,8 +458,6 @@
         "「python」とプリントされ、プログラムが終了する"
       ],
       "correct_index": 1,
-      "user_answer_index": 0,
-      "user_result": "incorrect",
       "explanation": "raise が走った時点でその関数の以降の行は実行されない（'ruby' は出ない）。例外は呼び出し元 test1 の except で捕捉され 'php' が出る。"
     },
     {
@@ -542,8 +472,6 @@
         "例外インスタンスが生成されたとき、args属性に例外が発生したときに指定された引数が辞書として格納されている"
       ],
       "correct_index": 3,
-      "user_answer_index": 2,
-      "user_result": "incorrect",
       "explanation": "args は辞書ではなくタプル。raise NameError('a','b') の e.args は ('a', 'b')。"
     },
     {
@@ -559,8 +487,6 @@
         "3,4,2,2"
       ],
       "correct_index": 1,
-      "user_answer_index": 2,
-      "user_result": "incorrect",
       "explanation": "num（引数=ローカル）と self.num（属性）は別物。最初は num=4, self.num=3。再代入後 num=1, self.num=2。出力順は 4,3,1,2。"
     },
     {
@@ -576,8 +502,6 @@
         "Item.add_quantity(quantity)"
       ],
       "correct_index": 2,
-      "user_answer_index": null,
-      "user_result": "unanswered",
       "explanation": "基底クラスのメソッド呼び出しは super().method(args) または ClassName.method(self, args)。super は呼び出し付きで使う。super 形なら self を渡さない、クラス名形なら self を渡す。"
     },
     {
@@ -593,8 +517,6 @@
         "11 / 1 / 3.141592653589793 / 8.0"
       ],
       "correct_index": 0,
-      "user_answer_index": null,
-      "user_result": "unanswered",
       "explanation": "ceil 切り上げ、floor 切り捨て、pi 円周率、log(x, base) は底指定の対数。log(16, 2) = 4.0。"
     },
     {
@@ -610,8 +532,6 @@
         "mean / median / standard"
       ],
       "correct_index": 2,
-      "user_answer_index": null,
-      "user_result": "unanswered",
       "explanation": "平均は mean（average ではない）、中央値は median、分散は variance。"
     },
     {
@@ -626,8 +546,6 @@
         "urllib.request.urlopen()"
       ],
       "correct_index": 3,
-      "user_answer_index": null,
-      "user_result": "unanswered",
       "explanation": "urllib.request.urlopen(url) でリソースを取得。'open' ではなく 'urlopen'。"
     },
     {
@@ -642,8 +560,6 @@
         "from datetime / datetime.today()"
       ],
       "correct_index": 2,
-      "user_answer_index": null,
-      "user_result": "unanswered",
       "explanation": "datetime モジュールから datetime クラスをインポートし、datetime.now() で現在日時。date.today() は時刻なしの日付のみ。"
     },
     {
@@ -658,8 +574,6 @@
         "MyTemplate(Template) で delimiter='%' / t.substitute(name=\"Alice\")"
       ],
       "correct_index": 1,
-      "user_answer_index": null,
-      "user_result": "unanswered",
       "explanation": "substitute はキーワード引数で渡す（位置引数はNG）。safe_substitute は変数未定義でもエラーにならない（残す）。"
     },
     {
@@ -674,8 +588,6 @@
         "python3 directory -venv"
       ],
       "correct_index": 2,
-      "user_answer_index": null,
-      "user_result": "unanswered",
       "explanation": "python3 -m venv <name> で仮想環境を作成。-m はモジュールをスクリプト実行するオプション。"
     }
   ]
