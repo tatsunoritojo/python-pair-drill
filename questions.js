@@ -1127,6 +1127,68 @@ const QUESTIONS = [
     explanation: '`lst[:]` は浅いコピーを作る。ループ中に元の lst を変更しても、ループはコピー側を進むので影響を受けない。逆に `for x in lst:` で元を変更すると、ループ位置とインデックスがずれて挙動が壊れる。「破壊的に変更しながらループしたいときの定番」。',
   },
 
+  // ====== 試験本番で出た論点（次回受験向け補強）======
+  {
+    id: 'str-zfill', category: 'データ型',
+    question: '`"-3.14".zfill(7)` の結果は？',
+    choices: [
+      '"-003.14"',
+      '"0003.14"',
+      '"-0003.14"',
+      '"00-3.14"',
+    ],
+    correct: 0,
+    explanation: 'zfill は **符号を維持したまま** 右側にゼロを詰める。"-3.14" は5文字、幅7に揃えるため符号 `-` の後ろに `0` を2つ入れて `-003.14`（7文字）。よくある引っかけ: 「-」を末尾に含めて `"-0003.14"`（8文字）と勘違い、または符号を無視して `"00-3.14"` と書く。「符号は先頭固定、ゼロは符号と数値の間」と覚える。',
+  },
+  {
+    id: 'str-zfill-int', category: 'データ型',
+    question: '`(-5).zfill(3)` を実行するとどうなる？',
+    choices: [
+      'AttributeError（int に zfill メソッドはない）',
+      '"-05" が返る',
+      '"005" が返る',
+      '0',
+    ],
+    correct: 0,
+    explanation: 'zfill は **文字列メソッド** なので、int には呼べない。`str(-5).zfill(3)` のように先に文字列化する必要がある。「-5」を文字列にすると "-5"（2文字）、zfill(3) で "-05"（符号+0+5）。「数値→文字列→ゼロ埋め」の順を意識する。',
+  },
+  {
+    id: 'lib-freeze-tool', category: 'モジュール',
+    question: 'Python の freeze ツールの目的として正しいのは？',
+    choices: [
+      'Python インタープリタ本体とモジュールをまとめて単一の実行可能バイナリ化する',
+      'パッケージのバージョンを固定して requirements.txt に書き出す',
+      'モジュールを読み取り専用にして変更不可にする',
+      'プロセスを一時停止する',
+    ],
+    correct: 0,
+    explanation: 'freeze ツールは Python ソース配布に含まれ、Python インタープリタ＋必要なモジュールを単一の実行可能ファイルにする。Python が入っていない環境でもスクリプトを動かせる。同じ目的の外部ツールに PyInstaller / cx_Freeze / py2exe がある。「pip freeze」（パッケージ一覧の書き出し）とは別物なので混同に注意。',
+  },
+  {
+    id: 'ctrl-elif-else-diff', category: 'イテレーション',
+    question: 'Python の `elif` と `else` の違いとして正しいのは？',
+    choices: [
+      'elif は条件式を持ち何個でも書ける、else は条件なしで最後に1つだけ',
+      'elif と else は同じ意味で書き換え可能',
+      'elif は1個まで、else は何個でも書ける',
+      'elif も else も条件式が必須',
+    ],
+    correct: 0,
+    explanation: 'elif（else if の縮約）は **条件式を持つ追加分岐**で何個でも書ける。else は **条件なしのフォールバック**で最後に1つだけ（複数書くと SyntaxError）。上から順に判定し、最初に True になった分岐だけ実行される。「elif=条件あり複数、else=条件なし1個」と覚える。',
+  },
+  {
+    id: 'ctrl-else-position', category: 'イテレーション',
+    question: 'if / elif / else の順序として正しいのは？',
+    choices: [
+      'if → elif（複数可、省略可） → else（最後に1つ、省略可）',
+      'if → else → elif の順',
+      'else → if → elif の順',
+      'どの順序でもよい',
+    ],
+    correct: 0,
+    explanation: '必ず if が先頭、その後 elif（0個以上）、最後に else（0個か1個）。else を elif より前に置くと SyntaxError。else は「他のすべてが False だったとき」のフォールバックなので、論理的にも最後にしか置けない。',
+  },
+
   // ====== イテレーション（誤答癖④：境界の追跡）======
   {
     id: 'ctrl-loop-index-err', category: 'イテレーション',

@@ -172,6 +172,13 @@ const QUESTION_META = {
   'lib-math-log':             { difficulty: 'medium', concepts: ['guess'] },
   'exc-raise-handler-flow':   { difficulty: 'medium', concepts: ['boundary', 'implicit-rule'] },
   'list-shallow-copy-inloop': { difficulty: 'hard',   concepts: ['boundary'] },
+
+  // 試験本番で出た論点（次回受験向け）
+  'str-zfill':         { difficulty: 'medium', concepts: ['implicit-rule', 'boundary'] },
+  'str-zfill-int':     { difficulty: 'easy',   concepts: ['implicit-rule', 'pair-confusion'] },
+  'lib-freeze-tool':   { difficulty: 'hard',   concepts: ['guess', 'pair-confusion'] },
+  'ctrl-elif-else-diff': { difficulty: 'easy', concepts: ['pair-confusion'] },
+  'ctrl-else-position':  { difficulty: 'easy', concepts: ['word-order'] },
 };
 
 // デフォルト値（meta が無い問題用）
