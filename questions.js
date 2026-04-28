@@ -1251,6 +1251,68 @@ const QUESTIONS = [
     explanation: 'urlparse は URL を ParseResult（scheme, netloc, path, params, query, fragment の6つ組）に分解。`urlparse("https://example.com/a?b=c")` → スキーム=https、ホスト=example.com、パス=/a、クエリ=b=c。urlencode は逆方向（dict → クエリ文字列）、urlopen は URL の中身を取得する別関数。',
   },
 
+  // ====== 試験本番で出た論点（基本概念の暗記系）======
+  {
+    id: 'print-end-arg', category: '入出力',
+    question: '`print()` 関数の `end` 引数の役割は？',
+    choices: [
+      'print の末尾に追加される文字を指定する（デフォルトは改行）',
+      'プログラムを終了させる',
+      'ループから抜ける',
+      '出力を停止する',
+    ],
+    correct: 0,
+    explanation: 'end は「print の末尾に追加する文字」を指定するキーワード引数。デフォルトは "\\n"（改行）。`end=""` にすれば改行しない、`end=","` にすればカンマで終わる。「end」を「終了」と直訳して「終了する」を選びがちだが、ここでの end は「末尾」の意味（endswith の end も同じ）。',
+  },
+  {
+    id: 'print-end-default', category: '入出力',
+    question: '`print("a")` のデフォルトの末尾文字は？',
+    choices: [
+      "'\\n'（改行）",
+      "''（何もない）",
+      "' '（空白）",
+      "','（カンマ）",
+    ],
+    correct: 0,
+    explanation: 'print のデフォルトは末尾に改行 `\\n` を追加する。だから複数の print を呼ぶと改行されて表示される。`end=""` にすると改行が消えて連続表示になる。',
+  },
+  {
+    id: 'print-end-loop', category: '入出力',
+    question: '次のコードの出力は？\n\n```\nfor i in range(3):\n    print(i, end=",")\n```',
+    choices: [
+      '0,1,2,',
+      '0,1,2',
+      '0\\n1\\n2\\n',
+      '0 1 2',
+    ],
+    correct: 0,
+    explanation: 'end="," で各 print の末尾にカンマが付く。ループ最終回でもカンマが追加されるので末尾にもカンマが残る → "0,1,2,"。「最後のカンマだけ除く」というのは別の論点（join を使う等）で、end ではできない。',
+  },
+  {
+    id: 'tuple-no-comma', category: 'データ型',
+    question: '次のうち、タプルを形成しないのはどれ？',
+    choices: [
+      't = 1',
+      't = "1", "2", "3"',
+      't = ("1", "2", "3")',
+      't = 1,',
+    ],
+    correct: 0,
+    explanation: 'タプルを作るのは「カンマ」、括弧ではない。`t = 1` はカンマがないのでただの int の代入。`t = 1,` は末尾カンマがあるので1要素タプル `(1,)`。`t = ("1", "2", "3")` は括弧の中にカンマがあるのでタプル。「括弧は補助、本体はカンマ」を口で唱える。',
+  },
+  {
+    id: 'tuple-single-paren', category: 'データ型',
+    question: '`t = (1)` の型は？',
+    choices: [
+      'int（ただの整数1、括弧は優先順位として扱われる）',
+      'tuple（1要素タプル）',
+      'list（[1]）',
+      'SyntaxError',
+    ],
+    correct: 0,
+    explanation: '`(1)` は数式の括弧と同じで、ただの値1を返す。1要素タプルにするには `(1,)` のように末尾カンマが必須。タプルの本体はカンマであり、括弧は単なる補助（読みやすさのため）。',
+  },
+
   // ====== イテレーション（誤答癖④：境界の追跡）======
   {
     id: 'ctrl-loop-index-err', category: 'イテレーション',

@@ -186,6 +186,13 @@ const QUESTION_META = {
   'cls-instance-vs-class-var': { difficulty: 'medium', concepts: ['pair-confusion'] },
   'lib-urllib-modules':     { difficulty: 'medium', concepts: ['pair-confusion', 'guess'] },
   'lib-urllib-parse':       { difficulty: 'medium', concepts: ['pair-confusion'] },
+
+  // print の end 引数 / タプル形成（試験本番で出た基本概念）
+  'print-end-arg':       { difficulty: 'easy',   concepts: ['guess', 'implicit-rule'] },
+  'print-end-default':   { difficulty: 'easy',   concepts: ['implicit-rule'] },
+  'print-end-loop':      { difficulty: 'medium', concepts: ['boundary'] },
+  'tuple-no-comma':      { difficulty: 'easy',   concepts: ['implicit-rule'] },
+  'tuple-single-paren':  { difficulty: 'medium', concepts: ['implicit-rule'] },
 };
 
 // デフォルト値（meta が無い問題用）
