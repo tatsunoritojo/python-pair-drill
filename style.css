@@ -634,6 +634,69 @@ footer a:hover { text-decoration: underline; }
   margin-top: 0.5rem;
 }
 
+/* スコアリング調整UI */
+.scoring-preset-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+.scoring-preset {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.125rem;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  font-size: 0.8125rem;
+}
+.scoring-preset:hover { border-color: var(--primary); }
+.scoring-preset.active {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+.scoring-preset-label { font-weight: 700; }
+
+.scoring-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+.scoring-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.scoring-field-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.scoring-field-value {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color: var(--primary);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.scoring-field input[type="range"] {
+  width: 100%;
+  margin: 0.125rem 0;
+}
+.scoring-field-hint {
+  display: block;
+  font-size: 0.75rem;
+}
+
 /* ============ 誤答癖プロファイル ============ */
 .weak-profile {
   margin-top: 1rem;

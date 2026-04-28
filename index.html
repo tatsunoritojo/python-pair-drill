@@ -57,6 +57,25 @@
         <div id="weak-profile-list"></div>
       </div>
 
+      <details class="data-mgmt">
+        <summary>⚙️ 賢い出題のスコアリング調整</summary>
+        <div class="data-mgmt-body">
+          <p class="muted small">「賢い出題」モードのスコアリング重みをカスタマイズできます。プリセット選択 or 個別調整。</p>
+
+          <div class="form-group">
+            <label>プリセット</label>
+            <div id="scoring-preset-list" class="scoring-preset-list"></div>
+          </div>
+
+          <div class="form-group">
+            <label>個別調整</label>
+            <div id="scoring-fields" class="scoring-fields"></div>
+          </div>
+
+          <button class="btn-secondary" id="scoring-reset-btn">デフォルトに戻す</button>
+        </div>
+      </details>
+
       <button class="btn-primary" id="start-btn">スタート</button>
       <button class="btn-secondary" id="stats-btn">統計を見る</button>
       <a href="exam.html" class="btn-secondary as-link">📝 模擬試験モード</a>

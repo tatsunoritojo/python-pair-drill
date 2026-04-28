@@ -89,8 +89,8 @@ const storage = {
 //   3. 各問題のスコア = 弱概念ボーナス + 個別エラー率 + 久しぶり度 + 未着手 - 連続正解
 //   4. セッション最適化: 同 concept が連続しないよう並べ替え
 //
-// スコアリング重み（チューニング可能ポイント）
-const SCORING = {
+// スコアリング重み（UIから編集可能）
+const SCORING_DEFAULT = {
   weakConceptWeight: 2.0,    // 弱点 concept のエラー率ボーナス
   errorRateWeight:  1.5,     // 個別エラー率の重み
   unseenBonus:      0.6,     // 未着手問題のボーナス
@@ -102,6 +102,84 @@ const SCORING = {
   oversamplingFactor: 2,     // 候補プールの倍率（最終的に count 個に絞る）
   conceptDataMin:   2,       // concept 統計の最低サンプル数
 };
+
+const SCORING_PRESETS = {
+  balanced: {
+    label: 'バランス（標準）',
+    desc: '弱点と忘却曲線、未着手をまんべんなく',
+    values: { ...SCORING_DEFAULT },
+  },
+  weakFocus: {
+    label: '弱点集中',
+    desc: '誤答が多い問題と弱い概念を最大限優先',
+    values: {
+      weakConceptWeight: 3.0, errorRateWeight: 2.5, unseenBonus: 0.3,
+      recencyMaxBonus: 0.3, recencySaturationHours: 24,
+      streak3Penalty: 0.8, streak5Penalty: 0.6, randomJitter: 0.2,
+      oversamplingFactor: 2, conceptDataMin: 1,
+    },
+  },
+  unseenFirst: {
+    label: '未着手優先',
+    desc: 'まだ解いていない問題から先に消化',
+    values: {
+      weakConceptWeight: 1.5, errorRateWeight: 1.0, unseenBonus: 1.5,
+      recencyMaxBonus: 0.3, recencySaturationHours: 24,
+      streak3Penalty: 0.5, streak5Penalty: 0.3, randomJitter: 0.3,
+      oversamplingFactor: 2, conceptDataMin: 2,
+    },
+  },
+  spacedRepetition: {
+    label: '間隔反復',
+    desc: '正解した問題も時間が経ったら再出題',
+    values: {
+      weakConceptWeight: 1.5, errorRateWeight: 1.0, unseenBonus: 0.5,
+      recencyMaxBonus: 1.5, recencySaturationHours: 12,
+      streak3Penalty: 0.3, streak5Penalty: 0.2, randomJitter: 0.3,
+      oversamplingFactor: 2, conceptDataMin: 2,
+    },
+  },
+  random: {
+    label: 'ほぼランダム',
+    desc: '統計の影響を最小化、新鮮さ優先',
+    values: {
+      weakConceptWeight: 0.3, errorRateWeight: 0.3, unseenBonus: 0.3,
+      recencyMaxBonus: 0.2, recencySaturationHours: 24,
+      streak3Penalty: 0.0, streak5Penalty: 0.0, randomJitter: 1.5,
+      oversamplingFactor: 1, conceptDataMin: 5,
+    },
+  },
+};
+
+const SCORING_FIELDS = [
+  { key: 'weakConceptWeight', label: '弱点 concept ボーナス', min: 0, max: 5, step: 0.1, hint: '苦手な concept を持つ問題を上位に' },
+  { key: 'errorRateWeight',   label: '個別エラー率の重み',     min: 0, max: 5, step: 0.1, hint: '間違えた問題ほど出やすく' },
+  { key: 'unseenBonus',       label: '未着手ボーナス',         min: 0, max: 3, step: 0.1, hint: '一度も解いていない問題を上位に' },
+  { key: 'recencyMaxBonus',   label: '久しぶり度ボーナス',     min: 0, max: 3, step: 0.1, hint: '時間が経った問題ほど出やすく' },
+  { key: 'recencySaturationHours', label: '頭打ち時間 (h)',    min: 1, max: 168, step: 1, hint: 'この時間で久しぶり度が最大に' },
+  { key: 'streak3Penalty',    label: '3連正解ペナルティ',      min: 0, max: 2, step: 0.1, hint: '熟練問題の出題頻度を下げる' },
+  { key: 'streak5Penalty',    label: '5連正解の追加ペナルティ', min: 0, max: 2, step: 0.1, hint: 'さらに下げる加算分' },
+  { key: 'randomJitter',      label: 'ランダム性',             min: 0, max: 2, step: 0.1, hint: '同スコアの順序を散らす' },
+  { key: 'oversamplingFactor',label: '候補プール倍率',         min: 1, max: 5, step: 1, hint: 'スコア上位 N×倍率 から最適化' },
+  { key: 'conceptDataMin',    label: 'concept 統計最低件数',  min: 1, max: 10, step: 1, hint: 'これ未満のサンプル数の concept は無視' },
+];
+
+function loadScoring() {
+  try {
+    const raw = localStorage.getItem('python-pair-drill-scoring');
+    if (!raw) return { ...SCORING_DEFAULT };
+    const saved = JSON.parse(raw);
+    return { ...SCORING_DEFAULT, ...saved };
+  } catch {
+    return { ...SCORING_DEFAULT };
+  }
+}
+function saveScoring(values) {
+  localStorage.setItem('python-pair-drill-scoring', JSON.stringify(values));
+}
+
+// 動的に変わる SCORING（後方互換のため変数名は維持）
+let SCORING = loadScoring();
 
 function computeConceptStats(questionStats) {
   const result = {};
@@ -553,6 +631,98 @@ function initHome() {
 
   // 誤答癖プロファイル表示
   renderWeakProfile(data.questionStats);
+
+  // スコアリング設定UI
+  renderScoringUI();
+}
+
+function renderScoringUI() {
+  // プリセット
+  const presetEl = document.getElementById('scoring-preset-list');
+  if (!presetEl) return;
+  if (!presetEl.dataset.bound) {
+    presetEl.dataset.bound = '1';
+    presetEl.innerHTML = '';
+    Object.entries(SCORING_PRESETS).forEach(([key, p]) => {
+      const btn = document.createElement('button');
+      btn.className = 'scoring-preset';
+      btn.dataset.preset = key;
+      btn.innerHTML = `
+        <span class="scoring-preset-label"></span>
+        <span class="scoring-preset-desc muted small"></span>
+      `;
+      btn.querySelector('.scoring-preset-label').textContent = p.label;
+      btn.querySelector('.scoring-preset-desc').textContent = p.desc;
+      btn.addEventListener('click', () => {
+        SCORING = { ...SCORING_DEFAULT, ...p.values };
+        saveScoring(SCORING);
+        renderScoringFields();
+        markActivePreset();
+      });
+      presetEl.appendChild(btn);
+    });
+    markActivePreset();
+  }
+
+  // 個別フィールド
+  renderScoringFields();
+  bindScoringResetOnce();
+}
+
+function renderScoringFields() {
+  const fieldsEl = document.getElementById('scoring-fields');
+  if (!fieldsEl) return;
+  fieldsEl.innerHTML = '';
+  SCORING_FIELDS.forEach((f) => {
+    const row = document.createElement('div');
+    row.className = 'scoring-field';
+    const id = `scoring-${f.key}`;
+    row.innerHTML = `
+      <label for="${id}" class="scoring-field-label">
+        <span class="scoring-field-name"></span>
+        <span class="scoring-field-value" id="${id}-value"></span>
+      </label>
+      <input type="range" id="${id}" min="${f.min}" max="${f.max}" step="${f.step}" value="${SCORING[f.key]}" />
+      <span class="scoring-field-hint muted small"></span>
+    `;
+    row.querySelector('.scoring-field-name').textContent = f.label;
+    row.querySelector(`#${id}-value`).textContent = SCORING[f.key];
+    row.querySelector('.scoring-field-hint').textContent = f.hint;
+    const slider = row.querySelector(`#${id}`);
+    slider.addEventListener('input', (ev) => {
+      const v = parseFloat(ev.target.value);
+      SCORING[f.key] = v;
+      row.querySelector(`#${id}-value`).textContent = v;
+      saveScoring(SCORING);
+      markActivePreset();
+    });
+    fieldsEl.appendChild(row);
+  });
+}
+
+function markActivePreset() {
+  // 完全一致するプリセットがあればハイライト
+  const presetEl = document.getElementById('scoring-preset-list');
+  if (!presetEl) return;
+  presetEl.querySelectorAll('.scoring-preset').forEach((btn) => {
+    const key = btn.dataset.preset;
+    const p = SCORING_PRESETS[key];
+    const match = p && SCORING_FIELDS.every((f) => SCORING[f.key] === p.values[f.key]);
+    btn.classList.toggle('active', !!match);
+  });
+}
+
+function bindScoringResetOnce() {
+  const btn = document.getElementById('scoring-reset-btn');
+  if (btn && !btn.dataset.bound) {
+    btn.dataset.bound = '1';
+    btn.addEventListener('click', () => {
+      SCORING = { ...SCORING_DEFAULT };
+      saveScoring(SCORING);
+      renderScoringFields();
+      markActivePreset();
+    });
+  }
 }
 
 function renderWeakProfile(questionStats) {
