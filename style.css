@@ -303,6 +303,7 @@ footer a:hover { text-decoration: underline; }
   margin-bottom: 1.25rem;
   font-weight: 600;
   word-break: break-word;
+  white-space: pre-wrap;
 }
 
 .choices {

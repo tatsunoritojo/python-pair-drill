@@ -1,0 +1,136 @@
+{
+  "id": "mock-exam-1-attempt2",
+  "title": "模擬演習1（試行2）",
+  "source": "Python3エンジニア認定基礎試験 模擬演習1",
+  "result": {
+    "correct": 27,
+    "incorrect": 13,
+    "unanswered": 0,
+    "total": 40,
+    "note": "合格ライン7割（28問）まであと1問"
+  },
+  "incorrect_questions": [
+    {
+      "no": 3,
+      "domain": "データ構造",
+      "topic": "tuple() に複数引数",
+      "summary": "tuple() の引数は1つ（iterable）のみ。tuple('a','b','c') は TypeError。",
+      "correct_choice": "tuple(\"python\", \"ruby\", \"php\")（がタプル生成不可）"
+    },
+    {
+      "no": 5,
+      "domain": "データ構造",
+      "topic": "ディクショナリの基本特性",
+      "summary": "同じキーは重複格納不可（後勝ち）。タプルはイミュータブル。リストはdictキー不可（unhashable）。値の存在確認は values() を使う。",
+      "correct_choice": "同じキーを重複して格納することはできない"
+    },
+    {
+      "no": 8,
+      "domain": "モジュール",
+      "topic": "import モジュール → モジュール名.関数名()",
+      "summary": "import test だけなら関数呼び出しは test.test_print()。from test import test_print なら test_print() で直接呼べる。",
+      "correct_choice": "import test / test.test_print()"
+    },
+    {
+      "no": 12,
+      "domain": "エラーと例外",
+      "topic": "raise + 該当 except",
+      "code": "try:\n  raise ValueError('try')\nexcept NameError: ...\nexcept ValueError:\n  print('ValueError')\nexcept: ...",
+      "summary": "ValueError を raise → ValueError except だけが実行され 'ValueError' のみ出力。",
+      "correct_choice": "ValueError"
+    },
+    {
+      "no": 13,
+      "domain": "エラーと例外",
+      "topic": "単一except に複数例外",
+      "summary": "except (A, B): のようにタプルで複数例外を1ブロックで捕捉できる（できないというのが不適切）。",
+      "correct_choice": "「単一のexcept節に複数の例外を指定することはできない」が不適切"
+    },
+    {
+      "no": 16,
+      "domain": "標準ライブラリめぐり",
+      "topic": "sys.argv",
+      "summary": "コマンドライン引数は sys.argv（args ではない）。argv[0] はスクリプト名。",
+      "correct_choice": "sys.argv / sys.argv[1:3]"
+    },
+    {
+      "no": 17,
+      "domain": "標準ライブラリめぐり",
+      "topic": "sys.exit()",
+      "summary": "プログラム終了は sys.exit()。quit/end/close は sys にない。",
+      "correct_choice": "sys.exit()"
+    },
+    {
+      "no": 18,
+      "domain": "標準ライブラリめぐり",
+      "topic": "正規表現の量指定子",
+      "summary": "* は0回以上、+ は1回以上、? は0回または1回。",
+      "correct_choice": "「*：直前の文字を1回以上繰り返す」が不適切"
+    },
+    {
+      "no": 29,
+      "domain": "制御構文ツール",
+      "topic": "ループ内のインデックス操作",
+      "code": "for i in range(len(colors)):\n  i = i + 1\n  print(i, colors[i], end=\",\")",
+      "summary": "i の最後の周回で i=4 になり colors[4] は IndexError（colors は4要素）。",
+      "correct_choice": "エラーが発生する"
+    },
+    {
+      "no": 30,
+      "domain": "制御構文ツール",
+      "topic": "関数の基本",
+      "summary": "def greeting(message): print(message) → greeting('おはよう') で 'おはよう' を出力。",
+      "correct_choice": "おはよう"
+    },
+    {
+      "no": 34,
+      "domain": "制御構文ツール",
+      "topic": "可変長引数の順序",
+      "summary": "*args は **kwargs より前。a が辞書として使われている → ①が *b（位置）、②が **a（キーワード）。",
+      "correct_choice": "①*b ②**a"
+    },
+    {
+      "no": 35,
+      "domain": "制御構文ツール",
+      "topic": "PEP8 命名規則",
+      "summary": "クラス名は UpperCamelCase、関数・メソッド名は lower_case_with_underscores。",
+      "correct_choice": "「クラス名にlower_case、関数名にUpperCamel」が不適切"
+    },
+    {
+      "no": 36,
+      "domain": "データ構造",
+      "topic": "list.index(x, start, end)",
+      "code": "numbers = [5,3,5,1,3,2,4,3,4,3]\nnumbers.index(3) → 1\nnumbers.index(3, 2) → 4\nnumbers.index(3, 5, 9) → 7",
+      "summary": "index() は最初に出現するインデックスを返す。第2,3引数で検索範囲を制限可能。",
+      "correct_choice": "1,4,7,"
+    },
+    {
+      "no": 37,
+      "domain": "標準ライブラリめぐり",
+      "topic": "正規表現 \\b \\w \\d . | ?",
+      "summary": "\\b\\d. は単語先頭の数字+任意1文字。'2020' のうち '20' のみマッチ → ['20']。",
+      "correct_choice": "②['2020']（が不適切）"
+    },
+    {
+      "no": 38,
+      "domain": "標準ライブラリめぐりーPartⅡ",
+      "topic": "struct の pack / unpack",
+      "summary": "pack: Pythonデータ → バイナリ。unpack: バイナリ → Pythonデータ。逆。",
+      "correct_choice": "「unpack が Python→バイナリ、pack がバイナリ→Python」が不適切"
+    },
+    {
+      "no": 39,
+      "domain": "仮想環境とパッケージ",
+      "topic": "pip install 再実行",
+      "summary": "既にインストール済のパッケージを再 install してもバージョンは変わらない。更新は --upgrade / -U。",
+      "correct_choice": "「再 install で最新に更新される」が不適切"
+    },
+    {
+      "no": 40,
+      "domain": "対話環境での入力行編集とヒストリ置換",
+      "topic": "ヒストリファイル名",
+      "summary": "ヒストリは ~/.python_history（__history__.py ではない）。",
+      "correct_choice": "「ヒストリは __history__.py に保存」が不適切"
+    }
+  ]
+}

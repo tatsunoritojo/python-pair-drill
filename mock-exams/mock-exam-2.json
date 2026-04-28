@@ -1,0 +1,130 @@
+{
+  "id": "mock-exam-2",
+  "title": "模擬演習2",
+  "source": "Python3エンジニア認定基礎試験 模擬演習2",
+  "result": {
+    "correct": 25,
+    "incorrect": 15,
+    "unanswered": 0,
+    "total": 40
+  },
+  "incorrect_questions": [
+    {
+      "no": 1,
+      "domain": "食欲をそそってみようか",
+      "topic": "インタープリタ言語の定義",
+      "summary": "インタープリタ言語は1行ずつ解釈実行（×一括翻訳）。一括翻訳はコンパイル言語。",
+      "correct_choice": "インタープリタ言語は、プログラムを一括丸ごと機械語に翻訳してから実行される（これが不適切な説明＝正解）"
+    },
+    {
+      "no": 4,
+      "domain": "気楽な入門編",
+      "topic": "オペランド vs オペレーター",
+      "summary": "+, - などはオペレーター。値や変数がオペランド。",
+      "correct_choice": "「+ や - などの演算子はオペランドとも呼ばれている」が不適切"
+    },
+    {
+      "no": 5,
+      "domain": "気楽な入門編",
+      "topic": "丸括弧での文字列連結",
+      "code": "fruits = (\n    \"orange\"\n    \"apple\"\n    \"lemon\"\n)\nprint(fruits)",
+      "summary": "丸括弧内に文字列リテラルを並べると + なしで連結される → orangeapplelemon",
+      "correct_choice": "orangeapplelemon"
+    },
+    {
+      "no": 6,
+      "domain": "気楽な入門編",
+      "topic": "トリプルクォート",
+      "code": "fruits = \"\"\"orange\napple\nlemon\n\"\"\"\nprint(fruits)",
+      "summary": "トリプルクォートは改行を含む複数行文字列をそのまま保持。",
+      "correct_choice": "orange / apple / lemon（各行表示）"
+    },
+    {
+      "no": 12,
+      "domain": "制御構文ツール",
+      "topic": "デフォルト引数とスコープ",
+      "code": "num = 1\ndef add(a, b=10):\n  num = 5\n  print(a + b)\nnum = 2\nadd(num)",
+      "summary": "関数内 num=5 はローカルでグローバルに影響しない。add(2) → 2+10=12。",
+      "correct_choice": "12"
+    },
+    {
+      "no": 13,
+      "domain": "制御構文ツール",
+      "topic": "*args/**kwargs の出力形",
+      "summary": "*args は tuple、**kwargs は dict（{key: value}）。リストではない。",
+      "correct_choice": "Yamada / ('特技は水泳', '趣味は読書') / {'job': 'デザイナー', 'age': 18}"
+    },
+    {
+      "no": 14,
+      "domain": "制御構文ツール",
+      "topic": "リストのアンパック",
+      "code": "list = [\"特技は水泳\", \"趣味は読書\"]\nprint(*list)",
+      "summary": "*list で要素を展開して位置引数として渡す → スペース区切りで出力。",
+      "correct_choice": "特技は水泳 趣味は読書"
+    },
+    {
+      "no": 16,
+      "domain": "制御構文ツール",
+      "topic": "lambda + sort key",
+      "summary": "(数値, 文字) のタプルで文字（インデックス1）順に並べる → key=lambda pair: pair[1]",
+      "correct_choice": "lambda pair: pair[1]"
+    },
+    {
+      "no": 20,
+      "domain": "データ構造",
+      "topic": "zip(*matrix) の転置",
+      "summary": "zip(*matrix) は転置を生成。print するなら list() で実体化。",
+      "correct_choice": "print(list(zip(*matrix)))"
+    },
+    {
+      "no": 22,
+      "domain": "データ構造",
+      "topic": "zip + リスト内包",
+      "summary": "リスト内包で zip(en, ja) を回して (e, j) タプルを生成。",
+      "correct_choice": "[(e, j) for e, j in zip(en, ja)]"
+    },
+    {
+      "no": 23,
+      "domain": "データ構造",
+      "topic": "コレクションの特性",
+      "summary": "リストとタプルは順序保持。集合は順序なし。{} は空dict（空集合は set()）。タプルはイミュータブル。値取得は values()。",
+      "correct_choice": "リストとタプルは、要素の順序が保持されるという特徴がある"
+    },
+    {
+      "no": 26,
+      "domain": "モジュール",
+      "topic": "import の語順",
+      "summary": "from <module> import <item>。\"import * from math\" は語順が逆。",
+      "correct_choice": "from math import *"
+    },
+    {
+      "no": 33,
+      "domain": "クラス",
+      "topic": "メソッドの第1引数 self",
+      "code": "class Test:\n  num = 10\n  def hello():\n    return \"Hello, Python\"",
+      "summary": "インスタンスメソッドは第1引数に self が必須。test.hello() を呼ぶと self が暗黙渡しされ、引数なし定義の hello() は TypeError。",
+      "correct_choice": "「10」がプリントされ、エラーが表示される"
+    },
+    {
+      "no": 34,
+      "domain": "標準ライブラリめぐり",
+      "topic": "dir() vs help()",
+      "summary": "dir() は属性・メソッド一覧。ドキュメント表示は help()。",
+      "correct_choice": "「dir(os)」はosモジュールの使い方や機能を説明するドキュメントを表示するコードである（が不適切）"
+    },
+    {
+      "no": 39,
+      "domain": "仮想環境とパッケージ",
+      "topic": "pip freeze",
+      "summary": "インストール済パッケージ＋バージョンを書き出すのは pip freeze（exportはない）。",
+      "correct_choice": "pip freeze > requirements.txt"
+    },
+    {
+      "no": 40,
+      "domain": "対話環境での入力行編集とヒストリ置換",
+      "topic": "補完キー",
+      "summary": "補完は [Tab] キー単独（[Tab]+[C] ではない）。",
+      "correct_choice": "[Tab]+[C]キーで補完機能を呼び出すことができる（が不適切）"
+    }
+  ]
+}

@@ -500,4 +500,229 @@ const QUESTIONS = [
     correct: 0,
     explanation: 'finally は「何が起きても必ず実行」が約束されている節。ファイルを閉じる、ネットワーク接続を解放するなど、リソース解放に使う。例外が発生して except で捕まえようが、return / break / continue で抜けようが、finally は実行される。なお finally の中で return すると、try / else 側の return より優先されてしまう（戻り値が上書き）ので、finally に return を書くのは要注意パターン。文脈マネージャ（with 文）が使える場面ではそちらが優先される。',
   },
+
+  // ====== モジュール（誤答癖②③：語順・存在しない値）======
+  {
+    id: 'mod-name-main', category: 'モジュール',
+    question: 'スクリプトを `python script.py` で直接実行したとき、`__name__` の値は？',
+    choices: ['"__main__"', '"__module__"', 'スクリプトのファイル名', 'モジュール名'],
+    correct: 0,
+    explanation: '__name__ に入る値は2種類だけ。直接実行 → "__main__"、import された → そのモジュール名。"__module__" や "__file__" のようないかにもありそうな値は引っかけ、実際には登場しない。「__name__ は2値だけ」と固定して覚えると `if __name__ == "__main__":` のガードを書く場面で迷わない。「ありそうな単語」を選ぶ癖が出る人ほど、ここは即答できるよう叩き込む。',
+  },
+  {
+    id: 'mod-search-path', category: 'モジュール',
+    question: 'Python が import 文でモジュールを探す場所は？',
+    choices: ['sys.path に並んだディレクトリ', 'シンボリックリンクを置いたディレクトリ', 'PATH 環境変数のディレクトリ', '/usr/lib のみ'],
+    correct: 0,
+    explanation: 'import の検索先は sys.path に書かれたディレクトリだけ。sys.path にはビルトイン → カレントスクリプトのディレクトリ → PYTHONPATH → site-packages の順で要素が並んでいる。「シンボリックリンクのディレクトリ」のような言葉は試験で頻出のひっかけ — シンボリックリンクは「別名」の仕組みで、検索パスの議論には登場しない。「import が見るのは sys.path だけ」と1語で覚える。',
+  },
+
+  // ====== 関数注釈（誤答癖③⑥：存在しない記号・暗黙ルール）======
+  {
+    id: 'anno-arrow', category: '構文',
+    question: '関数の戻り値の型を注釈する記号は？',
+    choices: ['->', '=>', '::', ':'],
+    correct: 0,
+    explanation: '戻り値注釈は -> （ハイフン+不等号で矢印）。引数注釈は引数名の後ろに :型 をつける。`def f(x: int) -> str:` の形。=> は JavaScript のアロー関数の記号で Python では使わない、:: は Ruby/C++ のスコープ演算子。「ありそうな記号」が並ぶと推測で選びがちだが、Python の戻り値注釈は -> ただ1つだけと固定する。',
+  },
+  {
+    id: 'anno-no-check', category: '構文',
+    question: '関数注釈（型ヒント）の効果として正しいのは？',
+    choices: [
+      '情報として __annotations__ に保持されるだけで実行時の型強制はない',
+      '実行時に自動で型チェックされる',
+      '型が違うと自動でキャストされる',
+      'デフォルト値として使われる',
+    ],
+    correct: 0,
+    explanation: '注釈は __annotations__ 属性に辞書として格納されるだけで、実行時には何もしない。違う型を渡してもエラーにならない（mypy などの外部ツールが静的解析する）。「注釈があるのだから型チェックされるはず」という直感が外れるパターン。「Python の注釈は実行時には飾り」と覚える。',
+  },
+
+  // ====== 辞書（誤答癖⑥：暗黙ルール）======
+  {
+    id: 'dict-loop-key', category: '辞書',
+    question: '`for x in d:` （d は辞書）でループすると x に入るのは？',
+    choices: ['キー', '値', '(キー, 値) のタプル', 'キーと値が交互に'],
+    correct: 0,
+    explanation: '辞書を直接ループするとキーが取れる。`for x in d` は `for x in d.keys()` と同義。値が欲しければ d.values()、両方なら `for k, v in d.items()`。`for kw in kwargs: print(kw, kwargs[kw])` のようなパターンで「kw は値」と勘違いすると出力が「値:キー」の順になって誤答する。',
+  },
+  {
+    id: 'dict-comp', category: '辞書',
+    question: '辞書内包表記の正しい構文は？',
+    choices: [
+      '{k: v for x in iterable}',
+      '[k: v for x in iterable]',
+      '{k = v for x in iterable}',
+      '(k: v for x in iterable)',
+    ],
+    correct: 0,
+    explanation: '波括弧 + キー: 値 + for 句。`{x: x*2 for x in [1,2,3]}` → {1:2, 2:4, 3:6}。括弧の種類で生成物が決まる: [] はリスト内包、{ : } は辞書内包、{ } は集合内包、( ) はジェネレータ式。「辞書だから波括弧、キーと値だから :」と要素から逆算する。',
+  },
+
+  // ====== データ型（誤答癖⑥：暗黙ルール）======
+  {
+    id: 'tuple-inner-mutable', category: 'データ型',
+    question: '`t = ([1, 2], 3)` の後、`t[0].append(4)` を実行するとどうなる？',
+    choices: [
+      't は ([1, 2, 4], 3) になる',
+      'TypeError が発生する',
+      't は変わらない',
+      'タプル全体が新しいオブジェクトに置き換わる',
+    ],
+    correct: 0,
+    explanation: 'タプル自体はイミュータブル（要素の差し替えはできない）が、要素として入っているリストの中身は変更可能。`t[0] = [9]` はエラーだが `t[0].append(4)` はリストへの操作なので OK。「タプルは完全にイミュータブル」と単純化すると外す典型。「差し替えはダメ、中身の操作は OK」と分けて覚える。',
+  },
+  {
+    id: 'list-count-quote', category: 'データ型',
+    question: '`colors = ["red", "blue", "red"]` で "red" の出現数を数えるには？',
+    choices: [
+      'colors.count("red")',
+      'colors.count(red)',
+      'count("red", colors)',
+      'count(colors, "red")',
+    ],
+    correct: 0,
+    explanation: 'count はリストのメソッド形式 `obj.count(x)`。引数の "red" はクォート必須 — クォートを外すと `red` という変数として扱われ NameError。組み込み関数 count() は Python に存在しない。「メソッドは obj.method()、文字列はクォートで囲む」の二段チェックを習慣にする。',
+  },
+  {
+    id: 'func-default-shared', category: '関数引数',
+    question: '`def add(a, lst=[]): lst.append(a); print(lst)` を順に `add(1); add(2); add(3)` で呼ぶと、3回目の出力は？',
+    choices: ['[1, 2, 3]', '[3]', '[1]', 'TypeError'],
+    correct: 0,
+    explanation: 'デフォルト引数のリストは関数定義時に1度だけ作られ、呼び出し間で共有される。1回目 [1] → 2回目 [1, 2] → 3回目 [1, 2, 3] と蓄積。「毎回新しいリストになりそう」という直感を裏切る Python の有名な落とし穴。回避策は `def add(a, lst=None): if lst is None: lst = []`。',
+  },
+
+  // ====== 入出力（誤答癖①：推測しがち）======
+  {
+    id: 'io-open', category: '入出力',
+    question: 'with 文でファイルを読み込み用に開く正しい書き方は？',
+    choices: [
+      'with open("f.txt", "r") as f:',
+      'with fileopen("f.txt", "r") as f:',
+      'with file.open("f.txt", "r") as f:',
+      'with Open("f.txt", "r") as f:',
+    ],
+    correct: 0,
+    explanation: 'ファイルを開く組み込み関数は open()（fileopen でも file.open でも Open でもない）。「fileopen」のような複合語っぽい名前は実在しないが「ありそう」に見える引っかけ。「ファイル操作は素の open()」と固定。as の後の名前が以降の参照名になる（`as f` なら f.read()）。',
+  },
+
+  // ====== 標準ライブラリ（誤答癖①⑤：名前推測・対の取り違え）======
+  {
+    id: 'lib-stat-mean', category: '標準ライブラリ',
+    question: 'statistics モジュールで平均値を求める関数は？',
+    choices: ['statistics.mean', 'statistics.average', 'statistics.avg', 'statistics.midpoint'],
+    correct: 0,
+    explanation: '平均は mean。average ではない（英語的には average の方が自然なので推測で外しやすい）。中央値は median、分散は variance、標準偏差は stdev。「ありそうな名前」と「実際の API 名」がずれる典型 — 推測ではなく丸暗記する。「statistics は mean / median / variance」のセットで唱える。',
+  },
+  {
+    id: 'lib-urlopen', category: '標準ライブラリ',
+    question: 'URL のリソースを取得する関数は？',
+    choices: [
+      'urllib.request.urlopen',
+      'urllib.request.open',
+      'urllib.request.geturl',
+      'urllib.request.read',
+    ],
+    correct: 0,
+    explanation: 'urlopen が正解（open ではない）。url + open を1単語にした urlopen。ファイル用の組み込み open() と紛れないよう独自の名前にしている。geturl はレスポンスオブジェクトのメソッドで取得用ではない。「URL を開く = urlopen」とまとめて覚える。',
+  },
+  {
+    id: 'lib-datetime-now', category: '標準ライブラリ',
+    question: '現在の日時オブジェクトを取得する一般的な書き方は？',
+    choices: [
+      'from datetime import datetime; datetime.now()',
+      'from datetime import date; date.today()',
+      'from datetime; datetime.today()',
+      'from datetime import now; now()',
+    ],
+    correct: 0,
+    explanation: 'datetime モジュールから datetime クラスを取り出して now()。datetime はモジュール名でもありその中のクラス名でもあるので二重に書くのが紛らわしい。date.today() は時刻なし日付のみで別物。`now` という関数は単独では存在しない。',
+  },
+  {
+    id: 'lib-template-sub', category: '標準ライブラリ',
+    question: 'string.Template の substitute に値を渡す書き方は？',
+    choices: [
+      't.substitute(name="Alice")',
+      't.substitute("Alice")',
+      't.substitute(["Alice"])',
+      't.substitute(name, "Alice")',
+    ],
+    correct: 0,
+    explanation: 'substitute はキーワード引数で渡す（位置引数は不可）。テンプレート内の $name に Alice を埋めたいなら name="Alice"。テンプレートが何の変数を参照しているか名前で結び付くので必然的にキーワード形式。なお safe_substitute は変数が未定義でも残すだけでエラーを起こさない別関数。',
+  },
+
+  // ====== パッケージ（誤答癖①：推測）======
+  {
+    id: 'pkg-venv', category: 'パッケージ',
+    question: '仮想環境 myenv を作成するコマンドは？',
+    choices: [
+      'python -m venv myenv',
+      'venv myenv',
+      'python venv myenv',
+      'python --venv myenv',
+    ],
+    correct: 0,
+    explanation: '-m はモジュールをスクリプトとして実行するオプション。venv モジュールに myenv という引数を渡して仮想環境ディレクトリを作る。`venv` 単独のコマンドは存在しない。`python venv` は python が venv というファイルを探して失敗する。「-m が必須」と覚える。',
+  },
+
+  // ====== クラス（誤答癖①⑥：継承構文・暗黙ルール）======
+  {
+    id: 'cls-super', category: 'クラス',
+    question: '派生クラスから基底クラスのメソッドを呼ぶ正しい書き方は？',
+    choices: [
+      'super().method(arg)',
+      'super.method(arg)',
+      'super().method(self, arg)',
+      'self.super.method(arg)',
+    ],
+    correct: 0,
+    explanation: 'super() を呼び出してメソッドアクセス。self は自動的に渡されるので明示しない。括弧抜きの super はクラスオブジェクト自体で別物。クラス名を直接呼ぶ別流儀（ClassName.method(self, arg)）では self を渡すが、super() 形式では不要。「super() なら self なし、ClassName 形式なら self あり」と対比で覚える。',
+  },
+  {
+    id: 'cls-self-vs-local', category: 'クラス',
+    question: 'メソッド内で `num = 1` と書いた場合、これはインスタンス属性になる？',
+    choices: [
+      'ならない（ローカル変数として扱われる、属性にするには self.num = 1 が必要）',
+      'なる（self.num = 1 と同じ）',
+      'なる（ただし読み取り専用）',
+      'なる（クラス変数として）',
+    ],
+    correct: 0,
+    explanation: '`num = 1` はメソッド内のローカル変数を作るだけで、インスタンスに何も残らない。インスタンス属性にするには必ず `self.num = 1`。出題コードで `num` と `self.num` が混在している場合は別物として追跡する。両者を混同すると、出力が `4,3,1,2` のような順になる挙動を「同じ変数なのに変な出力」と誤読してしまう。',
+  },
+
+  // ====== 例外（誤答癖④⑤：制御フロー追跡・対の取り違え）======
+  {
+    id: 'exc-raise-skips', category: '例外',
+    question: '関数内で raise した後、同じ関数内のその後の行は？',
+    choices: [
+      '実行されず即座に呼び出し元へ送出される',
+      '実行されてから例外が伝わる',
+      'finally 節として扱われる',
+      'return 文として扱われる',
+    ],
+    correct: 0,
+    explanation: 'raise はその時点で関数を抜ける（return と同じ流れ）。`raise X; print("never")` の print は絶対に実行されない。コード追跡で「raise の後の print も実行される」と読むと出力が1行多くなる誤答に直結する。「raise を見たらその関数の以降の行は捨てる」と機械的に処理。',
+  },
+  {
+    id: 'exc-args-tuple', category: '例外',
+    question: '`except E as e:` のとき、e.args の型は？',
+    choices: ['tuple', 'list', 'dict', 'str'],
+    correct: 0,
+    explanation: 'args は raise 時に渡された引数を入れた tuple。`raise E("a", "b")` の e.args は ("a", "b")。dict や list ではない。Python では「複数引数が並んだら tuple」というパターンが一貫している（*args も tuple）。「複数引数 = tuple」のルールで全体を統合する。',
+  },
+
+  // ====== イテレーション（誤答癖④：境界の追跡）======
+  {
+    id: 'ctrl-loop-index-err', category: 'イテレーション',
+    question: '次のコードの最終的な挙動は？\n\n```\nlst = ["a", "b", "c", "d"]\nfor i in range(len(lst)):\n    i = i + 1\n    print(lst[i])\n```',
+    choices: [
+      'IndexError が発生する',
+      '"a" "b" "c" "d" を順に出力',
+      '"b" "c" "d" を出力した後に終了',
+      '何も出力しない',
+    ],
+    correct: 0,
+    explanation: 'i は 0,1,2,3 と回るが i+=1 で 1,2,3,4 になる。最初の3周は lst[1]="b", lst[2]="c", lst[3]="d" と正常に出力されるが、最後の周回で lst[4] にアクセスして IndexError。中盤の正常出力につられて選択肢の「b c d 出力後終了」を選ぶと外す。「ループは必ず最終周回まで指で追う」を癖にする。',
+  },
 ];
