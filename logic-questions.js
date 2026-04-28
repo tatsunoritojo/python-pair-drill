@@ -2,8 +2,8 @@
 // 自動生成 (mock-exams/*.json から code フィールド付き問題のみ抽出)
 const LOGIC_QUESTIONS = [
   {
-    "id": "logic-mock-exam-1-attempt2-q1",
-    "source": "模擬演習1（試行2） Q1",
+    "id": "logic-mock-exam-1-q1",
+    "source": "模擬演習1 Q1",
     "domain": "エラーと例外",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "try:\n  print(5 / 0)\nexcept ZeroDivisionError:\n  print(\"ZeroDivisionError\")\nexcept NameError:\n  print(\"NameError\")\nexcept ValueError:\n  print(\"ValueError\")\nexcept Exception:\n  print(\"Exception\")",
@@ -17,8 +17,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "5/0 で ZeroDivisionError が発生。複数 except 節は上から順に該当を探し、最初にマッチしたもののみ実行される。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q2",
-    "source": "模擬演習1（試行2） Q2",
+    "id": "logic-mock-exam-1-q2",
+    "source": "模擬演習1 Q2",
     "domain": "データ構造",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "number = [1, 2, 3, 4, 5, 6, 7]\ndel number[5]\nprint(number)\ndel number[1:3]\nprint(number)\ndel number[:]\nprint(number)",
@@ -32,8 +32,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "del は要素やスライス範囲、リスト全体を削除可能。前の操作の結果が次に引き継がれる点に注意。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q4",
-    "source": "模擬演習1（試行2） Q4",
+    "id": "logic-mock-exam-1-q4",
+    "source": "模擬演習1 Q4",
     "domain": "データ構造",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "users = {'Yamada': 170, 'Suzuki': 165, 'Takayama': 172}\nfor k, v in users.items():\n  print(\"キー:\", k, \"値:\", v)",
@@ -47,8 +47,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "items() は (キー, 値) のタプルを返す。for k, v in d.items() でアンパックして取得。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q6",
-    "source": "模擬演習1（試行2） Q6",
+    "id": "logic-mock-exam-1-q6",
+    "source": "模擬演習1 Q6",
     "domain": "データ構造",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "scores = [1, 2, 3, 4, 5]\nnew_scores = []\nwhile scores:\n  score = scores.pop()\n  new_scores.append(score)\nprint(new_scores)",
@@ -62,8 +62,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "pop() はリスト末尾から取り出す。while は scores が空になるまで繰り返す。結果は逆順。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q9",
-    "source": "模擬演習1（試行2） Q9",
+    "id": "logic-mock-exam-1-q9",
+    "source": "模擬演習1 Q9",
     "domain": "入出力",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "score = 80\naverage = 59.3333\nprint(f'あなたの点数は{score:3d}点です')\nprint(f'平均点は{average:.2f}点です')\nprint(f'平均点は{average:10.2f}点です')",
@@ -77,8 +77,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "数値は右寄せで表示。{:3d} は幅3の整数、{:.2f} は小数点以下2桁、{:10.2f} は幅10で小数点以下2桁。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q11",
-    "source": "模擬演習1（試行2） Q11",
+    "id": "logic-mock-exam-1-q11",
+    "source": "模擬演習1 Q11",
     "domain": "エラーと例外",
     "question": "次のスクリプトを実行して「数値を入力してください：」に「a」を入力したとき、出力結果として適切な選択肢を選択してください。",
     "code": "try:\n  x = int(input(\"数値を入力してください：\"))\n  print(x)\nexcept ValueError:\n  print(\"数値以外が入力されました\")",
@@ -92,8 +92,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "int('a') で ValueError 発生 → except 節で「数値以外が入力されました」が出力。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q12",
-    "source": "模擬演習1（試行2） Q12",
+    "id": "logic-mock-exam-1-q12",
+    "source": "模擬演習1 Q12",
     "domain": "エラーと例外",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "try:\n  raise ValueError('try')\nexcept NameError:\n  print('NameError')\nexcept ValueError:\n  print('ValueError')\nexcept:\n  print('Except')",
@@ -107,8 +107,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "ValueError を raise → ValueError except だけが実行され 'ValueError' のみ出力。複数 except が連続して走ることはない。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q14",
-    "source": "模擬演習1（試行2） Q14",
+    "id": "logic-mock-exam-1-q14",
+    "source": "模擬演習1 Q14",
     "domain": "クラス",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "class Test:\n  num = 10\n  def hello(self):\n    return \"Hello, Python\"\n\ntest = Test()\nprint(test.num)\nprint(test.hello())",
@@ -122,8 +122,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "self を正しく定義しているので test.hello() は 'Hello, Python' を返す。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q15",
-    "source": "模擬演習1（試行2） Q15",
+    "id": "logic-mock-exam-1-q15",
+    "source": "模擬演習1 Q15",
     "domain": "クラス",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "class Animal:\n  legs = 4\n  def __init__(self, name):\n    self.name = name\n\ntama = Animal(\"Tama\")\npochi = Animal(\"Pochi\")\nprint(tama.legs, tama.name)\nprint(pochi.legs, pochi.name)",
@@ -137,8 +137,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "クラス変数 legs=4 は全インスタンス共通。__init__ で各インスタンスに name を設定。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q19",
-    "source": "模擬演習1（試行2） Q19",
+    "id": "logic-mock-exam-1-q19",
+    "source": "模擬演習1 Q19",
     "domain": "データ構造",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "users = [\"Tanaka\", \"Suzuki\", \"Akayama\", \"Miyamoto\"]\ncopy_users = users.copy()\nusers.remove(\"Akayama\")\nprint(users)\nusers.clear()\nprint(users)\nprint(copy_users)",
@@ -152,8 +152,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "copy() は浅いコピー。元の users が変更されても copy_users は影響を受けない。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q21",
-    "source": "模擬演習1（試行2） Q21",
+    "id": "logic-mock-exam-1-q21",
+    "source": "模擬演習1 Q21",
     "domain": "気楽な入門編",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "a = 7\nb = 2\nc = a / b\nd = a // b\ne = a % b\nprint(\"c:\", c, \"d:\", d, \"e:\", e)",
@@ -167,8 +167,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "/ は除算（小数）、// は整数除算（商）、% は剰余。7/2=3.5, 7//2=3, 7%2=1。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q22",
-    "source": "模擬演習1（試行2） Q22",
+    "id": "logic-mock-exam-1-q22",
+    "source": "模擬演習1 Q22",
     "domain": "気楽な入門編",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "a = 3\nb = 5\nc, d = a + 4, b - 3\nprint(\"c:\", c, \"d:\", d)",
@@ -182,8 +182,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "多重代入。c=a+4=7, d=b-3=2。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q23",
-    "source": "模擬演習1（試行2） Q23",
+    "id": "logic-mock-exam-1-q23",
+    "source": "模擬演習1 Q23",
     "domain": "気楽な入門編",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "print(\"python\\name\")\nprint(\"python\\\\name\")\nprint(r\"python\\name\")",
@@ -197,8 +197,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "\\n は改行、\\\\ は \\ 1文字、r\"...\" は raw 文字列でエスケープ無効。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q24",
-    "source": "模擬演習1（試行2） Q24",
+    "id": "logic-mock-exam-1-q24",
+    "source": "模擬演習1 Q24",
     "domain": "気楽な入門編",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "str = 'apple,banana,orange'\nprint(str[0], str[8], str[-5], str[2:7])",
@@ -212,8 +212,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "[0]=a, [8]=n, [-5]=r（後ろから5番目）, [2:7]='ple,b'。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q25",
-    "source": "模擬演習1（試行2） Q25",
+    "id": "logic-mock-exam-1-q25",
+    "source": "模擬演習1 Q25",
     "domain": "気楽な入門編",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "num = [1, 3, 5, 7, 9]\nprint(num[1], num[-3])",
@@ -227,8 +227,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "num[1]=3、num[-3]=後ろから3番目=5。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q26",
-    "source": "模擬演習1（試行2） Q26",
+    "id": "logic-mock-exam-1-q26",
+    "source": "模擬演習1 Q26",
     "domain": "気楽な入門編",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "a, b = 1, 5\nwhile a < 30:\n  print(a, end=',')\n  a = a + b",
@@ -242,8 +242,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "a=1,6,11,16,21,26 まで while ループ。31 になる前に条件が False で抜ける。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q27",
-    "source": "模擬演習1（試行2） Q27",
+    "id": "logic-mock-exam-1-q27",
+    "source": "模擬演習1 Q27",
     "domain": "制御構文ツール",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "x = 8\nif x > 10:\n  print(\"xは10を超えた数です\")\nelif x == 10:\n  print(\"xは10です\")\nelse:\n  print(\"xは10未満です\")",
@@ -257,8 +257,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "x=8 は 10 未満なので else 節。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q28",
-    "source": "模擬演習1（試行2） Q28",
+    "id": "logic-mock-exam-1-q28",
+    "source": "模擬演習1 Q28",
     "domain": "制御構文ツール",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "for count in range(2):\n  print(count)",
@@ -272,8 +272,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "range(2) は 0, 1。stop は含まない。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q29",
-    "source": "模擬演習1（試行2） Q29",
+    "id": "logic-mock-exam-1-q29",
+    "source": "模擬演習1 Q29",
     "domain": "制御構文ツール",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "colors = [\"red\", \"black\", \"green\", \"blue\"]\nfor i in range(len(colors)):\n  i = i + 1\n  print(i, colors[i], end=\",\")",
@@ -287,8 +287,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "i=0,1,2,3 と回るが i+=1 で 1,2,3,4 になる。最後の i=4 で colors[4] にアクセスして IndexError。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q30",
-    "source": "模擬演習1（試行2） Q30",
+    "id": "logic-mock-exam-1-q30",
+    "source": "模擬演習1 Q30",
     "domain": "制御構文ツール",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "def greeting(message):\n  print(message)\n\ngreeting(\"おはよう\")",
@@ -302,8 +302,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "関数定義で message を受け取り print する。'おはよう' を渡せば 'おはよう' が出力される。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q31",
-    "source": "模擬演習1（試行2） Q31",
+    "id": "logic-mock-exam-1-q31",
+    "source": "模擬演習1 Q31",
     "domain": "制御構文ツール",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "def add(a, b=2):\n  return a + b\n\nprint(add(1))",
@@ -317,8 +317,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "デフォルト引数 b=2。add(1) は 1+2=3。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q32",
-    "source": "模擬演習1（試行2） Q32",
+    "id": "logic-mock-exam-1-q32",
+    "source": "模擬演習1 Q32",
     "domain": "制御構文ツール",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "number = 3\ndef add(a=5, b=number):\n  print(a + b)\n\nb = 2\nadd()",
@@ -332,8 +332,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "デフォルト引数は定義時に評価。b=number=3 が固定。add() = 5+3 = 8。後の b=2 は無関係。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q36",
-    "source": "模擬演習1（試行2） Q36",
+    "id": "logic-mock-exam-1-q36",
+    "source": "模擬演習1 Q36",
     "domain": "データ構造",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
     "code": "numbers = [5, 3, 5, 1, 3, 2, 4, 3, 4, 3]\nprint(numbers.index(3), end=\",\")\nprint(numbers.index(3, 2), end=\",\")\nprint(numbers.index(3, 5, 9), end=\",\")",
@@ -347,8 +347,8 @@ const LOGIC_QUESTIONS = [
     "explanation": "index(x, start, end) は start から end-1 の範囲で最初の x を探す。1 → 4 → 7 と返る。"
   },
   {
-    "id": "logic-mock-exam-1-attempt2-q37",
-    "source": "模擬演習1（試行2） Q37",
+    "id": "logic-mock-exam-1-q37",
+    "source": "模擬演習1 Q37",
     "domain": "標準ライブラリめぐり",
     "question": "次のコードを実行した結果、①〜④の行の出力として、不適切な選択肢を選択してください。",
     "code": "import re\ntext = \"Hello 2020 Python World Pytho\"\nprint(re.findall(r\"\\b\\w\", text))    # ①\nprint(re.findall(r\"\\b\\d.\", text))   # ②\nprint(re.findall(r\"\\bPython?\", text)) # ③\nprint(re.findall(r\"\\bHe..|W.\", text)) # ④",

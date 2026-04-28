@@ -1,6 +1,6 @@
 {
-  "id": "mock-exam-1-attempt2",
-  "title": "模擬演習1（試行2）",
+  "id": "mock-exam-1",
+  "title": "模擬演習1",
   "source": "Python3エンジニア認定基礎試験 模擬演習1",
   "questions": [
     {
