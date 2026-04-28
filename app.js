@@ -84,6 +84,20 @@ const storage = {
 //   3. 各問題のスコア = 弱概念ボーナス + 個別エラー率 + 久しぶり度 + 未着手 - 連続正解
 //   4. セッション最適化: 同 concept が連続しないよう並べ替え
 //
+// スコアリング重み（チューニング可能ポイント）
+const SCORING = {
+  weakConceptWeight: 2.0,    // 弱点 concept のエラー率ボーナス
+  errorRateWeight:  1.5,     // 個別エラー率の重み
+  unseenBonus:      0.6,     // 未着手問題のボーナス
+  recencyMaxBonus:  0.5,     // 最終解答からの経過時間ボーナス上限
+  recencySaturationHours: 24,// 経過時間が頭打ちになる時間
+  streak3Penalty:   0.6,     // 3回連続正解
+  streak5Penalty:   0.4,     // 5回連続正解（追加分）
+  randomJitter:     0.3,     // 同スコアを散らすランダム
+  oversamplingFactor: 2,     // 候補プールの倍率（最終的に count 個に絞る）
+  conceptDataMin:   2,       // concept 統計の最低サンプル数
+};
+
 function computeConceptStats(questionStats) {
   const result = {};
   Object.keys(questionStats).forEach((qid) => {
@@ -112,36 +126,32 @@ function scorePool(pool, questionStats) {
     let conceptBonus = 0;
     meta.concepts.forEach((c) => {
       const cs = conceptStats[c];
-      if (cs && cs.total >= 2) {
+      if (cs && cs.total >= SCORING.conceptDataMin) {
         conceptBonus = Math.max(conceptBonus, 1 - cs.correct / cs.total);
       }
     });
-    score += conceptBonus * 2.0;
+    score += conceptBonus * SCORING.weakConceptWeight;
 
-    // 個別の誤答率
+    // 個別の誤答率（未着手はボーナス）
     if (s.total > 0) {
-      score += (1 - s.correct / s.total) * 1.5;
+      score += (1 - s.correct / s.total) * SCORING.errorRateWeight;
     } else {
-      // 未着手ボーナス
-      score += 0.6;
+      score += SCORING.unseenBonus;
     }
 
-    // 久しぶり度（最後の解答からの経過時間。24時間で頭打ち）
+    // 久しぶり度
     if (s.lastAt > 0) {
       const hoursSince = (now - s.lastAt) / (1000 * 60 * 60);
-      score += Math.min(hoursSince / 24, 1.0) * 0.5;
+      score += Math.min(hoursSince / SCORING.recencySaturationHours, 1.0) * SCORING.recencyMaxBonus;
     }
 
-    // 連続正解ペナルティ（3回以上で出題頻度を下げる）
-    if ((s.streak || 0) >= 3) {
-      score -= 0.6;
-    }
-    if ((s.streak || 0) >= 5) {
-      score -= 0.4;  // さらに下げる（合計-1.0）
-    }
+    // 連続正解ペナルティ
+    const streak = s.streak || 0;
+    if (streak >= 3) score -= SCORING.streak3Penalty;
+    if (streak >= 5) score -= SCORING.streak5Penalty;
 
-    // ランダム性で同スコアの順序を散らす
-    score += Math.random() * 0.3;
+    // 同スコアを散らすランダム
+    score += Math.random() * SCORING.randomJitter;
 
     return { q, score, meta };
   });
@@ -152,32 +162,27 @@ function scorePool(pool, questionStats) {
 
 function optimizeSession(scored, count) {
   if (count <= 0 || count > scored.length) count = scored.length;
-
-  // 上位から count 個を選び、concept が連続しないよう並べ替え
-  let pool = scored.slice(0, count);
+  const pool = scored.slice(0, count);
   const arranged = [];
+  const EASY_LEAD = 3;  // 最初のN問を easy 優先で並べる
 
+  // 各ステップで「直前と concept が被らない」「easyリード期は easy 優先」の二段階で選ぶ
   while (pool.length > 0) {
-    const lastConcepts = arranged.length > 0
-      ? new Set(arranged[arranged.length - 1].meta.concepts)
-      : new Set();
-    let pickIdx = pool.findIndex((item) =>
-      item.meta.concepts.length === 0 || !item.meta.concepts.some((c) => lastConcepts.has(c))
-    );
-    if (pickIdx === -1) pickIdx = 0;
-    arranged.push(pool.splice(pickIdx, 1)[0]);
-  }
+    const idx = arranged.length;
+    const lastConcepts = idx > 0 ? new Set(arranged[idx - 1].meta.concepts) : new Set();
+    const noOverlap = (item) =>
+      item.meta.concepts.length === 0 || !item.meta.concepts.some((c) => lastConcepts.has(c));
 
-  // 最初の3問を easy 優先に（心理的な慣らし）
-  for (let i = 0; i < Math.min(3, arranged.length); i++) {
-    if (arranged[i].meta.difficulty !== 'easy') {
-      const easyIdx = arranged.findIndex((item, idx) => idx > i && item.meta.difficulty === 'easy');
-      if (easyIdx > i) {
-        const tmp = arranged[i];
-        arranged[i] = arranged[easyIdx];
-        arranged[easyIdx] = tmp;
-      }
+    let pickIdx = -1;
+    if (idx < EASY_LEAD) {
+      // easy かつ concept 被らない → easy のみ → 被らないだけ → 何でもいい
+      pickIdx = pool.findIndex((it) => it.meta.difficulty === 'easy' && noOverlap(it));
+      if (pickIdx === -1) pickIdx = pool.findIndex((it) => it.meta.difficulty === 'easy');
     }
+    if (pickIdx === -1) pickIdx = pool.findIndex(noOverlap);
+    if (pickIdx === -1) pickIdx = 0;
+
+    arranged.push(pool.splice(pickIdx, 1)[0]);
   }
 
   return arranged.map((item) => item.q);
@@ -309,7 +314,8 @@ function startQuiz(overridePool) {
       const data = storage.load();
       const scored = scorePool(pool, data.questionStats);
       const want = state.config.count > 0 ? state.config.count : scored.length;
-      pool = optimizeSession(scored.slice(0, want * 2), want);
+      const candidates = Math.min(want * SCORING.oversamplingFactor, scored.length);
+      pool = optimizeSession(scored.slice(0, candidates), want);
     } else {
       pool = shuffle(pool);
       if (state.config.count > 0) pool = pool.slice(0, state.config.count);

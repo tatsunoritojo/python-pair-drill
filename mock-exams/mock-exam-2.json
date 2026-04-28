@@ -2,7 +2,7 @@
   "id": "mock-exam-2",
   "title": "模擬演習2",
   "source": "Python3エンジニア認定基礎試験 模擬演習2",
-  "result": { "correct": 25, "incorrect": 15, "total": 40 },
+  "result": { "correct": 24, "incorrect": 16, "total": 40 },
   "questions": [
     {
       "no": 1,

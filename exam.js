@@ -139,7 +139,11 @@ async function startExam() {
   let qs = state.exam.questions.slice();
   const orderBtn = document.querySelector('#order-select button.active');
   if (orderBtn && orderBtn.dataset.order === 'shuffle') {
-    qs = qs.slice().sort(() => Math.random() - 0.5);
+    // Fisher-Yates シャッフル（sort()ベースは偏りが出るため使わない）
+    for (let i = qs.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qs[i], qs[j]] = [qs[j], qs[i]];
+    }
   }
 
   state.questions = qs;
@@ -260,6 +264,7 @@ function updateTimer() {
   el.classList.toggle('danger', remaining <= 300);
   if (remaining <= 0) {
     clearInterval(state.timerId);
+    setTimeout(() => alert('制限時間を超えました。採点します。'), 0);
     finishExam(true);
   }
 }
@@ -439,6 +444,41 @@ document.getElementById('exam-retry-wrong-btn').addEventListener('click', () => 
   renderQuestion();
   renderOverview();
   startTimer();
+});
+
+// ---------- キーボードショートカット ----------
+// 1〜9 / A〜F で選択肢、← → でナビ、Enter で次へ
+document.addEventListener('keydown', (e) => {
+  if (!document.getElementById('exam-quiz-screen').classList.contains('active')) return;
+  if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+
+  const q = state.questions[state.current];
+  if (!q) return;
+
+  // 数字またはアルファベットで選択肢
+  let idx = -1;
+  if (e.key >= '1' && e.key <= '9') idx = parseInt(e.key, 10) - 1;
+  else if (/^[a-fA-F]$/.test(e.key)) idx = e.key.toLowerCase().charCodeAt(0) - 97;
+
+  if (idx >= 0 && idx < q.choices.length) {
+    e.preventDefault();
+    state.answers[state.current] = idx;
+    renderQuestion();
+    renderOverview();
+    return;
+  }
+
+  // 矢印キーまたは Enter で前後ナビ
+  if (e.key === 'Enter' || e.key === 'ArrowRight') {
+    e.preventDefault();
+    document.getElementById('exam-next-btn').click();
+  } else if (e.key === 'ArrowLeft') {
+    e.preventDefault();
+    document.getElementById('exam-prev-btn').click();
+  } else if (e.key.toLowerCase() === 'f') {
+    e.preventDefault();
+    document.getElementById('exam-flag-btn').click();
+  }
 });
 
 // ---------- 起動 ----------
