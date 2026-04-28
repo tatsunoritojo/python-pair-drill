@@ -1,0 +1,32 @@
+{
+  "name": "Python ペアドリル",
+  "short_name": "Pyペアドリル",
+  "description": "Python3エンジニア認定基礎試験対策の学習Webアプリ",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f7fb",
+  "theme_color": "#2563eb",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "favicon-64.png",
+      "sizes": "64x64",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
