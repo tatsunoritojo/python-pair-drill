@@ -54,9 +54,18 @@ const storage = {
   },
   recordResult(questionId, correct) {
     const data = storage.load();
-    if (!data.questionStats[questionId]) data.questionStats[questionId] = { correct: 0, total: 0 };
-    data.questionStats[questionId].total += 1;
-    if (correct) data.questionStats[questionId].correct += 1;
+    if (!data.questionStats[questionId]) {
+      data.questionStats[questionId] = { correct: 0, total: 0, streak: 0, lastAt: 0 };
+    }
+    const s = data.questionStats[questionId];
+    s.total += 1;
+    s.lastAt = Date.now();
+    if (correct) {
+      s.correct += 1;
+      s.streak = (s.streak || 0) + 1;
+    } else {
+      s.streak = 0;
+    }
     storage.save(data);
   },
   recordAttempt(score, total, timeSec) {
@@ -66,6 +75,128 @@ const storage = {
     storage.save(data);
   },
 };
+
+// ====== 賢い出題ロジック ======
+//
+// 設計方針:
+//   1. 各問題に concept タグ（誤答癖7分類）と difficulty を付与（concepts.js）
+//   2. ユーザー履歴から concept 別の正答率を集計して「弱点プロファイル」を作る
+//   3. 各問題のスコア = 弱概念ボーナス + 個別エラー率 + 久しぶり度 + 未着手 - 連続正解
+//   4. セッション最適化: 同 concept が連続しないよう並べ替え
+//
+function computeConceptStats(questionStats) {
+  const result = {};
+  Object.keys(questionStats).forEach((qid) => {
+    const meta = (typeof getMeta === 'function') ? getMeta(qid) : { concepts: [] };
+    const s = questionStats[qid];
+    meta.concepts.forEach((c) => {
+      result[c] = result[c] || { correct: 0, total: 0 };
+      result[c].correct += s.correct || 0;
+      result[c].total += s.total || 0;
+    });
+  });
+  return result;
+}
+
+function scorePool(pool, questionStats) {
+  const conceptStats = computeConceptStats(questionStats);
+  const now = Date.now();
+
+  const scored = pool.map((q) => {
+    const meta = (typeof getMeta === 'function') ? getMeta(q.id) : { difficulty: 'medium', concepts: [] };
+    const s = questionStats[q.id] || { correct: 0, total: 0, streak: 0, lastAt: 0 };
+
+    let score = 0;
+
+    // 弱点概念ボーナス: その問題のタグの中で最も弱い concept のエラー率を採用
+    let conceptBonus = 0;
+    meta.concepts.forEach((c) => {
+      const cs = conceptStats[c];
+      if (cs && cs.total >= 2) {
+        conceptBonus = Math.max(conceptBonus, 1 - cs.correct / cs.total);
+      }
+    });
+    score += conceptBonus * 2.0;
+
+    // 個別の誤答率
+    if (s.total > 0) {
+      score += (1 - s.correct / s.total) * 1.5;
+    } else {
+      // 未着手ボーナス
+      score += 0.6;
+    }
+
+    // 久しぶり度（最後の解答からの経過時間。24時間で頭打ち）
+    if (s.lastAt > 0) {
+      const hoursSince = (now - s.lastAt) / (1000 * 60 * 60);
+      score += Math.min(hoursSince / 24, 1.0) * 0.5;
+    }
+
+    // 連続正解ペナルティ（3回以上で出題頻度を下げる）
+    if ((s.streak || 0) >= 3) {
+      score -= 0.6;
+    }
+    if ((s.streak || 0) >= 5) {
+      score -= 0.4;  // さらに下げる（合計-1.0）
+    }
+
+    // ランダム性で同スコアの順序を散らす
+    score += Math.random() * 0.3;
+
+    return { q, score, meta };
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+  return scored;
+}
+
+function optimizeSession(scored, count) {
+  if (count <= 0 || count > scored.length) count = scored.length;
+
+  // 上位から count 個を選び、concept が連続しないよう並べ替え
+  let pool = scored.slice(0, count);
+  const arranged = [];
+
+  while (pool.length > 0) {
+    const lastConcepts = arranged.length > 0
+      ? new Set(arranged[arranged.length - 1].meta.concepts)
+      : new Set();
+    let pickIdx = pool.findIndex((item) =>
+      item.meta.concepts.length === 0 || !item.meta.concepts.some((c) => lastConcepts.has(c))
+    );
+    if (pickIdx === -1) pickIdx = 0;
+    arranged.push(pool.splice(pickIdx, 1)[0]);
+  }
+
+  // 最初の3問を easy 優先に（心理的な慣らし）
+  for (let i = 0; i < Math.min(3, arranged.length); i++) {
+    if (arranged[i].meta.difficulty !== 'easy') {
+      const easyIdx = arranged.findIndex((item, idx) => idx > i && item.meta.difficulty === 'easy');
+      if (easyIdx > i) {
+        const tmp = arranged[i];
+        arranged[i] = arranged[easyIdx];
+        arranged[easyIdx] = tmp;
+      }
+    }
+  }
+
+  return arranged.map((item) => item.q);
+}
+
+// 弱点プロファイル（ホーム画面で参照用）
+function getWeakProfile(questionStats) {
+  const cs = computeConceptStats(questionStats);
+  return Object.keys(cs)
+    .map((c) => ({
+      concept: c,
+      label: (typeof CONCEPT_LABELS !== 'undefined' && CONCEPT_LABELS[c]) || c,
+      correct: cs[c].correct,
+      total: cs[c].total,
+      rate: cs[c].total > 0 ? cs[c].correct / cs[c].total : null,
+    }))
+    .filter((x) => x.total >= 2)
+    .sort((a, b) => (a.rate || 1) - (b.rate || 1));
+}
 
 // ====== テーマ ======
 function initTheme() {
@@ -137,6 +268,33 @@ function initHome() {
   document.getElementById('weak-mode').onchange = (e) => {
     state.config.weakMode = e.target.checked;
   };
+
+  // 誤答癖プロファイル表示
+  renderWeakProfile(data.questionStats);
+}
+
+function renderWeakProfile(questionStats) {
+  const wrap = document.getElementById('weak-profile');
+  const list = document.getElementById('weak-profile-list');
+  const profile = getWeakProfile(questionStats);
+  if (profile.length === 0) {
+    wrap.hidden = true;
+    return;
+  }
+  wrap.hidden = false;
+  list.innerHTML = '';
+  profile.slice(0, 7).forEach((p) => {
+    const row = document.createElement('div');
+    row.className = 'weak-row';
+    const rate = p.rate !== null ? Math.round(p.rate * 100) : '-';
+    row.innerHTML = `
+      <span class="weak-label"></span>
+      <span class="weak-bar"><span class="weak-bar-fill" style="width:${p.rate * 100}%"></span></span>
+      <span class="weak-rate">${p.correct}/${p.total} (${rate}%)</span>
+    `;
+    row.querySelector('.weak-label').textContent = p.label;
+    list.appendChild(row);
+  });
 }
 
 // ====== クイズ開始 ======
@@ -149,19 +307,13 @@ function startQuiz(overridePool) {
 
     if (state.config.weakMode) {
       const data = storage.load();
-      // 過去の不正解率で重み付けし、降順ソート → 同率はランダム
-      const weighted = pool.map((q) => {
-        const s = data.questionStats[q.id];
-        const errorRate = s && s.total > 0 ? 1 - s.correct / s.total : 0.5;
-        return { q, weight: errorRate + Math.random() * 0.3 };
-      });
-      weighted.sort((a, b) => b.weight - a.weight);
-      pool = weighted.map((x) => x.q);
+      const scored = scorePool(pool, data.questionStats);
+      const want = state.config.count > 0 ? state.config.count : scored.length;
+      pool = optimizeSession(scored.slice(0, want * 2), want);
     } else {
       pool = shuffle(pool);
+      if (state.config.count > 0) pool = pool.slice(0, state.config.count);
     }
-
-    if (state.config.count > 0) pool = pool.slice(0, state.config.count);
   }
 
   // 問題ごとに選択肢をシャッフル

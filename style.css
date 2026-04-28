@@ -490,6 +490,53 @@ footer a:hover { text-decoration: underline; }
   .stat > span:last-child { font-size: 1rem; }
 }
 
+/* ============ 誤答癖プロファイル ============ */
+.weak-profile {
+  margin-top: 1rem;
+  padding: 0.875rem 1rem;
+  background: var(--bg);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+.weak-profile h3 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 0.625rem;
+}
+.weak-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.8125rem;
+}
+.weak-row:last-child { margin-bottom: 0; }
+.weak-label {
+  font-weight: 600;
+}
+.weak-bar {
+  display: block;
+  height: 5px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.weak-bar-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--error) 0%, var(--warning) 50%, var(--success) 100%);
+  background-size: 200% 100%;
+  background-position: 0% 0;
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+.weak-rate {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
 /* ============ 模擬試験ページ用 ============ */
 
 /* 模擬選択リスト */

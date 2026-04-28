@@ -42,8 +42,13 @@
       <div class="form-group">
         <label class="checkbox-label">
           <input type="checkbox" id="weak-mode">
-          <span>弱点優先モード（間違えた問題を多めに出す）</span>
+          <span>賢い出題（弱点・忘却曲線・誤答癖で自動調整）</span>
         </label>
+      </div>
+
+      <div class="weak-profile" id="weak-profile" hidden>
+        <h3>誤答癖プロファイル</h3>
+        <div id="weak-profile-list"></div>
       </div>
 
       <button class="btn-primary" id="start-btn">スタート</button>
@@ -123,6 +128,7 @@
   <small>Python ペアドリル · <a href="https://github.com/tatsunoritojo/python-pair-drill" target="_blank" rel="noopener">GitHub</a></small>
 </footer>
 <script src="questions.js"></script>
+<script src="concepts.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
