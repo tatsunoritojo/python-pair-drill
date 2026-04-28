@@ -84,8 +84,9 @@
         <summary>📦 データの書き出し / 読み込み</summary>
         <div class="data-mgmt-body">
           <p class="muted small">別の端末・ブラウザにデータを移行する場合に使います。<br>
-          <strong>PC → スマホ</strong>: 「QRコードで書き出す」→ スマホのカメラで読み取り → 自動復元。<br>
-          <strong>スマホ → PC</strong>: スマホで「テキストで書き出す」→ メールや LINE などで PC へコピー → PC で「テキストを貼り付けて読み込む」。<br>
+          <strong>📧 メール</strong>: 自分宛てに送って受信端末でリンクをタップ → 自動復元（最も簡単）<br>
+          <strong>📱 QR</strong>: PC で生成 → スマホのカメラで読み取り → 自動復元<br>
+          <strong>📋 テキスト</strong>: コピペで任意の経路（LINE等）で送信、貼り付けて読み込む<br>
           <strong>引き継ぎ対象</strong>: ドリル統計・模擬試験履歴・アシスタント設定（モデル/名前/コンテキスト設定）。<br>
           <strong>引き継ぎ対象外</strong>: AI会話履歴（容量を圧迫し、文脈も切れるため）。</p>
           <label class="checkbox-label">
@@ -93,6 +94,7 @@
             <span>APIキーも含める（流出に注意）</span>
           </label>
           <h4 class="data-mgmt-section">書き出し</h4>
+          <button class="btn-secondary" id="export-mail-btn">📧 メールで送る（ワンタップ復元リンク）</button>
           <button class="btn-secondary" id="export-qr-btn">📱 QRコードで書き出す（スマホへ）</button>
           <button class="btn-secondary" id="export-text-btn">📋 テキスト（コピペ用）で書き出す</button>
           <button class="btn-secondary" id="export-btn">📁 JSONファイルとして書き出す</button>

@@ -398,6 +398,52 @@ function exportAsQR(includeApiKey) {
   openModal('qr-modal');
 }
 
+function exportViaEmail(includeApiKey) {
+  const data = collectExportData(includeApiKey);
+  let compressed;
+  try {
+    compressed = compressData(data);
+  } catch (e) {
+    alert(e.message);
+    return;
+  }
+  const url = `${location.origin}${location.pathname}?import=${compressed}`;
+
+  const subject = 'Python ペアドリル のデータ引き継ぎ';
+  const body = [
+    'Python ペアドリル の学習データを別端末に引き継ぎます。',
+    '',
+    '下のリンクを別端末（PC / スマホ）のブラウザで開くと、',
+    '確認ダイアログのあと自動的にデータが復元されます。',
+    '',
+    url,
+    '',
+    '─── 引き継ぎ対象 ───',
+    '・ドリル統計（問題ごとの正答率・連続正解数）',
+    '・模擬試験の挑戦履歴',
+    '・AIアシスタント設定（モデル・名前・APIキー※）',
+    '',
+    '※APIキーは送信時の選択次第で含まれる場合があります。',
+    '※AI会話履歴は対象外（容量を圧迫し、文脈も切れるため）。',
+  ].join('\n');
+
+  const mailto = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+  // mailto は環境次第で2KB前後が上限。超えると一部メーラーが起動しない
+  if (mailto.length > 1900) {
+    alert(
+      `データが大きく、mailto URI が ${mailto.length} 文字になります。\n` +
+      `メーラーが起動しない可能性があるため、別の方法を推奨します:\n\n` +
+      `・QRコードで書き出す（スマホへ送る場合）\n` +
+      `・テキストで書き出す → コピーして任意のアプリで送信`
+    );
+    return;
+  }
+
+  // 別タブで開いて、メール送信後にこのページに戻れるように
+  window.location.href = mailto;
+}
+
 function exportAsText(includeApiKey) {
   const data = collectExportData(includeApiKey);
   let compressed;
@@ -622,6 +668,7 @@ function initHome() {
   bindOnce('export-btn', () => exportAllData(getInclude()));
   bindOnce('export-qr-btn', () => exportAsQR(getInclude()));
   bindOnce('export-text-btn', () => exportAsText(getInclude()));
+  bindOnce('export-mail-btn', () => exportViaEmail(getInclude()));
   bindOnce('import-text-btn', importFromText);
   bindOnce('text-import-confirm-btn', applyTextImport);
   bindOnce('text-copy-btn', () => {
