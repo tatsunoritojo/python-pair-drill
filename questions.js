@@ -827,6 +827,100 @@ const QUESTIONS = [
     explanation: 'bpython は標準の対話モードを拡張した CLI ツール。色付き表示、関数シグネチャ表示、自動補完が強化されている。`pip install bpython` でインストール、`bpython` で起動。Webブラウザで動くノートブックは Jupyter、Python 本体実装は CPython と別カテゴリ。',
   },
 
+  // ====== 模擬演習4で出た新規論点（弱点の補強）======
+  {
+    id: 'ctrl-continue-break', category: 'イテレーション',
+    question: 'ループ内で「現在のイテレーションだけスキップして次の周回へ」進む文は？',
+    choices: ['continue', 'break', 'pass', 'return'],
+    correct: 0,
+    explanation: 'continue は現在の周回の残りを飛ばして次の周回へジャンプ。break はループ自体を終了する別物。「continue=次へ、break=止まる」の対比で覚える。pass は「何もしないが構文上ブロックが必要」な場面のプレースホルダで、ループ制御ではない。',
+  },
+  {
+    id: 'syn-docstring-firstline', category: '構文',
+    question: 'PEP257 の docstring の書き方として正しいのは？',
+    choices: [
+      '1行目はオブジェクトの目的を簡潔に要約する1行、詳細は空行を挟んで3行目以降',
+      '1行目はオブジェクトの目的・引数・戻り値・型情報など全部を詳しく書く',
+      '1行目は必ず空行にして、2行目から本文を書く',
+      'docstring は1行で完結させ、複数行は禁止',
+    ],
+    correct: 0,
+    explanation: 'PEP257 は「1行目は要約」「複数行なら空行を挟んで詳細」と定めている。要約だけでも有用なよう、最初の1行が短く独立しているのがポイント。help() で見たときに最初の行が見出しになる。',
+  },
+  {
+    id: 'tuple-unpack', category: 'データ型',
+    question: '`t = 3, 2, 3, 1` のあと `w, x, y, z = t` を実行した。x の値は？',
+    choices: ['2', '3', '1', 'TypeError'],
+    correct: 0,
+    explanation: 'カンマで区切った値の並びは括弧なしでもタプル `(3, 2, 3, 1)` になる。アンパック代入で w=3, x=2, y=3, z=1 と順に割り当てられる。「カンマがタプルを作る、括弧は補助」の原則。',
+  },
+  {
+    id: 'dict-key-error', category: '辞書',
+    question: '辞書 `d = {"a": 1}` に対して `d["b"]` を実行するとどうなる？',
+    choices: ['KeyError', 'None が返る', '空文字列が返る', '0 が返る'],
+    correct: 0,
+    explanation: '存在しないキーで参照すると KeyError。安全に取得したいなら `d.get("b")`（存在しなければ None）または `d.get("b", デフォルト値)` を使う。「辞書 [] アクセスは厳しい、get() は優しい」と対比で覚える。',
+  },
+  {
+    id: 'exc-syntax-caret', category: '例外',
+    question: 'Python が構文エラーを表示するとき、問題の箇所のすぐ下に表示する記号は？',
+    choices: ['^', '↑', '~', '*'],
+    correct: 0,
+    explanation: '構文エラーメッセージで該当位置を指す記号は `^`（キャレット）。コンパイラ系ツール一般の慣習で、問題の文字の真下に置かれる。「^ が指している位置を直す」と覚えれば、エラーメッセージから素早く問題箇所を特定できる。',
+  },
+  {
+    id: 'exc-multiple-firstmatch', category: '例外',
+    question: '複数の except 節がある try 文で例外が発生したとき、どの except が実行される？',
+    choices: [
+      '上から順に判定し、最初に一致した except だけが実行される',
+      '最も型が近い「最もマッチする」except が選ばれる',
+      'すべての一致する except が順に実行される',
+      'ランダムに1つ選ばれる',
+    ],
+    correct: 0,
+    explanation: '上から順に判定し、**最初に一致したもの**だけが走る。だから親クラス Exception を上に書くと、その下の具体例外には届かなくなる。「具体的なものを上、一般的なものを下」が鉄則。「最もマッチ」という直感は誤り。',
+  },
+  {
+    id: 'cls-isinstance', category: 'クラス',
+    question: '`obj` が `MyClass` のインスタンスかどうかを判定する関数は？',
+    choices: ['isinstance(obj, MyClass)', 'issubclass(obj, MyClass)', 'isinstance(MyClass, obj)', 'type(obj) is MyClass'],
+    correct: 0,
+    explanation: 'isinstance(対象オブジェクト, クラス) の順で書く。issubclass は両方クラスを取り、継承関係を判定する別物。type(obj) is MyClass は厳密型チェックで継承を考慮しないので、ポリモーフィズムを壊す。「インスタンス判定は isinstance、クラス間関係は issubclass」と用途で覚える。',
+  },
+  {
+    id: 'cls-issubclass', category: 'クラス',
+    question: '`Drink` が `Item` を継承しているか判定する関数は？',
+    choices: ['issubclass(Drink, Item)', 'isinstance(Drink, Item)', 'issubclass(Item, Drink)', 'Drink.is_subclass(Item)'],
+    correct: 0,
+    explanation: 'issubclass(子クラス, 親クラス) の順。第1引数が「下」、第2引数が「上」。順序を逆にすると逆の関係を聞くことになる。isinstance はクラスではなくインスタンスを取るので別物。',
+  },
+  {
+    id: 'regex-or', category: '正規表現',
+    question: '正規表現で「左右のパターンのいずれか」を表す記号は？',
+    choices: ['|', '%', '/', '||'],
+    correct: 0,
+    explanation: '| （パイプ）一文字。`apple|orange` で apple または orange のどちらかにマッチ。% は別の意味（書式指定など）、|| はないが他言語の論理OR記号と混同しがちな引っかけ。',
+  },
+  {
+    id: 'lib-bisect', category: '標準ライブラリ',
+    question: 'bisect モジュールの役割は？',
+    choices: [
+      'ソート済みのリストに対して効率的な挿入位置を見つける',
+      '文字列に関する便利な定数や関数を提供する',
+      'バイナリ形式のデータを扱う',
+      '辞書を二分探索する',
+    ],
+    correct: 0,
+    explanation: 'bisect は二分探索（binary search）を使ってソート済みリストへの挿入位置を求めるモジュール。`bisect.insort(lst, x)` でリストの順序を保ったまま要素を挿入できる。文字列の定数集は string モジュール、バイナリは struct モジュール、と別物が並ぶ引っかけ。',
+  },
+  {
+    id: 'pkg-list', category: 'パッケージ',
+    question: 'インストール済みパッケージの一覧を表示するコマンドは？',
+    choices: ['pip list', 'pip show', 'pip freeze', 'pip status'],
+    correct: 0,
+    explanation: 'pip list は人間向けの表形式でパッケージ名とバージョンを表示。pip show <name> は特定パッケージの詳細情報、pip freeze は requirements.txt 用の `name==version` 形式。用途で使い分ける。pip status というコマンドは存在しない。',
+  },
+
   // ====== イテレーション（誤答癖④：境界の追跡）======
   {
     id: 'ctrl-loop-index-err', category: 'イテレーション',

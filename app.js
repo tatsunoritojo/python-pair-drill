@@ -200,7 +200,7 @@ const EXPORT_KEYS = {
   assistantData: 'python-pair-drill-assistant-v1',
 };
 
-function exportAllData(includeApiKey) {
+function collectExportData(includeApiKey) {
   const data = { version: 1, exportedAt: new Date().toISOString() };
   for (const [field, key] of Object.entries(EXPORT_KEYS)) {
     const raw = localStorage.getItem(key);
@@ -211,11 +211,14 @@ function exportAllData(includeApiKey) {
       data[field] = null;
     }
   }
-  // APIキーの除外
   if (!includeApiKey && data.assistantData && data.assistantData.apiKey) {
     data.assistantData = { ...data.assistantData, apiKey: '' };
   }
+  return data;
+}
 
+function exportAllData(includeApiKey) {
+  const data = collectExportData(includeApiKey);
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -227,6 +230,162 @@ function exportAllData(includeApiKey) {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
+
+function compressData(data) {
+  if (typeof LZString === 'undefined') {
+    throw new Error('LZ-string ライブラリが読み込めていません。');
+  }
+  return LZString.compressToEncodedURIComponent(JSON.stringify(data));
+}
+
+function decompressData(compressed) {
+  if (typeof LZString === 'undefined') {
+    throw new Error('LZ-string ライブラリが読み込めていません。');
+  }
+  const json = LZString.decompressFromEncodedURIComponent(compressed);
+  if (!json) throw new Error('圧縮データを展開できませんでした。');
+  return JSON.parse(json);
+}
+
+function applyImportData(data) {
+  if (!data || typeof data !== 'object' || data.version !== 1) {
+    alert('対応していないデータ形式です（version: 1 のみ対応）。');
+    return false;
+  }
+  let count = 0;
+  for (const [field, key] of Object.entries(EXPORT_KEYS)) {
+    if (data[field] !== undefined && data[field] !== null) {
+      localStorage.setItem(key, JSON.stringify(data[field]));
+      count++;
+    }
+  }
+  return count;
+}
+
+function exportAsQR(includeApiKey) {
+  const data = collectExportData(includeApiKey);
+  let compressed;
+  try {
+    compressed = compressData(data);
+  } catch (e) {
+    alert(e.message);
+    return;
+  }
+  const baseUrl = location.origin + location.pathname;
+  const url = `${baseUrl}?import=${compressed}`;
+
+  const sizeKB = (url.length / 1024).toFixed(1);
+  if (url.length > 2300) {
+    if (!confirm(`データが大きい (${sizeKB} KB / 推奨2KB以下) ためQRコードが密になり読み取りに時間がかかる可能性があります。続行しますか？`)) return;
+  }
+
+  // 古いQRが残っていれば消す
+  const canvas = document.getElementById('qr-canvas');
+  canvas.innerHTML = '';
+
+  if (typeof QRCode === 'undefined') {
+    alert('QRライブラリが読み込めていません。インターネット接続を確認してください。');
+    return;
+  }
+
+  // QRCode.js は size 自動判定するが、手動で指定もできる
+  new QRCode(canvas, {
+    text: url,
+    width: 280,
+    height: 280,
+    correctLevel: QRCode.CorrectLevel.L,  // 容量優先
+  });
+
+  document.getElementById('qr-info').textContent = `データサイズ: ${sizeKB} KB`;
+  openModal('qr-modal');
+}
+
+function exportAsText(includeApiKey) {
+  const data = collectExportData(includeApiKey);
+  let compressed;
+  try {
+    compressed = compressData(data);
+  } catch (e) {
+    alert(e.message);
+    return;
+  }
+  document.getElementById('text-export-area').value = compressed;
+  document.getElementById('text-export-info').textContent =
+    `${compressed.length.toLocaleString()} 文字 / 約 ${(compressed.length / 1024).toFixed(1)} KB`;
+  openModal('text-modal');
+}
+
+function importFromText() {
+  openModal('text-import-modal');
+  document.getElementById('text-import-area').value = '';
+  setTimeout(() => document.getElementById('text-import-area').focus(), 50);
+}
+
+function applyTextImport() {
+  const text = document.getElementById('text-import-area').value.trim();
+  if (!text) {
+    alert('テキストが空です。');
+    return;
+  }
+  let data;
+  try {
+    data = decompressData(text);
+  } catch (e) {
+    alert(`データの読み込みに失敗しました: ${e.message}`);
+    return;
+  }
+  if (!confirm('現在のデータを上書きしてインポートします。よろしいですか？')) return;
+  const count = applyImportData(data);
+  if (count !== false) {
+    alert(`${count}件のデータを読み込みました。ページを再読み込みします。`);
+    location.reload();
+  }
+}
+
+// URL ?import= を起動時に検出して自動復元
+function checkUrlImport() {
+  const params = new URLSearchParams(location.search);
+  const compressed = params.get('import');
+  if (!compressed) return;
+  let data;
+  try {
+    data = decompressData(compressed);
+  } catch (e) {
+    console.error('Import from URL failed:', e);
+    alert('URL のデータが破損しています。');
+    history.replaceState({}, '', location.pathname);
+    return;
+  }
+  if (confirm('URL に他端末のデータが含まれています。\n既存のデータを上書きしてインポートしますか？')) {
+    const count = applyImportData(data);
+    history.replaceState({}, '', location.pathname);
+    if (count !== false) {
+      alert(`${count}件のデータを読み込みました。ページを再読み込みします。`);
+      location.reload();
+    }
+  } else {
+    history.replaceState({}, '', location.pathname);
+  }
+}
+
+// モーダル制御
+function openModal(id) {
+  const m = document.getElementById(id);
+  m.hidden = false;
+  m.setAttribute('aria-hidden', 'false');
+}
+function closeModal(id) {
+  const m = document.getElementById(id);
+  m.hidden = true;
+  m.setAttribute('aria-hidden', 'true');
+}
+document.addEventListener('click', (e) => {
+  const close = e.target.closest('[data-close]');
+  if (close) {
+    const modal = close.closest('.modal');
+    if (modal) closeModal(modal.id);
+  }
+});
 
 function importAllData(file) {
   const reader = new FileReader();
@@ -353,14 +512,34 @@ function initHome() {
   };
 
   // データ管理ボタン（毎回再バインドしないようガード）
-  const exportBtn = document.getElementById('export-btn');
-  if (exportBtn && !exportBtn.dataset.bound) {
-    exportBtn.dataset.bound = '1';
-    exportBtn.addEventListener('click', () => {
-      const include = document.getElementById('export-include-key').checked;
-      exportAllData(include);
-    });
-  }
+  const bindOnce = (id, handler) => {
+    const el = document.getElementById(id);
+    if (el && !el.dataset.bound) {
+      el.dataset.bound = '1';
+      el.addEventListener('click', handler);
+    }
+  };
+  const getInclude = () => document.getElementById('export-include-key').checked;
+
+  bindOnce('export-btn', () => exportAllData(getInclude()));
+  bindOnce('export-qr-btn', () => exportAsQR(getInclude()));
+  bindOnce('export-text-btn', () => exportAsText(getInclude()));
+  bindOnce('import-text-btn', importFromText);
+  bindOnce('text-import-confirm-btn', applyTextImport);
+  bindOnce('text-copy-btn', () => {
+    const ta = document.getElementById('text-export-area');
+    ta.select();
+    try {
+      navigator.clipboard.writeText(ta.value).then(
+        () => { document.getElementById('text-export-info').textContent = 'コピーしました ✓'; },
+        () => { document.execCommand('copy'); }
+      );
+    } catch {
+      document.execCommand('copy');
+    }
+  });
+  bindOnce('wipe-btn', wipeAllData);
+
   const importInput = document.getElementById('import-file');
   if (importInput && !importInput.dataset.bound) {
     importInput.dataset.bound = '1';
@@ -370,11 +549,6 @@ function initHome() {
       }
       ev.target.value = '';
     });
-  }
-  const wipeBtn = document.getElementById('wipe-btn');
-  if (wipeBtn && !wipeBtn.dataset.bound) {
-    wipeBtn.dataset.bound = '1';
-    wipeBtn.addEventListener('click', wipeAllData);
   }
 
   // 誤答癖プロファイル表示
@@ -753,3 +927,4 @@ document.getElementById('start-btn').addEventListener('click', () => startQuiz()
 // ====== 起動 ======
 initTheme();
 initHome();
+checkUrlImport();  // URL ?import= があれば自動復元

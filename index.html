@@ -63,17 +63,59 @@
       <details class="data-mgmt">
         <summary>📦 データの書き出し / 読み込み</summary>
         <div class="data-mgmt-body">
-          <p class="muted">別の端末・ブラウザにデータを移行する場合に使います。</p>
+          <p class="muted small">別の端末・ブラウザにデータを移行する場合に使います。<br>
+          <strong>PC → スマホ</strong>: 「QRコードで書き出す」→ スマホのカメラで読み取り → 自動復元。<br>
+          <strong>スマホ → PC</strong>: スマホで「テキストで書き出す」→ メールや LINE などで PC へコピー → PC で「テキストを貼り付けて読み込む」。</p>
           <label class="checkbox-label">
             <input type="checkbox" id="export-include-key">
             <span>APIキーも含める（流出に注意）</span>
           </label>
-          <button class="btn-secondary" id="export-btn">JSONとして書き出す</button>
-          <label for="import-file" class="btn-secondary as-link" style="cursor:pointer;">JSONを読み込む</label>
+          <h4 class="data-mgmt-section">書き出し</h4>
+          <button class="btn-secondary" id="export-qr-btn">📱 QRコードで書き出す（スマホへ）</button>
+          <button class="btn-secondary" id="export-text-btn">📋 テキスト（コピペ用）で書き出す</button>
+          <button class="btn-secondary" id="export-btn">📁 JSONファイルとして書き出す</button>
+          <h4 class="data-mgmt-section">読み込み</h4>
+          <button class="btn-secondary" id="import-text-btn">📋 テキストを貼り付けて読み込む</button>
+          <label for="import-file" class="btn-secondary as-link" style="cursor:pointer;">📁 JSONファイルを読み込む</label>
           <input type="file" id="import-file" accept=".json,application/json" hidden />
+          <h4 class="data-mgmt-section">削除</h4>
           <button class="btn-secondary danger" id="wipe-btn">すべてのデータを削除</button>
         </div>
       </details>
+
+      <div id="qr-modal" class="modal" hidden aria-hidden="true" role="dialog" aria-labelledby="qr-modal-title">
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-content">
+          <h3 id="qr-modal-title">QRコードで送信</h3>
+          <p class="muted small">スマホのカメラでQRコードを読み取ってください。読み取ると、スマホのブラウザでアプリが開いてデータが復元されます。</p>
+          <div id="qr-canvas" class="qr-canvas"></div>
+          <p id="qr-info" class="muted small"></p>
+          <button class="btn-primary" data-close>閉じる</button>
+        </div>
+      </div>
+
+      <div id="text-modal" class="modal" hidden aria-hidden="true" role="dialog" aria-labelledby="text-modal-title">
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-content">
+          <h3 id="text-modal-title">テキストで書き出し</h3>
+          <p class="muted small">下のテキストをコピーして、別端末の「テキストを貼り付けて読み込む」に貼り付けてください。</p>
+          <textarea id="text-export-area" readonly rows="6"></textarea>
+          <p id="text-export-info" class="muted small"></p>
+          <button class="btn-primary" id="text-copy-btn">クリップボードにコピー</button>
+          <button class="btn-secondary" data-close>閉じる</button>
+        </div>
+      </div>
+
+      <div id="text-import-modal" class="modal" hidden aria-hidden="true" role="dialog" aria-labelledby="text-import-modal-title">
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-content">
+          <h3 id="text-import-modal-title">テキストを貼り付けて読み込む</h3>
+          <p class="muted small">他端末の「テキストで書き出す」で表示された文字列を下に貼り付けてください。</p>
+          <textarea id="text-import-area" rows="6" placeholder="圧縮された文字列を貼り付け…"></textarea>
+          <button class="btn-primary" id="text-import-confirm-btn">読み込む</button>
+          <button class="btn-secondary" data-close>キャンセル</button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -147,6 +189,8 @@
 <footer>
   <small>Python ペアドリル · <a href="https://github.com/tatsunoritojo/python-pair-drill" target="_blank" rel="noopener">GitHub</a></small>
 </footer>
+<script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="questions.js"></script>
 <script src="concepts.js"></script>
 <script src="app.js"></script>

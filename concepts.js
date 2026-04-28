@@ -140,6 +140,19 @@ const QUESTION_META = {
   'exc-finally':       { difficulty: 'medium', concepts: ['implicit-rule'] },
   'exc-raise-skips':   { difficulty: 'hard',   concepts: ['boundary'] },
   'exc-args-tuple':    { difficulty: 'medium', concepts: ['implicit-rule'] },
+
+  // 模4ベースの追加問題
+  'ctrl-continue-break': { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'syn-docstring-firstline': { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'tuple-unpack':      { difficulty: 'medium', concepts: ['boundary'] },
+  'dict-key-error':    { difficulty: 'easy',   concepts: ['implicit-rule'] },
+  'exc-syntax-caret':  { difficulty: 'easy',   concepts: ['nonexistent'] },
+  'exc-multiple-firstmatch': { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'cls-isinstance':    { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'cls-issubclass':    { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'regex-or':          { difficulty: 'easy',   concepts: ['string-regex', 'guess'] },
+  'lib-bisect':        { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'pkg-list':          { difficulty: 'easy',   concepts: ['guess', 'pair-confusion'] },
 };
 
 // デフォルト値（meta が無い問題用）

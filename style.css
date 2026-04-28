@@ -543,6 +543,60 @@ footer a:hover { text-decoration: underline; }
   .stat > span:last-child { font-size: 1rem; }
 }
 
+/* ============ モーダル ============ */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.modal[hidden] { display: none; }
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  cursor: pointer;
+}
+.modal-content {
+  position: relative;
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 1.25rem;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.modal-content h3 { font-size: 1rem; }
+.modal-content textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 0.625rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  word-break: break-all;
+}
+.qr-canvas {
+  display: flex;
+  justify-content: center;
+  padding: 0.625rem;
+  background: white;
+  border-radius: 10px;
+}
+.qr-canvas img, .qr-canvas canvas { display: block; max-width: 100%; height: auto; }
+.small { font-size: 0.8125rem; }
+
 /* ============ データ管理（折りたたみ） ============ */
 .data-mgmt {
   margin-top: 1rem;
@@ -568,6 +622,14 @@ footer a:hover { text-decoration: underline; }
 }
 .data-mgmt-body p { font-size: 0.8125rem; }
 .data-mgmt-body .as-link { display: block; text-align: center; }
+.data-mgmt-section {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.5rem;
+}
 
 /* ============ 誤答癖プロファイル ============ */
 .weak-profile {
