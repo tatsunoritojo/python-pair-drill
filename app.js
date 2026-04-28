@@ -352,29 +352,45 @@ function exportAsQR(includeApiKey) {
   const baseUrl = location.origin + location.pathname;
   const url = `${baseUrl}?import=${compressed}`;
 
-  const sizeKB = (url.length / 1024).toFixed(1);
-  if (url.length > 2300) {
-    if (!confirm(`データが大きい (${sizeKB} KB / 推奨2KB以下) ためQRコードが密になり読み取りに時間がかかる可能性があります。続行しますか？`)) return;
-  }
-
-  // 古いQRが残っていれば消す
-  const canvas = document.getElementById('qr-canvas');
-  canvas.innerHTML = '';
-
-  if (typeof QRCode === 'undefined') {
+  if (typeof qrcode !== 'function') {
     alert('QRライブラリが読み込めていません。インターネット接続を確認してください。');
     return;
   }
 
-  // QRCode.js は size 自動判定するが、手動で指定もできる
-  new QRCode(canvas, {
-    text: url,
-    width: 280,
-    height: 280,
-    correctLevel: QRCode.CorrectLevel.L,  // 容量優先
+  // 古いQRを消す
+  const canvas = document.getElementById('qr-canvas');
+  canvas.innerHTML = '';
+
+  // qrcode-generator: typeNumber=0 で容量に応じて自動判定、L=容量優先
+  let qr, version;
+  try {
+    qr = qrcode(0, 'L');
+    qr.addData(url);
+    qr.make();
+    version = qr.getModuleCount();  // 1辺のセル数（バージョンの目安）
+  } catch (e) {
+    alert(`QRコード生成失敗: データが大きすぎます（${(url.length/1024).toFixed(1)} KB）。\n履歴を減らすか、テキスト書き出しをご利用ください。\n\n詳細: ${e.message}`);
+    return;
+  }
+
+  // SVG で描画（拡大縮小しても綺麗）
+  canvas.innerHTML = qr.createSvgTag({
+    cellSize: 4,
+    margin: 2,
+    scalable: true,
   });
 
-  document.getElementById('qr-info').textContent = `データサイズ: ${sizeKB} KB`;
+  // SVG を画面サイズに合わせる
+  const svg = canvas.querySelector('svg');
+  if (svg) {
+    svg.style.width = '100%';
+    svg.style.maxWidth = '320px';
+    svg.style.height = 'auto';
+  }
+
+  const sizeKB = (url.length / 1024).toFixed(2);
+  document.getElementById('qr-info').textContent =
+    `データ: ${url.length}文字 / ${sizeKB} KB · QRバージョン: ${Math.round((version - 17) / 4)} (${version}×${version}セル)`;
   openModal('qr-modal');
 }
 
