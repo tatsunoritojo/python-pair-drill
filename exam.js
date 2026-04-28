@@ -66,8 +66,13 @@ document.getElementById('theme-toggle').addEventListener('click', () => {
 
 // ---------- 画面切り替え ----------
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.setAttribute('aria-hidden', 'true');
+  });
+  const el = document.getElementById(id);
+  el.classList.add('active');
+  el.setAttribute('aria-hidden', 'false');
   window.scrollTo(0, 0);
 }
 
@@ -183,7 +188,9 @@ function renderQuestion() {
   q.choices.forEach((text, i) => {
     const choice = document.createElement('button');
     choice.className = 'choice';
-    if (state.answers[state.current] === i) choice.classList.add('selected');
+    const isSelected = state.answers[state.current] === i;
+    if (isSelected) choice.classList.add('selected');
+    choice.setAttribute('aria-pressed', String(isSelected));
     choice.innerHTML = `<span class="choice-marker">${labels[i] || (i+1)}</span><span class="choice-text"></span>`;
     choice.querySelector('.choice-text').textContent = text;
     choice.addEventListener('click', () => {
@@ -444,6 +451,87 @@ document.getElementById('exam-retry-wrong-btn').addEventListener('click', () => 
   renderQuestion();
   renderOverview();
   startTimer();
+});
+
+// ---------- 統計画面 ----------
+function renderStats() {
+  const history = loadExamHistory();
+  document.getElementById('exam-stats-total').textContent = history.length;
+
+  if (history.length === 0) {
+    document.getElementById('exam-stats-best').textContent = '-';
+    document.getElementById('exam-stats-recent').textContent = '-';
+    document.getElementById('exam-stats-by-exam').innerHTML = '<p class="muted">まだ挑戦履歴がありません。</p>';
+    document.getElementById('exam-stats-history').innerHTML = '';
+    return;
+  }
+
+  // 最高点
+  const best = history.reduce((m, h) => Math.max(m, h.correct / h.total), 0);
+  document.getElementById('exam-stats-best').textContent = `${Math.round(best * 100)}%`;
+
+  // 直近5回平均
+  const recent = history.slice(-5);
+  const recentAvg = recent.reduce((s, h) => s + h.correct / h.total, 0) / recent.length;
+  document.getElementById('exam-stats-recent').textContent = `${Math.round(recentAvg * 100)}%`;
+
+  // 模擬別の最高点
+  const byExam = {};
+  history.forEach((h) => {
+    const cur = byExam[h.examId];
+    const rate = h.correct / h.total;
+    if (!cur || rate > cur.rate) {
+      byExam[h.examId] = { rate, title: h.examTitle, correct: h.correct, total: h.total, at: h.timestamp };
+    }
+  });
+  const byExamEl = document.getElementById('exam-stats-by-exam');
+  byExamEl.innerHTML = '';
+  Object.values(byExam)
+    .sort((a, b) => b.rate - a.rate)
+    .forEach((b) => {
+      const row = document.createElement('div');
+      row.className = 'stats-row';
+      row.innerHTML = `
+        <span class="stats-row-title"></span>
+        <span class="stats-row-meta">${b.correct}/${b.total} (${Math.round(b.rate * 100)}%)</span>
+      `;
+      row.querySelector('.stats-row-title').textContent = b.title;
+      byExamEl.appendChild(row);
+    });
+
+  // 直近20件履歴
+  const histEl = document.getElementById('exam-stats-history');
+  histEl.innerHTML = '';
+  history.slice().reverse().slice(0, 20).forEach((h) => {
+    const date = new Date(h.timestamp);
+    const ymd = `${date.getMonth()+1}/${date.getDate()} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+    const rate = Math.round((h.correct / h.total) * 100);
+    const passed = rate >= 70;
+    const row = document.createElement('div');
+    row.className = 'history-row ' + (passed ? 'pass' : 'fail');
+    row.innerHTML = `
+      <span class="history-time">${ymd}</span>
+      <span class="history-title"></span>
+      <span class="history-score">${h.correct}/${h.total} <strong>${rate}%</strong></span>
+      <span class="history-time2">${formatSec(h.elapsed)}${h.timeout ? ' ⏱' : ''}</span>
+    `;
+    row.querySelector('.history-title').textContent = h.examTitle;
+    histEl.appendChild(row);
+  });
+}
+
+document.getElementById('exam-stats-btn').addEventListener('click', () => {
+  renderStats();
+  showScreen('exam-stats-screen');
+});
+document.getElementById('exam-stats-back-btn').addEventListener('click', () => {
+  showScreen('exam-home-screen');
+});
+document.getElementById('exam-stats-reset-btn').addEventListener('click', () => {
+  if (confirm('模擬試験の履歴をすべて削除します。よろしいですか？')) {
+    saveExamHistory([]);
+    renderStats();
+  }
 });
 
 // ---------- キーボードショートカット ----------

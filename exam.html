@@ -11,6 +11,11 @@
 <body>
 <header>
   <h1>模擬試験</h1>
+  <nav class="header-nav" aria-label="メインナビゲーション">
+    <a href="index.html" class="nav-link">ドリル</a>
+    <a href="exam.html" class="nav-link active" aria-current="page">模擬試験</a>
+    <a href="assistant.html" class="nav-link">AI</a>
+  </nav>
   <button id="theme-toggle" class="btn-icon" aria-label="テーマ切替">🌙</button>
 </header>
 <main>
@@ -42,7 +47,27 @@
       </div>
 
       <button class="btn-primary" id="exam-start-btn" disabled>スタート</button>
-      <a href="index.html" class="btn-secondary as-link">ドリルに戻る</a>
+      <button class="btn-secondary" id="exam-stats-btn">過去の挑戦履歴</button>
+    </div>
+  </section>
+
+  <section id="exam-stats-screen" class="screen">
+    <div class="card">
+      <h2>挑戦履歴</h2>
+      <div class="stats">
+        <div class="stat"><span class="stat-label">総挑戦</span><span id="exam-stats-total">0</span></div>
+        <div class="stat"><span class="stat-label">最高点</span><span id="exam-stats-best">-</span></div>
+        <div class="stat"><span class="stat-label">直近5回平均</span><span id="exam-stats-recent">-</span></div>
+      </div>
+
+      <h3>模擬別の最高点</h3>
+      <div id="exam-stats-by-exam"></div>
+
+      <h3>挑戦履歴（直近20件）</h3>
+      <div id="exam-stats-history"></div>
+
+      <button class="btn-secondary danger" id="exam-stats-reset-btn">履歴をリセット</button>
+      <button class="btn-secondary" id="exam-stats-back-btn">戻る</button>
     </div>
   </section>
 

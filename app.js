@@ -25,8 +25,13 @@ function shuffle(arr) {
 }
 
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach((s) => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.screen').forEach((s) => {
+    s.classList.remove('active');
+    s.setAttribute('aria-hidden', 'true');
+  });
+  const el = document.getElementById(id);
+  el.classList.add('active');
+  el.setAttribute('aria-hidden', 'false');
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
