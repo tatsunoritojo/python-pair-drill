@@ -193,6 +193,69 @@ const QUESTION_META = {
   'print-end-loop':      { difficulty: 'medium', concepts: ['boundary'] },
   'tuple-no-comma':      { difficulty: 'easy',   concepts: ['implicit-rule'] },
   'tuple-single-paren':  { difficulty: 'medium', concepts: ['implicit-rule'] },
+
+  // セクション4-9 50%台の補強
+  // 4. 制御構造ツール
+  'func-no-return':        { difficulty: 'easy',   concepts: ['implicit-rule'] },
+  'syn-pass':              { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'anno-storage':          { difficulty: 'medium', concepts: ['guess'] },
+  'syn-lambda-limit':      { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'arg-positional-only':   { difficulty: 'hard',   concepts: ['implicit-rule', 'word-order'] },
+  // 6. モジュール
+  'mod-init-py':           { difficulty: 'easy',   concepts: ['implicit-rule'] },
+  'mod-package-vs-module': { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'mod-dotted-import':     { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'mod-all-attribute':     { difficulty: 'medium', concepts: ['guess'] },
+  'mod-relative-import':   { difficulty: 'medium', concepts: ['guess'] },
+  // 8. エラーと例外
+  'exc-tryexceptelse-flow':{ difficulty: 'medium', concepts: ['word-order', 'implicit-rule'] },
+  'exc-raise-from':        { difficulty: 'hard',   concepts: ['guess'] },
+  'exc-custom-class':      { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'exc-assert':            { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'exc-finally-return':    { difficulty: 'hard',   concepts: ['implicit-rule', 'boundary'] },
+  // 9. クラス
+  'cls-init-purpose':      { difficulty: 'easy',   concepts: ['implicit-rule'] },
+  'cls-classmethod':       { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'cls-staticmethod':      { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'cls-name-mangling':     { difficulty: 'hard',   concepts: ['implicit-rule'] },
+  'cls-str-vs-repr':       { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'cls-mro':               { difficulty: 'hard',   concepts: ['guess'] },
+
+  // セクション12: 仮想環境とパッケージ 充実
+  'pkg-venv-purpose':      { difficulty: 'easy',   concepts: ['guess'] },
+  'pkg-venv-activate-unix':{ difficulty: 'medium', concepts: ['guess'] },
+  'pkg-venv-activate-win': { difficulty: 'medium', concepts: ['guess', 'pair-confusion'] },
+  'pkg-venv-deactivate':   { difficulty: 'easy',   concepts: ['guess'] },
+  'pkg-pip-version-spec':  { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'pkg-pip-uninstall':     { difficulty: 'easy',   concepts: ['guess', 'pair-confusion'] },
+  'pkg-pip-show':          { difficulty: 'easy',   concepts: ['guess'] },
+  'pkg-pip-list-vs-freeze':{ difficulty: 'medium', concepts: ['pair-confusion'] },
+  'pkg-requirements-content':{ difficulty: 'easy', concepts: ['implicit-rule'] },
+  'pkg-requirements-install':{ difficulty: 'easy', concepts: ['guess'] },
+  'pkg-pypi-purpose':      { difficulty: 'easy',   concepts: ['guess'] },
+  'pkg-pip-multiple':      { difficulty: 'easy',   concepts: ['implicit-rule'] },
+  'pkg-venv-isolated':     { difficulty: 'medium', concepts: ['implicit-rule'] },
+
+  // セクション11: 標準ライブラリ Part II 充実
+  'lib-reprlib-purpose':   { difficulty: 'medium', concepts: ['guess'] },
+  'lib-pprint-purpose':    { difficulty: 'easy',   concepts: ['guess'] },
+  'lib-textwrap-fill':     { difficulty: 'medium', concepts: ['guess'] },
+  'lib-locale-purpose':    { difficulty: 'easy',   concepts: ['guess'] },
+  'lib-template-substitute':{ difficulty: 'medium', concepts: ['pair-confusion'] },
+  'lib-struct-pack-format':{ difficulty: 'medium', concepts: ['implicit-rule'] },
+  'lib-threading-class':   { difficulty: 'easy',   concepts: ['guess', 'pair-confusion'] },
+  'lib-threading-purpose': { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'lib-logging-levels':    { difficulty: 'medium', concepts: ['word-order'] },
+  'lib-logging-basicconfig':{ difficulty: 'medium', concepts: ['guess'] },
+  'lib-weakref-purpose':   { difficulty: 'hard',   concepts: ['guess'] },
+  'lib-array-purpose':     { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'lib-deque-purpose':     { difficulty: 'medium', concepts: ['guess'] },
+  'lib-deque-methods':     { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'lib-bisect-insort':     { difficulty: 'medium', concepts: ['guess'] },
+  'lib-heapq-purpose':     { difficulty: 'medium', concepts: ['guess'] },
+  'lib-heapq-heappop':     { difficulty: 'easy',   concepts: ['implicit-rule'] },
+  'lib-decimal-purpose':   { difficulty: 'medium', concepts: ['guess'] },
+  'lib-decimal-vs-float':  { difficulty: 'medium', concepts: ['implicit-rule'] },
 };
 
 // デフォルト値（meta が無い問題用）
