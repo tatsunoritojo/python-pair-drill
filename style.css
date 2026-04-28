@@ -543,6 +543,32 @@ footer a:hover { text-decoration: underline; }
   .stat > span:last-child { font-size: 1rem; }
 }
 
+/* ============ データ管理（折りたたみ） ============ */
+.data-mgmt {
+  margin-top: 1rem;
+  padding: 0.625rem 0.875rem;
+  background: var(--bg);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+.data-mgmt summary {
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  list-style: none;
+  user-select: none;
+}
+.data-mgmt summary::-webkit-details-marker { display: none; }
+.data-mgmt[open] summary { margin-bottom: 0.625rem; }
+.data-mgmt-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.data-mgmt-body p { font-size: 0.8125rem; }
+.data-mgmt-body .as-link { display: block; text-align: center; }
+
 /* ============ 誤答癖プロファイル ============ */
 .weak-profile {
   margin-top: 1rem;

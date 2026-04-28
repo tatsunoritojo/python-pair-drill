@@ -193,6 +193,79 @@ function optimizeSession(scored, count) {
   return arranged.map((item) => item.q);
 }
 
+// ====== データのエクスポート / インポート ======
+const EXPORT_KEYS = {
+  drillData: 'python-pair-drill-v1',
+  examHistory: 'python-pair-drill-exam-history-v1',
+  assistantData: 'python-pair-drill-assistant-v1',
+};
+
+function exportAllData(includeApiKey) {
+  const data = { version: 1, exportedAt: new Date().toISOString() };
+  for (const [field, key] of Object.entries(EXPORT_KEYS)) {
+    const raw = localStorage.getItem(key);
+    if (!raw) { data[field] = null; continue; }
+    try {
+      data[field] = JSON.parse(raw);
+    } catch {
+      data[field] = null;
+    }
+  }
+  // APIキーの除外
+  if (!includeApiKey && data.assistantData && data.assistantData.apiKey) {
+    data.assistantData = { ...data.assistantData, apiKey: '' };
+  }
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+  a.href = url;
+  a.download = `python-pair-drill-${stamp}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importAllData(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    let data;
+    try {
+      data = JSON.parse(e.target.result);
+    } catch {
+      alert('JSONとして読み込めませんでした。ファイルが破損している可能性があります。');
+      return;
+    }
+    if (!data || typeof data !== 'object' || data.version !== 1) {
+      alert('対応していないデータ形式です（version: 1 のみ対応）。');
+      return;
+    }
+    if (!confirm('現在のデータを上書きしてインポートします。よろしいですか？')) return;
+
+    let count = 0;
+    for (const [field, key] of Object.entries(EXPORT_KEYS)) {
+      if (data[field] !== undefined && data[field] !== null) {
+        localStorage.setItem(key, JSON.stringify(data[field]));
+        count++;
+      }
+    }
+    alert(`${count}件のデータを読み込みました。ページを再読み込みします。`);
+    location.reload();
+  };
+  reader.onerror = () => alert('ファイル読み込みに失敗しました。');
+  reader.readAsText(file);
+}
+
+function wipeAllData() {
+  if (!confirm('すべてのドリル統計・模擬履歴・アシスタント設定（APIキー含む）を削除します。元に戻せません。')) return;
+  if (!confirm('本当に削除しますか？')) return;
+  Object.values(EXPORT_KEYS).forEach((key) => localStorage.removeItem(key));
+  alert('すべて削除しました。ページを再読み込みします。');
+  location.reload();
+}
+
 // 弱点プロファイル（ホーム画面で参照用）
 function getWeakProfile(questionStats) {
   const cs = computeConceptStats(questionStats);
@@ -278,6 +351,31 @@ function initHome() {
   document.getElementById('weak-mode').onchange = (e) => {
     state.config.weakMode = e.target.checked;
   };
+
+  // データ管理ボタン（毎回再バインドしないようガード）
+  const exportBtn = document.getElementById('export-btn');
+  if (exportBtn && !exportBtn.dataset.bound) {
+    exportBtn.dataset.bound = '1';
+    exportBtn.addEventListener('click', () => {
+      const include = document.getElementById('export-include-key').checked;
+      exportAllData(include);
+    });
+  }
+  const importInput = document.getElementById('import-file');
+  if (importInput && !importInput.dataset.bound) {
+    importInput.dataset.bound = '1';
+    importInput.addEventListener('change', (ev) => {
+      if (ev.target.files && ev.target.files[0]) {
+        importAllData(ev.target.files[0]);
+      }
+      ev.target.value = '';
+    });
+  }
+  const wipeBtn = document.getElementById('wipe-btn');
+  if (wipeBtn && !wipeBtn.dataset.bound) {
+    wipeBtn.dataset.bound = '1';
+    wipeBtn.addEventListener('click', wipeAllData);
+  }
 
   // 誤答癖プロファイル表示
   renderWeakProfile(data.questionStats);

@@ -59,6 +59,21 @@
       <button class="btn-primary" id="start-btn">スタート</button>
       <button class="btn-secondary" id="stats-btn">統計を見る</button>
       <a href="exam.html" class="btn-secondary as-link">📝 模擬試験モード</a>
+
+      <details class="data-mgmt">
+        <summary>📦 データの書き出し / 読み込み</summary>
+        <div class="data-mgmt-body">
+          <p class="muted">別の端末・ブラウザにデータを移行する場合に使います。</p>
+          <label class="checkbox-label">
+            <input type="checkbox" id="export-include-key">
+            <span>APIキーも含める（流出に注意）</span>
+          </label>
+          <button class="btn-secondary" id="export-btn">JSONとして書き出す</button>
+          <label for="import-file" class="btn-secondary as-link" style="cursor:pointer;">JSONを読み込む</label>
+          <input type="file" id="import-file" accept=".json,application/json" hidden />
+          <button class="btn-secondary danger" id="wipe-btn">すべてのデータを削除</button>
+        </div>
+      </details>
     </div>
   </section>
 

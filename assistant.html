@@ -25,6 +25,12 @@
       <p class="lead">Gemini API キーを入力してください。キーはあなたのブラウザ内（localStorage）にだけ保存され、外部に送信されません。</p>
 
       <div class="form-group">
+        <label for="user-name">呼んでほしい名前（任意）</label>
+        <input type="text" id="user-name" placeholder="例: 山田 / 太郎 など。空欄で「あなた」呼び" autocomplete="off" />
+        <small class="muted">アシスタントがこの名前で呼びかけます。空欄でも問題ありません。</small>
+      </div>
+
+      <div class="form-group">
         <label for="api-key">Gemini API キー</label>
         <input type="password" id="api-key" placeholder="AIzaSy..." autocomplete="off" />
         <small class="muted">取得は <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">Google AI Studio</a> から無料。</small>
@@ -42,9 +48,9 @@
       <div class="form-group">
         <label class="checkbox-label">
           <input type="checkbox" id="use-context" checked>
-          <span>東城さんの誤答癖プロファイルを文脈として渡す</span>
+          <span>あなたの誤答癖プロファイルを文脈として渡す</span>
         </label>
-        <small class="muted">3模擬の誤答パターンと統計をシステムプロンプトに含めて、個別最適化された解説を返してもらいます。</small>
+        <small class="muted">ドリル統計から弱点concept集計を生成し、システムプロンプトに自動で含めて、個別最適化された解説を返してもらいます。</small>
       </div>
 
       <button class="btn-primary" id="setup-save-btn">設定を保存して始める</button>
