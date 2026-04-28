@@ -289,6 +289,10 @@ function collectExportData(includeApiKey) {
       data[field] = null;
     }
   }
+  // AI会話履歴はデバイス間引き継ぎ対象外（文脈が切れて価値が薄い、容量も食う）
+  if (data.assistantData) {
+    data.assistantData = { ...data.assistantData, messages: [] };
+  }
   if (!includeApiKey && data.assistantData && data.assistantData.apiKey) {
     data.assistantData = { ...data.assistantData, apiKey: '' };
   }
