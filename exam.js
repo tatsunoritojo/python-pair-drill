@@ -5,6 +5,7 @@ const EXAMS = [
   { id: 'mock-exam-1-attempt2', file: 'mock-exams/mock-exam-1-attempt2.json' },
   { id: 'mock-exam-2',          file: 'mock-exams/mock-exam-2.json' },
   { id: 'mock-exam-3',          file: 'mock-exams/mock-exam-3.json' },
+  { id: 'mock-exam-4',          file: 'mock-exams/mock-exam-4.json' },
 ];
 
 const PASS_RATE = 0.7;
