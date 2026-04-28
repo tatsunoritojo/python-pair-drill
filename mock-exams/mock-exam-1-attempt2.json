@@ -2,135 +2,546 @@
   "id": "mock-exam-1-attempt2",
   "title": "模擬演習1（試行2）",
   "source": "Python3エンジニア認定基礎試験 模擬演習1",
-  "result": {
-    "correct": 27,
-    "incorrect": 13,
-    "unanswered": 0,
-    "total": 40,
-    "note": "合格ライン7割（28問）まであと1問"
-  },
-  "incorrect_questions": [
+  "result": { "correct": 23, "incorrect": 17, "total": 40 },
+  "questions": [
+    {
+      "no": 1,
+      "domain": "エラーと例外",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "try:\n  print(5 / 0)\nexcept ZeroDivisionError:\n  print(\"ZeroDivisionError\")\nexcept NameError:\n  print(\"NameError\")\nexcept ValueError:\n  print(\"ValueError\")\nexcept Exception:\n  print(\"Exception\")",
+      "choices": ["ZeroDivisionError", "NameError", "ValueError", "Exception"],
+      "correct_index": 0,
+      "user_answer_index": 0,
+      "user_result": "correct",
+      "explanation": "5/0 で ZeroDivisionError が発生。複数 except 節は上から順に該当を探し、最初にマッチしたもののみ実行される。"
+    },
+    {
+      "no": 2,
+      "domain": "データ構造",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "number = [1, 2, 3, 4, 5, 6, 7]\ndel number[5]\nprint(number)\ndel number[1:3]\nprint(number)\ndel number[:]\nprint(number)",
+      "choices": [
+        "[1, 2, 3, 4, 6, 7] / [4, 5, 6, 7] / []",
+        "[1, 2, 3, 4, 5, 7] / [1, 4, 5, 6, 7] / []",
+        "[1, 2, 3, 4, 5, 7] / [1, 4, 5, 7] / []",
+        "エラーが発生する"
+      ],
+      "correct_index": 2,
+      "user_answer_index": 2,
+      "user_result": "correct",
+      "explanation": "del は要素やスライス範囲、リスト全体を削除可能。前の操作の結果が次に引き継がれる点に注意。"
+    },
     {
       "no": 3,
       "domain": "データ構造",
-      "topic": "tuple() に複数引数",
-      "summary": "tuple() の引数は1つ（iterable）のみ。tuple('a','b','c') は TypeError。",
-      "correct_choice": "tuple(\"python\", \"ruby\", \"php\")（がタプル生成不可）"
+      "question": "次のコードを実行したとき、タプルが生成されない選択肢を選択してください。",
+      "choices": [
+        "text_tuple = \"python\",",
+        "text_tuple = \"python\", \"ruby\", \"php\"",
+        "text_tuple = (\"python\", \"ruby\", \"php\")",
+        "text_tuple = tuple(\"python\", \"ruby\", \"php\")"
+      ],
+      "correct_index": 3,
+      "user_answer_index": 1,
+      "user_result": "incorrect",
+      "explanation": "tuple() の引数は 1 つ（iterable）のみ。tuple('a','b','c') は TypeError。"
+    },
+    {
+      "no": 4,
+      "domain": "データ構造",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "users = {'Yamada': 170, 'Suzuki': 165, 'Takayama': 172}\nfor k, v in users.items():\n  print(\"キー:\", k, \"値:\", v)",
+      "choices": [
+        "キー: Yamada 値: 170 / キー: Suzuki 値: 165 / キー: Takayama 値: 172",
+        "キー: Takayama 値: 170 / キー: Suzuki 値: 165 / キー: Yamada 値: 172",
+        "キー: 172 値: Takayama / キー: 165 値: Suzuki / キー: 170 値: Yamada",
+        "エラーになる"
+      ],
+      "correct_index": 0,
+      "user_answer_index": 0,
+      "user_result": "correct",
+      "explanation": "items() は (キー, 値) のタプルを返す。for k, v in d.items() でアンパックして取得。"
     },
     {
       "no": 5,
       "domain": "データ構造",
-      "topic": "ディクショナリの基本特性",
-      "summary": "同じキーは重複格納不可（後勝ち）。タプルはイミュータブル。リストはdictキー不可（unhashable）。値の存在確認は values() を使う。",
-      "correct_choice": "同じキーを重複して格納することはできない"
+      "question": "Pythonのディクショナリに関する説明として、適切な選択肢を選択してください。",
+      "choices": [
+        "同じキーを重複して格納することはできない",
+        "タプルは可変体であり、後から要素を追加・編集・削除が可能である",
+        "「指定した値 not in ディクショナリ.keys()」で指定した値がディクショナリに存在しないかどうかを判定することができる",
+        "リストはディクショナリのキーで使用できる型である"
+      ],
+      "correct_index": 0,
+      "user_answer_index": 2,
+      "user_result": "incorrect",
+      "explanation": "同じキーは重複格納不可（後勝ち）。タプルはイミュータブル。値の存在は values()。リストは hashable でないのでキー不可。"
+    },
+    {
+      "no": 6,
+      "domain": "データ構造",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "scores = [1, 2, 3, 4, 5]\nnew_scores = []\nwhile scores:\n  score = scores.pop()\n  new_scores.append(score)\nprint(new_scores)",
+      "choices": ["[]", "[1, 2, 3, 4]", "[5, 4, 3, 2, 1]", "[1, 2, 3, 4, 5]"],
+      "correct_index": 2,
+      "user_answer_index": 2,
+      "user_result": "correct",
+      "explanation": "pop() はリスト末尾から取り出す。while は scores が空になるまで繰り返す。結果は逆順。"
+    },
+    {
+      "no": 7,
+      "domain": "モジュール",
+      "question": "モジュールに関する説明として、不適切な選択肢を選択してください。",
+      "choices": [
+        "Pythonのインタプリタを終了すると、変数や関数などを定義した情報は一般的に消失してしまう",
+        "「import パッケージ.サブアイテム.サブサブアイテム」の構文を使う場合、「パッケージ」や「サブアイテム」はパッケージである必要があるが、最後の「サブサブアイテム」は、パッケージでもモジュールでも良い",
+        "Pythonのコンパイル済みモジュールはプラットフォーム非依存なので、ひとつのライブラリを異なるアーキテクチャのシステム間で共有可能である",
+        "「from モジュール名 import *」のコードを実行することで、「_（アンダースコア）」で始まる名前も含めて全てインポートすることができる"
+      ],
+      "correct_index": 3,
+      "user_answer_index": 3,
+      "user_result": "correct",
+      "explanation": "from X import * では _ で始まる名前は除外される（プライベート扱い）。"
     },
     {
       "no": 8,
       "domain": "モジュール",
-      "topic": "import モジュール → モジュール名.関数名()",
-      "summary": "import test だけなら関数呼び出しは test.test_print()。from test import test_print なら test_print() で直接呼べる。",
-      "correct_choice": "import test / test.test_print()"
+      "question": "「python file.py」を実行し、出力が「hello」となる場合、①に当てはまるコードは？\n\nfile.py に ① を書く。test.py には def test_print(): print(\"hello\") が定義されている。",
+      "choices": [
+        "import test\\ntest.test_print()",
+        "import test\\ntest_print()",
+        "import test from test_print\\ntest.test_print()",
+        "import test from *\\ntest.test_print()"
+      ],
+      "correct_index": 0,
+      "user_answer_index": 1,
+      "user_result": "incorrect",
+      "explanation": "import test で得られる名前は test だけ。中の関数は test.test_print() で呼ぶ。"
+    },
+    {
+      "no": 9,
+      "domain": "入出力",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "score = 80\naverage = 59.3333\nprint(f'あなたの点数は{score:3d}点です')\nprint(f'平均点は{average:.2f}点です')\nprint(f'平均点は{average:10.2f}点です')",
+      "choices": [
+        "あなたの点数は80 点です / 平均点は59.33点です / 平均点は59.33     点です",
+        "あなたの点数は80 点です / 平均点は59点です / 平均点は59.33     点です",
+        "あなたの点数は 80点です / 平均点は59.33点です / 平均点は     59.33点です",
+        "あなたの点数は 80点です / 平均点は59点です / 平均点は     59.33点です"
+      ],
+      "correct_index": 2,
+      "user_answer_index": 2,
+      "user_result": "correct",
+      "explanation": "数値は右寄せで表示。{:3d} は幅3の整数、{:.2f} は小数点以下2桁、{:10.2f} は幅10で小数点以下2桁。"
+    },
+    {
+      "no": 10,
+      "domain": "Pythonインタープリタの使い方",
+      "question": "Pythonのインタープリタに関する説明で、不適切な選択肢を選択してください。",
+      "choices": [
+        "コマンド入力を促すために、ユーザーに対して表示される文字列のことをプロンプトという",
+        "ファイル終端文字（ファイル終端キャラクタ）を一次プロンプトに入力すると、インタープリンタが終了する",
+        "インタープリタはclose()で終了させることができる",
+        "Pythonのインタープリタを起動すると、バージョン・著作権の情報、ヘルプコマンドの後に一次プロンプトが表示される"
+      ],
+      "correct_index": 2,
+      "user_answer_index": 2,
+      "user_result": "correct",
+      "explanation": "終了は quit() または exit()。close() は file オブジェクト等のメソッドで sys にはない。"
+    },
+    {
+      "no": 11,
+      "domain": "エラーと例外",
+      "question": "次のスクリプトを実行して「数値を入力してください：」に「a」を入力したとき、出力結果として適切な選択肢を選択してください。",
+      "code": "try:\n  x = int(input(\"数値を入力してください：\"))\n  print(x)\nexcept ValueError:\n  print(\"数値以外が入力されました\")",
+      "choices": ["構文エラーが発生する", "a", "数値以外が入力されました", "何も表示されない"],
+      "correct_index": 2,
+      "user_answer_index": 2,
+      "user_result": "correct",
+      "explanation": "int('a') で ValueError 発生 → except 節で「数値以外が入力されました」が出力。"
     },
     {
       "no": 12,
       "domain": "エラーと例外",
-      "topic": "raise + 該当 except",
-      "code": "try:\n  raise ValueError('try')\nexcept NameError: ...\nexcept ValueError:\n  print('ValueError')\nexcept: ...",
-      "summary": "ValueError を raise → ValueError except だけが実行され 'ValueError' のみ出力。",
-      "correct_choice": "ValueError"
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "try:\n  raise ValueError('try')\nexcept NameError:\n  print('NameError')\nexcept ValueError:\n  print('ValueError')\nexcept:\n  print('Except')",
+      "choices": ["try", "ValueError", "try / ValueError", "ValueError / Except"],
+      "correct_index": 1,
+      "user_answer_index": 2,
+      "user_result": "incorrect",
+      "explanation": "ValueError を raise → ValueError except だけが実行され 'ValueError' のみ出力。複数 except が連続して走ることはない。"
     },
     {
       "no": 13,
       "domain": "エラーと例外",
-      "topic": "単一except に複数例外",
-      "summary": "except (A, B): のようにタプルで複数例外を1ブロックで捕捉できる（できないというのが不適切）。",
-      "correct_choice": "「単一のexcept節に複数の例外を指定することはできない」が不適切"
+      "question": "例外の処理に関する説明として、不適切な選択肢を選択してください。",
+      "choices": [
+        "最初にtry節が実行され、try節の実行中にエラーが発生すると、try節の残りの処理は飛ばされる",
+        "try文で発生した例外の型が、exceptキーワードの後ろで指定された例外と一致する場合、そのexcept節が実行されるが、単一のexcept節に複数の例外を指定することはできない",
+        "例外がexcept節で処理された場合、try文の後のプログラムはそのまま実行される",
+        "例外が発生しても、どのexcept節にも該当しない場合、未処理例外となり、プログラムは終了する"
+      ],
+      "correct_index": 1,
+      "user_answer_index": 2,
+      "user_result": "incorrect",
+      "explanation": "except (A, B): のようにタプルで複数の例外を1ブロックで捕捉できる。「できない」は不適切。"
+    },
+    {
+      "no": 14,
+      "domain": "クラス",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "class Test:\n  num = 10\n  def hello(self):\n    return \"Hello, Python\"\n\ntest = Test()\nprint(test.num)\nprint(test.hello())",
+      "choices": ["10", "10 / Hello, Python", "何も表示されない", "「10」がプリントされ、エラーが表示される"],
+      "correct_index": 1,
+      "user_answer_index": 1,
+      "user_result": "correct",
+      "explanation": "self を正しく定義しているので test.hello() は 'Hello, Python' を返す。"
+    },
+    {
+      "no": 15,
+      "domain": "クラス",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "class Animal:\n  legs = 4\n  def __init__(self, name):\n    self.name = name\n\ntama = Animal(\"Tama\")\npochi = Animal(\"Pochi\")\nprint(tama.legs, tama.name)\nprint(pochi.legs, pochi.name)",
+      "choices": [
+        "4 Tama / 4 Pochi",
+        "4 tama / 4 pochi",
+        "legs tama / legs pochi",
+        "エラーが発生する"
+      ],
+      "correct_index": 0,
+      "user_answer_index": 0,
+      "user_result": "correct",
+      "explanation": "クラス変数 legs=4 は全インスタンス共通。__init__ で各インスタンスに name を設定。"
     },
     {
       "no": 16,
       "domain": "標準ライブラリめぐり",
-      "topic": "sys.argv",
-      "summary": "コマンドライン引数は sys.argv（args ではない）。argv[0] はスクリプト名。",
-      "correct_choice": "sys.argv / sys.argv[1:3]"
+      "question": "①と②に当てはまる選択肢を選択してください。コマンドラインで「python3 test.py one two three」を実行した状態。\n\nimport sys\nprint(①)  # ['test.py', 'one', 'two', 'three']\nprint(②)  # ['one', 'two']",
+      "choices": [
+        "①sys.argv[:] ②sys.args[2:3]",
+        "①sys.args[:] ②sys.argv[1:3]",
+        "①sys.argv ②sys.argv[1:3]",
+        "①sys.args ②sys.args[2:3]"
+      ],
+      "correct_index": 2,
+      "user_answer_index": 1,
+      "user_result": "incorrect",
+      "explanation": "コマンドライン引数は sys.argv（args ではない）。argv[0] はスクリプト名、argv[1:] が引数。"
     },
     {
       "no": 17,
       "domain": "標準ライブラリめぐり",
-      "topic": "sys.exit()",
-      "summary": "プログラム終了は sys.exit()。quit/end/close は sys にない。",
-      "correct_choice": "sys.exit()"
+      "question": "プログラムを途中で終了させたいとき、①に当てはまる選択肢を選択してください。",
+      "choices": ["sys.quit()", "sys.end()", "sys.close()", "sys.exit()"],
+      "correct_index": 3,
+      "user_answer_index": 1,
+      "user_result": "incorrect",
+      "explanation": "プログラム終了は sys.exit()。quit/end/close は sys にない。"
     },
     {
       "no": 18,
       "domain": "標準ライブラリめぐり",
-      "topic": "正規表現の量指定子",
-      "summary": "* は0回以上、+ は1回以上、? は0回または1回。",
-      "correct_choice": "「*：直前の文字を1回以上繰り返す」が不適切"
+      "question": "正規表現のパターンマッチングで使う特殊文字について、不適切な選択肢を選択してください。",
+      "choices": [
+        "^：文字列の先頭",
+        "$：文字列の末尾",
+        ".：改行以外の一字",
+        "*：直前の文字を1回以上繰り返す"
+      ],
+      "correct_index": 3,
+      "user_answer_index": 2,
+      "user_result": "incorrect",
+      "explanation": "* は 0回以上の繰り返し（1回以上ではない）。1回以上は + 。"
+    },
+    {
+      "no": 19,
+      "domain": "データ構造",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "users = [\"Tanaka\", \"Suzuki\", \"Akayama\", \"Miyamoto\"]\ncopy_users = users.copy()\nusers.remove(\"Akayama\")\nprint(users)\nusers.clear()\nprint(users)\nprint(copy_users)",
+      "choices": [
+        "['Tanaka', 'Suzuki', 'Miyamoto'] / [] / [\"Tanaka\", \"Suzuki\", \"Akayama\", \"Miyamoto\"]",
+        "[\"Tanaka\", \"Suzuki\", \"Akayama\", \"Miyamoto\"] / [] / []",
+        "['Tanaka', 'Suzuki', 'Miyamoto'] / [] / ['Tanaka', 'Suzuki', 'Miyamoto']",
+        "エラーになる"
+      ],
+      "correct_index": 0,
+      "user_answer_index": 0,
+      "user_result": "correct",
+      "explanation": "copy() は浅いコピー。元の users が変更されても copy_users は影響を受けない。"
+    },
+    {
+      "no": 20,
+      "domain": "食欲をそそってみようか",
+      "question": "Pythonの特徴に関する説明のうち、不適切な選択肢を選択してください。",
+      "choices": [
+        "配列や集合などといった、高水準のデータ型が組み込まれている",
+        "プログラムのグルーピングは、インデントではなく、 カッコで囲う",
+        "一般的にPythonで書いたプログラムはC言語やJAVA言語で書いたプログラムよりも短い",
+        "Pythonによって書かれたプログラムはモジュール群に分割して再利用することが可能である"
+      ],
+      "correct_index": 1,
+      "user_answer_index": 1,
+      "user_result": "correct",
+      "explanation": "Python はインデントでグルーピング。カッコでは囲わない。"
+    },
+    {
+      "no": 21,
+      "domain": "気楽な入門編",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "a = 7\nb = 2\nc = a / b\nd = a // b\ne = a % b\nprint(\"c:\", c, \"d:\", d, \"e:\", e)",
+      "choices": [
+        "c: 3 d: 1 e: 3",
+        "c: 3 d: 3.5 e: 1",
+        "c: 3.5 d: 1 e: 3.5",
+        "c: 3.5 d: 3 e: 1"
+      ],
+      "correct_index": 3,
+      "user_answer_index": 3,
+      "user_result": "correct",
+      "explanation": "/ は除算（小数）、// は整数除算（商）、% は剰余。7/2=3.5, 7//2=3, 7%2=1。"
+    },
+    {
+      "no": 22,
+      "domain": "気楽な入門編",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "a = 3\nb = 5\nc, d = a + 4, b - 3\nprint(\"c:\", c, \"d:\", d)",
+      "choices": ["c: 7 d: 2", "c: 12 d: 5", "c: 9 d: 0", "エラーが発生する"],
+      "correct_index": 0,
+      "user_answer_index": 0,
+      "user_result": "correct",
+      "explanation": "多重代入。c=a+4=7, d=b-3=2。"
+    },
+    {
+      "no": 23,
+      "domain": "気楽な入門編",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "print(\"python\\name\")\nprint(\"python\\\\name\")\nprint(r\"python\\name\")",
+      "choices": [
+        "python / ame / python\\name / python\\name",
+        "python\\name / python\\name / python / ame",
+        "python / ame / pytho\\name / python",
+        "ame / python\\name / python / ame"
+      ],
+      "correct_index": 0,
+      "user_answer_index": 0,
+      "user_result": "correct",
+      "explanation": "\\n は改行、\\\\ は \\ 1文字、r\"...\" は raw 文字列でエスケープ無効。"
+    },
+    {
+      "no": 24,
+      "domain": "気楽な入門編",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "str = 'apple,banana,orange'\nprint(str[0], str[8], str[-5], str[2:7])",
+      "choices": ["e a r ple,b", "a a a pple,", "a n r ple,b", "a n r pple,"],
+      "correct_index": 2,
+      "user_answer_index": 2,
+      "user_result": "correct",
+      "explanation": "[0]=a, [8]=n, [-5]=r（後ろから5番目）, [2:7]='ple,b'。"
+    },
+    {
+      "no": 25,
+      "domain": "気楽な入門編",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "num = [1, 3, 5, 7, 9]\nprint(num[1], num[-3])",
+      "choices": ["1 9", "3 9", "3 5", "エラーが発生する"],
+      "correct_index": 2,
+      "user_answer_index": 2,
+      "user_result": "correct",
+      "explanation": "num[1]=3、num[-3]=後ろから3番目=5。"
+    },
+    {
+      "no": 26,
+      "domain": "気楽な入門編",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "a, b = 1, 5\nwhile a < 30:\n  print(a, end=',')\n  a = a + b",
+      "choices": ["1,6,11,16,21,26,", "1,6,11,16,21,26,31", "5,11,16,21,26,", "5,11,16,21,26,31"],
+      "correct_index": 0,
+      "user_answer_index": 0,
+      "user_result": "correct",
+      "explanation": "a=1,6,11,16,21,26 まで while ループ。31 になる前に条件が False で抜ける。"
+    },
+    {
+      "no": 27,
+      "domain": "制御構文ツール",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "x = 8\nif x > 10:\n  print(\"xは10を超えた数です\")\nelif x == 10:\n  print(\"xは10です\")\nelse:\n  print(\"xは10未満です\")",
+      "choices": ["xは10を超えた数です", "xは10です", "xは10未満です", "エラーが発生する"],
+      "correct_index": 2,
+      "user_answer_index": 2,
+      "user_result": "correct",
+      "explanation": "x=8 は 10 未満なので else 節。"
+    },
+    {
+      "no": 28,
+      "domain": "制御構文ツール",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "for count in range(2):\n  print(count)",
+      "choices": ["1", "1 / 2", "0 / 1", "0 / 1 / 2"],
+      "correct_index": 2,
+      "user_answer_index": 2,
+      "user_result": "correct",
+      "explanation": "range(2) は 0, 1。stop は含まない。"
     },
     {
       "no": 29,
       "domain": "制御構文ツール",
-      "topic": "ループ内のインデックス操作",
-      "code": "for i in range(len(colors)):\n  i = i + 1\n  print(i, colors[i], end=\",\")",
-      "summary": "i の最後の周回で i=4 になり colors[4] は IndexError（colors は4要素）。",
-      "correct_choice": "エラーが発生する"
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "colors = [\"red\", \"black\", \"green\", \"blue\"]\nfor i in range(len(colors)):\n  i = i + 1\n  print(i, colors[i], end=\",\")",
+      "choices": [
+        "0 red,1 black,2 green",
+        "0 red,1 black,2 green,3 blue,",
+        "1 red,2 black,3 green,4 blue,",
+        "エラーが発生する"
+      ],
+      "correct_index": 3,
+      "user_answer_index": 1,
+      "user_result": "incorrect",
+      "explanation": "i=0,1,2,3 と回るが i+=1 で 1,2,3,4 になる。最後の i=4 で colors[4] にアクセスして IndexError。"
     },
     {
       "no": 30,
       "domain": "制御構文ツール",
-      "topic": "関数の基本",
-      "summary": "def greeting(message): print(message) → greeting('おはよう') で 'おはよう' を出力。",
-      "correct_choice": "おはよう"
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "def greeting(message):\n  print(message)\n\ngreeting(\"おはよう\")",
+      "choices": ["エラーが発生する", "何も表示されない", "greeting", "おはよう"],
+      "correct_index": 3,
+      "user_answer_index": 0,
+      "user_result": "incorrect",
+      "explanation": "関数定義で message を受け取り print する。'おはよう' を渡せば 'おはよう' が出力される。"
+    },
+    {
+      "no": 31,
+      "domain": "制御構文ツール",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "def add(a, b=2):\n  return a + b\n\nprint(add(1))",
+      "choices": ["None", "add(1, 2)", "3", "エラーになる"],
+      "correct_index": 2,
+      "user_answer_index": 2,
+      "user_result": "correct",
+      "explanation": "デフォルト引数 b=2。add(1) は 1+2=3。"
+    },
+    {
+      "no": 32,
+      "domain": "制御構文ツール",
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "number = 3\ndef add(a=5, b=number):\n  print(a + b)\n\nb = 2\nadd()",
+      "choices": ["7", "8", "何も表示されない", "エラーになる"],
+      "correct_index": 1,
+      "user_answer_index": 1,
+      "user_result": "correct",
+      "explanation": "デフォルト引数は定義時に評価。b=number=3 が固定。add() = 5+3 = 8。後の b=2 は無関係。"
+    },
+    {
+      "no": 33,
+      "domain": "制御構文ツール",
+      "question": "次の関数を呼び出すコードとして、不適切な選択肢を選択してください。\n\ndef person(name, age, gender='male'):\n    print(f\"名前：{name}、年齢：{age}、性別：{gender}\")",
+      "choices": [
+        "person(name='Makoto', gender='female', age=18)",
+        "person(age=18, gender='female', 'Makoto')",
+        "person('Makoto', 18, 'female')",
+        "person(name='Makoto', age=18, gender='female')"
+      ],
+      "correct_index": 1,
+      "user_answer_index": 1,
+      "user_result": "correct",
+      "explanation": "位置引数はキーワード引数より前でないとエラー。"
     },
     {
       "no": 34,
       "domain": "制御構文ツール",
-      "topic": "可変長引数の順序",
-      "summary": "*args は **kwargs より前。a が辞書として使われている → ①が *b（位置）、②が **a（キーワード）。",
-      "correct_choice": "①*b ②**a"
+      "question": "①、②に当てはまる選択肢を選択してください。\n\ndef test(name, ①, ②):\n  print(name)\n  for kw in a:\n    print(a[kw])\n  for arg in b:\n    print(arg)\n\ntest(\"Yamada\", \"特技は水泳\", \"趣味は読書\", job=\"デザイナー\", age=18)\n\n# 出力: Yamada / デザイナー / 18 / 特技は水泳 / 趣味は読書",
+      "choices": ["①*a ②**b", "①**a ②*b", "①**b ②*a", "①*b ②**a"],
+      "correct_index": 3,
+      "user_answer_index": 1,
+      "user_result": "incorrect",
+      "explanation": "*args は **kwargs より前。a[kw] とアクセスしているので a が辞書（**a）、b が *b。順序は *b（位置）→ **a（キーワード）が正しい順。"
     },
     {
       "no": 35,
       "domain": "制御構文ツール",
-      "topic": "PEP8 命名規則",
-      "summary": "クラス名は UpperCamelCase、関数・メソッド名は lower_case_with_underscores。",
-      "correct_choice": "「クラス名にlower_case、関数名にUpperCamel」が不適切"
+      "question": "PEP8 に関する説明のうち、不適切な選択肢を選択してください。",
+      "choices": [
+        "可能な限りコメントは、独立した行に書くことが推奨されている",
+        "クラスや関数の前には空行を挿入することが推奨されている",
+        "演算子の周辺やカンマの後ろにスペースを入れることが推奨されている。また、カッコのすぐ内側にはスペースを入れないことが推奨されている",
+        "クラス名には「lower_case_with_underscores」、関数名やメソッド名には「UpperCamelCase」による命名が推奨されている"
+      ],
+      "correct_index": 3,
+      "user_answer_index": 0,
+      "user_result": "incorrect",
+      "explanation": "クラス名は UpperCamelCase、関数・メソッド名は lower_case_with_underscores。逆。"
     },
     {
       "no": 36,
       "domain": "データ構造",
-      "topic": "list.index(x, start, end)",
-      "code": "numbers = [5,3,5,1,3,2,4,3,4,3]\nnumbers.index(3) → 1\nnumbers.index(3, 2) → 4\nnumbers.index(3, 5, 9) → 7",
-      "summary": "index() は最初に出現するインデックスを返す。第2,3引数で検索範囲を制限可能。",
-      "correct_choice": "1,4,7,"
+      "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+      "code": "numbers = [5, 3, 5, 1, 3, 2, 4, 3, 4, 3]\nprint(numbers.index(3), end=\",\")\nprint(numbers.index(3, 2), end=\",\")\nprint(numbers.index(3, 5, 9), end=\",\")",
+      "choices": ["1,4,7,", "2,5,8,", "1,4,", "2,5,"],
+      "correct_index": 0,
+      "user_answer_index": 3,
+      "user_result": "incorrect",
+      "explanation": "index(x, start, end) は start から end-1 の範囲で最初の x を探す。1 → 4 → 7 と返る。"
     },
     {
       "no": 37,
       "domain": "標準ライブラリめぐり",
-      "topic": "正規表現 \\b \\w \\d . | ?",
-      "summary": "\\b\\d. は単語先頭の数字+任意1文字。'2020' のうち '20' のみマッチ → ['20']。",
-      "correct_choice": "②['2020']（が不適切）"
+      "question": "次のコードを実行した結果、①〜④の行の出力として、不適切な選択肢を選択してください。",
+      "code": "import re\ntext = \"Hello 2020 Python World Pytho\"\nprint(re.findall(r\"\\b\\w\", text))    # ①\nprint(re.findall(r\"\\b\\d.\", text))   # ②\nprint(re.findall(r\"\\bPython?\", text)) # ③\nprint(re.findall(r\"\\bHe..|W.\", text)) # ④",
+      "choices": [
+        "①['H', '2', 'P', 'W', 'P']",
+        "②['2020']",
+        "③['Python', 'Pytho']",
+        "④['Hell', 'Wo']"
+      ],
+      "correct_index": 1,
+      "user_answer_index": 2,
+      "user_result": "incorrect",
+      "explanation": "②は \\b\\d. = 単語先頭の数字+任意1文字。'2020' から '20' のみマッチ → ['20']。'2020' は不適切。"
     },
     {
       "no": 38,
       "domain": "標準ライブラリめぐりーPartⅡ",
-      "topic": "struct の pack / unpack",
-      "summary": "pack: Pythonデータ → バイナリ。unpack: バイナリ → Pythonデータ。逆。",
-      "correct_choice": "「unpack が Python→バイナリ、pack がバイナリ→Python」が不適切"
+      "question": "モジュールに関する説明のうち、不適切な選択肢を選択してください。",
+      "choices": [
+        "threadingモジュールを利用することで、複数のスレッドを使用して、複数のタスクを同時に処理することができる",
+        "stringモジュールのTemplateクラスを使用することで、文字列のテンプレートを作成することができる",
+        "structモジュールのunpack()関数は、Pythonのデータ型をバイナリ表現に変換するために使用され、pack()関数は、バイナリ表現をPythonのデータ型に変換するために使用される",
+        "collectionsモジュールは、標準のデータ型を拡張したデータ型を提供するモジュールである"
+      ],
+      "correct_index": 2,
+      "user_answer_index": 3,
+      "user_result": "incorrect",
+      "explanation": "pack/unpack の説明が逆。pack: Python→バイナリ、unpack: バイナリ→Python。"
     },
     {
       "no": 39,
       "domain": "仮想環境とパッケージ",
-      "topic": "pip install 再実行",
-      "summary": "既にインストール済のパッケージを再 install してもバージョンは変わらない。更新は --upgrade / -U。",
-      "correct_choice": "「再 install で最新に更新される」が不適切"
+      "question": "仮想環境とパッケージに関する説明として、不適切な選択肢を選択してください。",
+      "choices": [
+        "複数のパッケージを一度にインストール、アップグレード、アンインストールすることができる",
+        "パッケージをインストールすると最新バージョンがインストールされる",
+        "パッケージ名とバージョンを保存したテキストファイル「requirements.txt」を使用することで、開発環境を容易に再現することができる",
+        "すでにインストールされているパッケージをインストールすると、最新のバージョンに更新される"
+      ],
+      "correct_index": 3,
+      "user_answer_index": 1,
+      "user_result": "incorrect",
+      "explanation": "既にインストール済を再 install してもバージョンは変わらない。最新化は --upgrade / -U が必要。"
     },
     {
       "no": 40,
       "domain": "対話環境での入力行編集とヒストリ置換",
-      "topic": "ヒストリファイル名",
-      "summary": "ヒストリは ~/.python_history（__history__.py ではない）。",
-      "correct_choice": "「ヒストリは __history__.py に保存」が不適切"
+      "question": "入力行編集とヒストリ置換に関する説明として、不適切な選択肢を選択してください。",
+      "choices": [
+        "ヒストリは、デフォルト設定ではユーザーディレクトリにある「__history__.py」というファイルに保存される",
+        "Pythonのインタープリタでは、標準で変数やモジュールの補完機能が有効になっている",
+        "bpythonに類似した拡張対話環境にIPythonがあり、Jupyter Notebookのカーネルとして、IPythonが使用されている",
+        "「pip install ipython」でIPythonをインストールでき、「ipython」コマンドでIPythonの対話モードを起動できる"
+      ],
+      "correct_index": 0,
+      "user_answer_index": 3,
+      "user_result": "incorrect",
+      "explanation": "ヒストリは ~/.python_history（先頭ドット）。__history__.py は実在しない。"
     }
   ]
 }

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2563eb">
+<meta name="description" content="Python3エンジニア認定基礎試験 模擬試験">
+<title>模擬試験 · Python ペアドリル</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>模擬試験</h1>
+  <button id="theme-toggle" class="btn-icon" aria-label="テーマ切替">🌙</button>
+</header>
+<main>
+  <section id="exam-home-screen" class="screen active">
+    <div class="card">
+      <h2>模擬試験を選んで開始</h2>
+      <p class="lead">本番形式で40問連続出題。タイマーつき、結果はドメイン別に集計。</p>
+
+      <div class="form-group">
+        <label>模擬を選択</label>
+        <div id="exam-list" class="exam-list"></div>
+      </div>
+
+      <div class="form-group">
+        <label>制限時間</label>
+        <div class="segmented" id="time-select">
+          <button data-time="40" class="active">40分（本番相当）</button>
+          <button data-time="60">60分（余裕めに）</button>
+          <button data-time="0">無制限</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>順序</label>
+        <div class="segmented" id="order-select">
+          <button data-order="original" class="active">元の順序</button>
+          <button data-order="shuffle">シャッフル</button>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="exam-start-btn" disabled>スタート</button>
+      <a href="index.html" class="btn-secondary as-link">ドリルに戻る</a>
+    </div>
+  </section>
+
+  <section id="exam-quiz-screen" class="screen">
+    <div class="quiz-header">
+      <button id="exam-quit-btn" class="btn-icon" aria-label="中断">✕</button>
+      <div class="progress-bar"><div class="progress-fill" id="exam-progress-fill"></div></div>
+    </div>
+    <div class="quiz-meta">
+      <span class="meta-item"><span class="meta-label">問</span><span id="exam-progress">0/0</span></span>
+      <span class="meta-item"><span class="meta-label">残り時間</span><span id="exam-timer">--:--</span></span>
+      <span class="meta-item"><span class="meta-label">回答済</span><span id="exam-answered">0</span></span>
+    </div>
+    <div class="card quiz-card">
+      <div class="category-tag" id="exam-domain"></div>
+      <h2 class="question-text" id="exam-question"></h2>
+      <pre class="code-block" id="exam-code" hidden></pre>
+      <div class="choices" id="exam-choices"></div>
+      <div class="exam-nav">
+        <button class="btn-secondary" id="exam-prev-btn">← 前へ</button>
+        <button class="btn-secondary" id="exam-flag-btn" aria-pressed="false">🚩 後で見直す</button>
+        <button class="btn-primary" id="exam-next-btn">次へ →</button>
+      </div>
+      <div class="exam-jump">
+        <button class="btn-secondary danger" id="exam-finish-btn">終了して採点</button>
+      </div>
+    </div>
+    <div class="card exam-overview" id="exam-overview">
+      <h3>全問題の状態</h3>
+      <div class="exam-grid" id="exam-grid"></div>
+    </div>
+  </section>
+
+  <section id="exam-result-screen" class="screen">
+    <div class="card">
+      <h2 id="exam-result-title">採点結果</h2>
+      <div class="result-score">
+        <div class="big-score" id="exam-big-score">0/40</div>
+        <div class="score-rate" id="exam-score-rate">0%</div>
+      </div>
+      <div class="exam-verdict" id="exam-verdict"></div>
+
+      <div class="stats">
+        <div class="stat"><span class="stat-label">正解</span><span id="exam-correct">0</span></div>
+        <div class="stat"><span class="stat-label">不正解</span><span id="exam-wrong">0</span></div>
+        <div class="stat"><span class="stat-label">未回答</span><span id="exam-unanswered">0</span></div>
+        <div class="stat"><span class="stat-label">所要時間</span><span id="exam-elapsed">0:00</span></div>
+      </div>
+
+      <h3>ドメイン別正答率</h3>
+      <div id="exam-domain-stats"></div>
+
+      <h3>問題ごとの結果</h3>
+      <div id="exam-review-list"></div>
+
+      <button class="btn-primary" id="exam-retry-wrong-btn">間違えた問題だけ復習</button>
+      <button class="btn-secondary" id="exam-retry-btn">同じ模擬をもう一度</button>
+      <a href="exam.html" class="btn-secondary as-link">他の模擬を選ぶ</a>
+    </div>
+  </section>
+</main>
+<footer>
+  <small>Python ペアドリル · <a href="index.html">ドリル</a> · <a href="https://github.com/tatsunoritojo/python-pair-drill" target="_blank" rel="noopener">GitHub</a></small>
+</footer>
+<script src="exam.js"></script>
+</body>
+</html>
