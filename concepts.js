@@ -153,6 +153,25 @@ const QUESTION_META = {
   'regex-or':          { difficulty: 'easy',   concepts: ['string-regex', 'guess'] },
   'lib-bisect':        { difficulty: 'medium', concepts: ['pair-confusion'] },
   'pkg-list':          { difficulty: 'easy',   concepts: ['guess', 'pair-confusion'] },
+
+  // 自己チェックで追加（模1-4の不正解論点の漏れ補完）
+  'tuple-args-count':         { difficulty: 'medium', concepts: ['guess', 'implicit-rule'] },
+  'mod-import-call-style':    { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'func-basic-call':          { difficulty: 'easy',   concepts: ['boundary'] },
+  'py-indent':                { difficulty: 'easy',   concepts: ['guess'] },
+  'iter-zip-transpose':       { difficulty: 'hard',   concepts: ['implicit-rule'] },
+  'iter-comp-zip':            { difficulty: 'medium', concepts: ['word-order', 'implicit-rule'] },
+  'type-collection-order':    { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'comment-mid-line':         { difficulty: 'easy',   concepts: ['implicit-rule'] },
+  'str-immutable-assign':     { difficulty: 'medium', concepts: ['implicit-rule', 'boundary'] },
+  'lib-dir-arg':              { difficulty: 'easy',   concepts: ['guess'] },
+  'exc-name-error':           { difficulty: 'easy',   concepts: ['guess', 'pair-confusion'] },
+  'cls-nested-scope':         { difficulty: 'hard',   concepts: ['boundary', 'implicit-rule'] },
+  'lib-date-today':           { difficulty: 'medium', concepts: ['guess', 'pair-confusion'] },
+  'lib-math-ceil-floor':      { difficulty: 'easy',   concepts: ['guess', 'pair-confusion'] },
+  'lib-math-log':             { difficulty: 'medium', concepts: ['guess'] },
+  'exc-raise-handler-flow':   { difficulty: 'medium', concepts: ['boundary', 'implicit-rule'] },
+  'list-shallow-copy-inloop': { difficulty: 'hard',   concepts: ['boundary'] },
 };
 
 // デフォルト値（meta が無い問題用）
