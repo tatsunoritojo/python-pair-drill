@@ -179,6 +179,13 @@ const QUESTION_META = {
   'lib-freeze-tool':   { difficulty: 'hard',   concepts: ['guess', 'pair-confusion'] },
   'ctrl-elif-else-diff': { difficulty: 'easy', concepts: ['pair-confusion'] },
   'ctrl-else-position':  { difficulty: 'easy', concepts: ['word-order'] },
+
+  // 試験本番で出たクラス・urllib論点
+  'cls-instance-isolation': { difficulty: 'hard', concepts: ['implicit-rule', 'boundary'] },
+  'cls-class-var-shared':   { difficulty: 'hard', concepts: ['implicit-rule', 'pair-confusion'] },
+  'cls-instance-vs-class-var': { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'lib-urllib-modules':     { difficulty: 'medium', concepts: ['pair-confusion', 'guess'] },
+  'lib-urllib-parse':       { difficulty: 'medium', concepts: ['pair-confusion'] },
 };
 
 // デフォルト値（meta が無い問題用）

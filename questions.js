@@ -1189,6 +1189,68 @@ const QUESTIONS = [
     explanation: '必ず if が先頭、その後 elif（0個以上）、最後に else（0個か1個）。else を elif より前に置くと SyntaxError。else は「他のすべてが False だったとき」のフォールバックなので、論理的にも最後にしか置けない。',
   },
 
+  // ====== 試験本番で実際に出た論点（インスタンス独立性・urllib構成）======
+  {
+    id: 'cls-instance-isolation', category: 'クラス',
+    question: '次のコードを実行した結果は？\n\n```\nclass Favorite:\n    def __init__(self):\n        self.things = []\n    def add(self, thing):\n        self.things.append(thing)\n\nx = Favorite()\ny = Favorite()\nx.add(\"A\")\ny.add(\"B\")\nx.add(\"C\")\nprint(x.things)\n```',
+    choices: [
+      "['A', 'C']",
+      "['A', 'B', 'C']",
+      "['A', 'B']",
+      "['B']",
+    ],
+    correct: 0,
+    explanation: '`__init__` で `self.things = []` しているので、Favorite() を呼ぶたびに **そのインスタンス専用** の things リストが作られる。x と y は独立。x.add は x の things に、y.add は y の things に入る。print(x.things) は x のリストだけ → ["A", "C"]。「同じクラス＝統合される」と思いがちだが、インスタンスは別物。',
+  },
+  {
+    id: 'cls-class-var-shared', category: 'クラス',
+    question: '次のコードを実行した結果は？\n\n```\nclass Favorite:\n    things = []   # クラス変数\n    def add(self, thing):\n        self.things.append(thing)\n\nx = Favorite()\ny = Favorite()\nx.add(\"A\")\ny.add(\"B\")\nx.add(\"C\")\nprint(x.things)\n```',
+    choices: [
+      "['A', 'B', 'C']",
+      "['A', 'C']",
+      "['A']",
+      "['B']",
+    ],
+    correct: 0,
+    explanation: 'things がクラス直下に定義されているので **クラス変数（全インスタンスで共有）**。`self.things.append(...)` は共有リストを書き換えるので、x.add も y.add も同じリストに追加される。print(x.things) は共有リストを表示 → ["A", "B", "C"]。__init__ なしでクラス変数を可変オブジェクト（list/dict）にするのは典型的な落とし穴。',
+  },
+  {
+    id: 'cls-instance-vs-class-var', category: 'クラス',
+    question: 'クラス変数とインスタンス変数の違いとして正しいのは？',
+    choices: [
+      'クラス変数は全インスタンスで共有、インスタンス変数は各インスタンスで独立',
+      'クラス変数はクラスからしかアクセスできない、インスタンス変数はインスタンスからしかアクセスできない',
+      'クラス変数は変更不可、インスタンス変数は変更可能',
+      '両者は同じもので、書き方が違うだけ',
+    ],
+    correct: 0,
+    explanation: 'クラス変数は `class C: x = 1` のように直下に書き、**全インスタンスで共有**。インスタンス変数は `self.x = 1` で書き、**各インスタンスで独立**。クラス変数を可変オブジェクト（list, dict）にすると、共有されているのを忘れて「なぜか他のインスタンスでも変わる」現象に出会う。「設計図に貼ってあるメモ＝クラス変数、製品ごとの取説＝インスタンス変数」と比喩で覚える。',
+  },
+  {
+    id: 'lib-urllib-modules', category: '標準ライブラリ',
+    question: 'urllib のサブモジュールと役割の組み合わせとして正しいのは？',
+    choices: [
+      'request=URLを開く / parse=URL分解 / error=例外',
+      'request=URL分解 / parse=URLを開く / error=例外',
+      'request=例外 / parse=URLを開く / error=URL分解',
+      'すべて urllib に直接ある（サブモジュール構成ではない）',
+    ],
+    correct: 0,
+    explanation: 'urllib は3つのサブモジュール: `urllib.request`（urlopen など、URLを開く）、`urllib.parse`（urlparse, urlencode など、URL文字列の分解・組立）、`urllib.error`（HTTPError, URLError など例外）。フラットではなく階層構造なので、import 時に `from urllib import request` などサブモジュール名が必要。',
+  },
+  {
+    id: 'lib-urllib-parse', category: '標準ライブラリ',
+    question: 'URL 文字列を構成要素（スキーム・ホスト・パス等）に分解する関数は？',
+    choices: [
+      'urllib.parse.urlparse',
+      'urllib.request.urlopen',
+      'urllib.parse.urlencode',
+      'urllib.split',
+    ],
+    correct: 0,
+    explanation: 'urlparse は URL を ParseResult（scheme, netloc, path, params, query, fragment の6つ組）に分解。`urlparse("https://example.com/a?b=c")` → スキーム=https、ホスト=example.com、パス=/a、クエリ=b=c。urlencode は逆方向（dict → クエリ文字列）、urlopen は URL の中身を取得する別関数。',
+  },
+
   // ====== イテレーション（誤答癖④：境界の追跡）======
   {
     id: 'ctrl-loop-index-err', category: 'イテレーション',
