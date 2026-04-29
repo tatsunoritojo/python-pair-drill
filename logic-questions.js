@@ -1530,5 +1530,140 @@ const LOGIC_QUESTIONS = [
     ],
     "correct": 0,
     "explanation": "Python 3 のソースコードはデフォルトで UTF-8 として扱われるため、日本語などの非 ASCII 文字を文字列リテラルや識別子・コメントにそのまま書ける。Python 2 時代に必要だった coding 宣言は、UTF-8 を使う限り省略可能。"
+  },
+  {
+    "id": "logic-op-power-sign",
+    "source": "3章チュートリアル",
+    "domain": "気楽な入門編",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print(-3**2)\nprint((-3)**2)",
+    "choices": [
+      "1行目: -9 / 2行目: 9",
+      "1行目: 9 / 2行目: 9",
+      "1行目: -9 / 2行目: -9",
+      "1行目: 6 / 2行目: 6"
+    ],
+    "correct": 0,
+    "explanation": "** は単項の負号より優先順位が高い。-3**2 は -(3**2) = -9、(-3)**2 = 9。「まず累乗、あとで符号」と覚える。"
+  },
+  {
+    "id": "logic-print-newline-escape",
+    "source": "3章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "s = 'First line.\\nSecond line.'\nprint(s)",
+    "choices": [
+      "1行目: First line. / 2行目: Second line.",
+      "First line.\\nSecond line.",
+      "'First line.\\nSecond line.'",
+      "SyntaxError"
+    ],
+    "correct": 0,
+    "explanation": "通常文字列では \\n は改行として解釈される。print() は __str__ を呼ぶのでエスケープが展開されて2行に出る。変数名だけ評価した場合は 'First line.\\nSecond line.' と repr 風になる点と区別する。"
+  },
+  {
+    "id": "logic-str-literal-concat",
+    "source": "3章チュートリアル",
+    "domain": "気楽な入門編",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print('Py' 'thon')",
+    "choices": [
+      "Python",
+      "Py thon",
+      "Py' 'thon",
+      "SyntaxError"
+    ],
+    "correct": 0,
+    "explanation": "隣接した文字列リテラルは + なしで自動連結される。空白で区切られていても1つの文字列になる。ただしこの自動連結はリテラル同士に限られ、変数や式には適用されない（prefix 'thon' はエラー）。"
+  },
+  {
+    "id": "logic-str-slice-basic",
+    "source": "3章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "word = 'Python'\nprint(word[0:2])\nprint(word[2:5])",
+    "choices": [
+      "1行目: Py / 2行目: tho",
+      "1行目: Pyt / 2行目: thon",
+      "1行目: Py / 2行目: thon",
+      "1行目: Pyt / 2行目: tho"
+    ],
+    "correct": 0,
+    "explanation": "スライスは [start, end) の半開区間。word[0:2] は index 0,1 で 'Py'、word[2:5] は index 2,3,4 で 'tho'。end を含めると考えると 1 文字多く見積もって誤る。"
+  },
+  {
+    "id": "logic-str-out-of-range",
+    "source": "3章チュートリアル",
+    "domain": "エラーと例外",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "word = 'Python'\nprint(word[4:42])\nprint(word[42:])",
+    "choices": [
+      "1行目: on / 2行目: 空行",
+      "1行目: IndexError / 2行目: IndexError",
+      "1行目: on / 2行目: IndexError",
+      "1行目: Python / 2行目: 空行"
+    ],
+    "correct": 0,
+    "explanation": "スライスは範囲外でもエラーにならず、有効な範囲だけが返る。word[4:42] は 'on'（index 4,5）、word[42:] は空文字列なので空行が出る。これに対し単一インデックス word[42] は IndexError になる。「スライスは安全、単一インデックスは厳しい」と対比で覚える。"
+  },
+  {
+    "id": "logic-list-alias",
+    "source": "3章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "rgb = ['Red', 'Green', 'Blue']\nrgba = rgb\nrgba.append('Alpha')\nprint(rgb)",
+    "choices": [
+      "['Red', 'Green', 'Blue', 'Alpha']",
+      "['Red', 'Green', 'Blue']",
+      "['Alpha']",
+      "NameError"
+    ],
+    "correct": 0,
+    "explanation": "rgba = rgb は新しいリストを作らず、同じリストへの別名を作るだけ。rgba.append() は rgb から見ても同じリストを変更するので、両方とも 'Alpha' が追加された状態になる。コピーが欲しいなら rgba = rgb[:] または rgb.copy() を使う。"
+  },
+  {
+    "id": "logic-list-slice-copy",
+    "source": "3章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "rgba = ['Red', 'Green', 'Blue', 'Alph']\ncorrect_rgba = rgba[:]\ncorrect_rgba[-1] = 'Alpha'\nprint(rgba)\nprint(correct_rgba)",
+    "choices": [
+      "1行目: ['Red', 'Green', 'Blue', 'Alph'] / 2行目: ['Red', 'Green', 'Blue', 'Alpha']",
+      "1行目: ['Red', 'Green', 'Blue', 'Alpha'] / 2行目: ['Red', 'Green', 'Blue', 'Alpha']",
+      "1行目: ['Red', 'Green', 'Blue', 'Alph'] / 2行目: ['Red', 'Green', 'Blue', 'Alph']",
+      "NameError"
+    ],
+    "correct": 0,
+    "explanation": "rgba[:] はリストの浅いコピーを作る（新しいリストオブジェクト）。両者は別オブジェクトなので、correct_rgba[-1] = 'Alpha' は元の rgba に影響しない。「= は共有、[:] は浅いコピー」と対で覚える。"
+  },
+  {
+    "id": "logic-list-slice-delete",
+    "source": "3章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g']\nletters[2:5] = []\nprint(letters)",
+    "choices": [
+      "['a', 'b', 'f', 'g']",
+      "['a', 'b', 'c', 'd', 'e', 'f', 'g']",
+      "['a', 'b', None, None, None, 'f', 'g']",
+      "['a', 'b']"
+    ],
+    "correct": 0,
+    "explanation": "スライス代入で空リストを代入すると、その範囲の要素が削除される。letters[2:5] は index 2,3,4（'c','d','e'）で、ここを [] で置換 = 削除。残るのは 'a','b','f','g'。end の 5 は含まない。"
+  },
+  {
+    "id": "logic-fib-multi-assign",
+    "source": "3章チュートリアル",
+    "domain": "制御構文ツール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "a, b = 0, 1\nfor _ in range(5):\n    a, b = b, a + b\nprint(a, b)",
+    "choices": [
+      "5 8",
+      "8 13",
+      "3 5",
+      "1 1"
+    ],
+    "correct": 0,
+    "explanation": "右辺がすべて評価されてから左辺に代入される。a,b = 0,1 から始まり、各周回で (a,b) → (b, a+b) と推移: (0,1)→(1,1)→(1,2)→(2,3)→(3,5)→(5,8)。5回ループ後は a=5, b=8。「右辺を固めてから左辺に渡す」を追えれば解ける。"
   }
 ];

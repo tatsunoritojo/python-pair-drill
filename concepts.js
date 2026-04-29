@@ -259,6 +259,19 @@ const QUESTION_META = {
   'lib-heapq-heappop':     { difficulty: 'easy',   concepts: ['implicit-rule'] },
   'lib-decimal-purpose':   { difficulty: 'medium', concepts: ['guess'] },
   'lib-decimal-vs-float':  { difficulty: 'medium', concepts: ['implicit-rule'] },
+
+  // 第3章 公式チュートリアル基礎論点
+  'op-truediv-float':      { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'op-floordiv-mod-relation':{ difficulty: 'medium', concepts: ['pair-confusion', 'boundary'] },
+  'op-power-precedence':   { difficulty: 'hard',   concepts: ['implicit-rule', 'boundary'] },
+  'str-quote-equiv':       { difficulty: 'easy',   concepts: ['guess'] },
+  'io-print-vs-repr':      { difficulty: 'medium', concepts: ['pair-confusion', 'string-regex'] },
+  'str-raw-prefix':        { difficulty: 'medium', concepts: ['string-regex'] },
+  'str-slice-end-exclusive':{ difficulty: 'easy', concepts: ['boundary'] },
+  'list-shared-ref':       { difficulty: 'hard',   concepts: ['implicit-rule', 'pair-confusion'] },
+  'list-slice-assign':     { difficulty: 'hard',   concepts: ['boundary', 'implicit-rule'] },
+  'syn-while-truthy':      { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'syn-multi-assign-rhs':  { difficulty: 'hard',   concepts: ['boundary'] },
 };
 
 // デフォルト値（meta が無い問題用）
