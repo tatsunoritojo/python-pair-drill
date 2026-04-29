@@ -288,6 +288,28 @@ const QUESTION_META = {
   'syn-lambda-single-expr':{ difficulty: 'medium', concepts: ['implicit-rule'] },
   'syn-lambda-closure':    { difficulty: 'medium', concepts: ['implicit-rule'] },
   'pep-style-basics':      { difficulty: 'easy',   concepts: ['nonexistent'] },
+
+  // 第5章 データ構造
+  'list-remove-first':     { difficulty: 'medium', concepts: ['boundary'] },
+  'list-pop-returns':      { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'list-as-stack':         { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'iter-comp-list':        { difficulty: 'easy',   concepts: ['guess'] },
+  'iter-comp-order':       { difficulty: 'hard',   concepts: ['word-order', 'boundary'] },
+  'iter-comp-tuple-paren': { difficulty: 'medium', concepts: ['word-order', 'nonexistent'] },
+  'iter-zip-transpose':    { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'syn-del-no-return':     { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'syn-del-name':          { difficulty: 'medium', concepts: ['boundary'] },
+  'tuple-unpack-count':    { difficulty: 'medium', concepts: ['boundary'] },
+  'set-no-order-no-dup':   { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'set-operators':         { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'dict-get-default':      { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'dict-list-keys':        { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'iter-sorted-set':       { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'syn-membership':        { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'syn-is-identity':       { difficulty: 'hard',   concepts: ['pair-confusion'] },
+  'syn-chained-compare':   { difficulty: 'medium', concepts: ['word-order'] },
+  'syn-short-circuit':     { difficulty: 'medium', concepts: ['boundary', 'implicit-rule'] },
+  'type-seq-lex-compare':  { difficulty: 'hard',   concepts: ['boundary'] },
 };
 
 // デフォルト値（meta が無い問題用）

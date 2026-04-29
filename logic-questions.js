@@ -1815,5 +1815,275 @@ const LOGIC_QUESTIONS = [
     ],
     "correct": 0,
     "explanation": "関数アノテーションは関数オブジェクトの __annotations__ 属性に辞書として格納される。値は class オブジェクトなので、print 表示は <class 'str'> の形式になる。実行時の型チェックは行われない(外部ツール mypy などが静的解析する)。全体表示だと並び方に依存して選択肢を作りにくいので、特定キーで取り出している。"
+  },
+  {
+    "id": "logic-pop-vs-del",
+    "source": "5章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "a = ['x', 'y', 'z']\nprint(a.pop())\nprint(a)\ndel a[0]\nprint(a)",
+    "choices": [
+      "1行目: z / 2行目: ['x', 'y'] / 3行目: ['y']",
+      "1行目: ['z'] / 2行目: ['x', 'y'] / 3行目: ['y']",
+      "1行目: None / 2行目: ['x', 'y', 'z'] / 3行目: ['x', 'y', 'z']",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "pop() は引数なしで末尾要素を削除して返すので 'z' が出力される。続く print(a) で残った ['x', 'y'] が出る。del a[0] は最初の要素 'x' を削除するが値は返さない。最終的に ['y']。「pop は抜いて返す、del は消すだけ」を体感する典型問題。"
+  },
+  {
+    "id": "logic-sort-returns-none",
+    "source": "5章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "a = [3, 1, 2]\nresult = a.sort()\nprint(a)\nprint(result)",
+    "choices": [
+      "1行目: [1, 2, 3] / 2行目: None",
+      "1行目: [3, 1, 2] / 2行目: [1, 2, 3]",
+      "1行目: [1, 2, 3] / 2行目: [1, 2, 3]",
+      "1行目: None / 2行目: [1, 2, 3]"
+    ],
+    "correct": 0,
+    "explanation": "list.sort() は破壊的にリストを並べ替えるが、戻り値は None。result には None が入り、a 自身が [1, 2, 3] に並び替わる。新しいリストが欲しい場合は sorted(a) を使う。「破壊的メソッドは None を返す」が Python の慣例で、reverse() や append() なども同様。"
+  },
+  {
+    "id": "logic-deque-popleft",
+    "source": "5章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "from collections import deque\nq = deque(['Eric', 'John', 'Michael'])\nq.append('Terry')\nprint(q.popleft())\nprint(q)",
+    "choices": [
+      "1行目: Eric / 2行目: deque(['John', 'Michael', 'Terry'])",
+      "1行目: Terry / 2行目: deque(['Eric', 'John', 'Michael'])",
+      "1行目: Michael / 2行目: deque(['Eric', 'John', 'Terry'])",
+      "1行目: None / 2行目: deque(['Eric', 'John', 'Michael', 'Terry'])"
+    ],
+    "correct": 0,
+    "explanation": "deque は両端キュー。append() で末尾追加、popleft() で先頭から取り出して返す。append('Terry') 後 ['Eric', 'John', 'Michael', 'Terry']、popleft() で 'Eric' を返して取り除き、残り ['John', 'Michael', 'Terry']。FIFO キューの典型挙動。"
+  },
+  {
+    "id": "logic-comp-if-filter",
+    "source": "5章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "vec = [-4, -2, 0, 2, 4]\nprint([x for x in vec if x >= 0])",
+    "choices": [
+      "[0, 2, 4]",
+      "[-4, -2]",
+      "[-4, -2, 0, 2, 4]",
+      "[]"
+    ],
+    "correct": 0,
+    "explanation": "リスト内包の if 句は要素のフィルタとして働く。x >= 0 を満たす要素 (0, 2, 4) だけが結果に入る。同じ操作を for ループで書くと result = []; for x in vec: if x >= 0: result.append(x) だが、内包のほうが宣言的で短い。"
+  },
+  {
+    "id": "logic-comp-double-for",
+    "source": "5章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print([(x, y) for x in [1, 2, 3] for y in [3, 1, 4] if x != y])",
+    "choices": [
+      "[(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]",
+      "[(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 3), (3, 4)]",
+      "[(1, 1), (2, 2), (3, 3)]",
+      "SyntaxError"
+    ],
+    "correct": 0,
+    "explanation": "二重 for の内包は外側 x、内側 y で全組合せを生成し、if x != y で対角の組（1==1, 3==3）が落ちる。x=1: (1,3),(1,4) で 1!=1 が落ちる、x=2: 全部通る (2,3),(2,1),(2,4)、x=3: 3!=3 で (3,3) が落ちて (3,1),(3,4)。「左ほど外側、フィルタは要素ごとに評価」を体感する典型問題。"
+  },
+  {
+    "id": "logic-comp-flatten",
+    "source": "5章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "vec = [[1, 2, 3], [4, 5, 6]]\nprint([num for elem in vec for num in elem])",
+    "choices": [
+      "[1, 2, 3, 4, 5, 6]",
+      "[[1, 2, 3], [4, 5, 6]]",
+      "[1, 4]",
+      "[(1, 4), (2, 5), (3, 6)]"
+    ],
+    "correct": 0,
+    "explanation": "二重 for の内包でフラット化。外側 elem が [1,2,3] と [4,5,6] を取り、内側 num が各リストの要素を取り出す。生成される値は num そのもの。「ネストリストを1次元に潰す」典型イディオム。順序は外側ループが先に進むので、最初のサブリストが完全に展開されてから次に進む。"
+  },
+  {
+    "id": "logic-zip-transpose",
+    "source": "5章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "matrix = [\n    [1, 2, 3],\n    [4, 5, 6],\n]\nprint(list(zip(*matrix)))",
+    "choices": [
+      "[(1, 4), (2, 5), (3, 6)]",
+      "[(1, 2, 3), (4, 5, 6)]",
+      "[(1, 2), (3, 4), (5, 6)]",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "zip(*matrix) は matrix の各行をアンパックして zip に渡す → zip([1,2,3], [4,5,6]) と等価。zip は対応位置の要素をタプルにまとめるので、(1,4), (2,5), (3,6) が生成される。これが行列の転置になる。「* で展開、zip で噛み合わせ」を組み合わせて転置するイディオム。"
+  },
+  {
+    "id": "logic-tuple-singleton",
+    "source": "5章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "singleton = 'hello',\nprint(type(singleton).__name__)\nprint(singleton)",
+    "choices": [
+      "1行目: tuple / 2行目: ('hello',)",
+      "1行目: str / 2行目: hello",
+      "1行目: list / 2行目: ['hello']",
+      "1行目: tuple / 2行目: ('hello')"
+    ],
+    "correct": 0,
+    "explanation": "末尾のカンマがあるので 'hello', は1要素タプル。type は tuple。print 表示は ('hello',) と末尾カンマ付き（1要素タプルであることを明示するため）。'hello' だけだと str、('hello') も str（括弧は単なる優先順位）。タプルを作るのはカンマであって括弧ではない。"
+  },
+  {
+    "id": "logic-tuple-immutable",
+    "source": "5章チュートリアル",
+    "domain": "エラーと例外",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "t = (1, 2, 3)\nt[0] = 9",
+    "choices": [
+      "TypeError",
+      "t は (9, 2, 3) になる",
+      "IndexError",
+      "ValueError"
+    ],
+    "correct": 0,
+    "explanation": "タプルは不変なので、インデックス代入は TypeError: 'tuple' object does not support item assignment。中身を変更したい場合は新しいタプルを作る (t = (9,) + t[1:]) かリストに変換する必要がある。タプルが不変な代わりに、辞書のキーや集合の要素として使えるメリットがある。"
+  },
+  {
+    "id": "logic-empty-set-vs-dict",
+    "source": "5章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "a = {}\nb = set()\nprint(type(a).__name__)\nprint(type(b).__name__)",
+    "choices": [
+      "1行目: dict / 2行目: set",
+      "1行目: set / 2行目: set",
+      "1行目: dict / 2行目: dict",
+      "1行目: set / 2行目: dict"
+    ],
+    "correct": 0,
+    "explanation": "{} は空辞書として扱われる（リテラルが先に dict に占有されているため）。空集合を作るには set() を呼ぶ必要がある。{1, 2, 3} のように要素があれば集合と判別されるが、空のときは dict 優先。「空集合は set()、空辞書は {}」と覚える。試験で頻出。"
+  },
+  {
+    "id": "logic-set-ops",
+    "source": "5章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "a = set('abracadabra')\nb = set('alacazam')\nprint(sorted(a - b))\nprint(sorted(a & b))",
+    "choices": [
+      "1行目: ['b', 'd', 'r'] / 2行目: ['a', 'c']",
+      "1行目: ['a', 'b', 'c', 'd', 'r'] / 2行目: ['a']",
+      "1行目: ['a', 'c'] / 2行目: ['b', 'd', 'r']",
+      "1行目: ['l', 'm', 'z'] / 2行目: ['a', 'c']"
+    ],
+    "correct": 0,
+    "explanation": "set('abracadabra') の要素は a, b, c, d, r。set('alacazam') の要素は a, c, l, m, z。a - b（差集合）は a にだけある要素 = b, d, r。a & b（積集合）は両方にある要素 = a, c。set 自体は順序を持たないので、表示を安定化させたいときは sorted() を被せる。"
+  },
+  {
+    "id": "logic-dict-get-vs-bracket",
+    "source": "5章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "tel = {'jack': 4098, 'sape': 4139}\nprint(tel.get('irv'))\nprint('jack' in tel)",
+    "choices": [
+      "1行目: None / 2行目: True",
+      "1行目: KeyError / 2行目: True",
+      "1行目: 0 / 2行目: 4098",
+      "1行目: '' / 2行目: False"
+    ],
+    "correct": 0,
+    "explanation": "get('irv') はキー 'irv' がないので None を返す（KeyError は出さない）。'jack' in tel は辞書のキーに 'jack' があるかを bool で返す → True。「[] は厳格、get() は穏当」を体感する典型例。in は辞書のキー検索が O(1) で高速。"
+  },
+  {
+    "id": "logic-dict-list-sorted",
+    "source": "5章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "tel = {'jack': 4098, 'sape': 4139, 'guido': 4127}\nprint(list(tel))\nprint(sorted(tel))",
+    "choices": [
+      "1行目: ['jack', 'sape', 'guido'] / 2行目: ['guido', 'jack', 'sape']",
+      "1行目: [4098, 4139, 4127] / 2行目: [4098, 4127, 4139]",
+      "1行目: ['guido', 'jack', 'sape'] / 2行目: ['guido', 'jack', 'sape']",
+      "1行目: [('jack', 4098), ('sape', 4139), ('guido', 4127)] / 2行目: 同左ソート"
+    ],
+    "correct": 0,
+    "explanation": "list(tel) は辞書のキーを挿入順で返す（Python 3.7+）→ ['jack', 'sape', 'guido']。sorted(tel) はキーをソートしたリスト → ['guido', 'jack', 'sape']。値やペアではなくキーが返る点に注意。「辞書のデフォルトはキー」を覚える。"
+  },
+  {
+    "id": "logic-reversed-sorted",
+    "source": "5章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print(list(reversed(range(1, 10, 2))))\nbasket = ['apple', 'orange', 'apple']\nprint(sorted(basket))",
+    "choices": [
+      "1行目: [9, 7, 5, 3, 1] / 2行目: ['apple', 'apple', 'orange']",
+      "1行目: [1, 3, 5, 7, 9] / 2行目: ['apple', 'orange', 'apple']",
+      "1行目: [9, 7, 5, 3, 1] / 2行目: ['apple', 'orange']",
+      "1行目: range(1, 10, -2) / 2行目: ['apple', 'apple', 'orange']"
+    ],
+    "correct": 0,
+    "explanation": "range(1, 10, 2) は [1, 3, 5, 7, 9]、reversed() で逆順 → [9, 7, 5, 3, 1]。sorted は新しいリストを返し、重複は除去せずそのまま並べ替える → ['apple', 'apple', 'orange']。重複除去したい場合は sorted(set(basket))。"
+  },
+  {
+    "id": "logic-sorted-set-pattern",
+    "source": "5章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "basket = ['apple', 'orange', 'apple', 'pear', 'orange', 'banana']\nprint(list(sorted(set(basket))))",
+    "choices": [
+      "['apple', 'banana', 'orange', 'pear']",
+      "['apple', 'orange', 'apple', 'pear', 'orange', 'banana']",
+      "['apple', 'apple', 'banana', 'orange', 'orange', 'pear']",
+      "['pear', 'orange', 'banana', 'apple']"
+    ],
+    "correct": 0,
+    "explanation": "set(basket) で重複除去 → 4要素、sorted() で昇順整列 → ['apple', 'banana', 'orange', 'pear']。重複除去 + ソートの定番イディオム。list() は冗長だが sorted() の結果は既にリストなので意味的には同じ。"
+  },
+  {
+    "id": "logic-is-vs-eq",
+    "source": "5章チュートリアル",
+    "domain": "制御構文ツール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "a = [1, 2]\nb = [1, 2]\nprint(a == b)\nprint(a is b)",
+    "choices": [
+      "1行目: True / 2行目: False",
+      "1行目: True / 2行目: True",
+      "1行目: False / 2行目: False",
+      "1行目: False / 2行目: True"
+    ],
+    "correct": 0,
+    "explanation": "== は値の等価性を比較するので、中身が同じ a と b は True。is は同一オブジェクトかどうか（id() が同じか）を比較するので、別々に作られた a と b は別オブジェクトで False。b = a のように代入すると is も True になる。「== = 同じ値、is = 同じ箱」と区別する。"
+  },
+  {
+    "id": "logic-short-circuit",
+    "source": "5章チュートリアル",
+    "domain": "制御構文ツール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "x = 0\nprint(x and 10)\nprint(x or 10)",
+    "choices": [
+      "1行目: 0 / 2行目: 10",
+      "1行目: True / 2行目: True",
+      "1行目: 10 / 2行目: 0",
+      "1行目: False / 2行目: False"
+    ],
+    "correct": 0,
+    "explanation": "x=0 は falsy。x and 10 は左が falsy で確定、その時点で 0（左の値そのもの）を返す。x or 10 は左が falsy なので右を評価し、10 を返す。「and: falsy で止まる、or: truthy で止まる」「結果は最後に評価した値そのもの（bool への変換はない）」を覚える。"
+  },
+  {
+    "id": "logic-seq-lex-compare",
+    "source": "5章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print((1, 2, 3) < (1, 2, 4))\nprint((1, 2) < (1, 2, -1))",
+    "choices": [
+      "1行目: True / 2行目: True",
+      "1行目: True / 2行目: False",
+      "1行目: False / 2行目: True",
+      "1行目: False / 2行目: False"
+    ],
+    "correct": 0,
+    "explanation": "辞書式比較で先頭から要素を比べる。1行目: 0番目 1==1, 1番目 2==2, 2番目 3<4 で True。2行目: 0番目 1==1, 1番目 2==2、ここで左が要素切れ → 短いほうが小さいので True。「先頭から比べ、共通部分が等しければ短いほうが小さい」を覚える。"
   }
 ];
