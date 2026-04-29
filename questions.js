@@ -3664,4 +3664,102 @@ const QUESTIONS = [
     correct: 0,
     explanation: '「batteries included」は Python の設計思想で、外部依存なしに即実用機能が動く豊富な標準ライブラリを指す。json, csv, xml, sqlite3, email, http.server, urllib, datetime, re, hashlib など、Web/データ処理/ファイルI/O の基本作業はほぼ標準で完結できる。もちろん本格用途では NumPy, requests, Django などの外部ライブラリも使うが、簡単なスクリプトなら標準だけで済む。',
   },
+
+  // ====== 第11章: 標準ライブラリミニツアー --- その2 ======
+  {
+    id: 'lib-textwrap-fill-vs-wrap', category: '標準ライブラリ',
+    question: 'textwrap モジュールの `fill()` と `wrap()` の違いは?',
+    choices: [
+      'fill() は1つの文字列（折り返し済み）を返す、wrap() は折り返し後の各行を要素とするリストを返す',
+      '機能差はない',
+      'fill() は文字列を埋める、wrap() は文字列を巻く',
+      'どちらもリストを返す',
+    ],
+    correct: 0,
+    explanation: 'textwrap.fill(text, width) は段落を指定幅で折り返した1つの文字列を返す（行間に \\n が入る）。textwrap.wrap(text, width) は折り返し後の各行を要素とするリストを返す。print したいなら fill、行ごとに処理したいなら wrap。「fill = 1文字列、wrap = 行リスト」と返り値の型で覚える。',
+  },
+  {
+    id: 'lib-template-dollar-syntax', category: '標準ライブラリ',
+    question: 'string.Template のプレースホルダ記法は?',
+    choices: [
+      '`$name` または `${name}` の形式（$ をエスケープしたいときは `$$`）',
+      '`{name}` 形式（format() と同じ）',
+      '`%(name)s` 形式（% 演算子と同じ）',
+      '`<name>` 形式',
+    ],
+    correct: 0,
+    explanation: 'string.Template は `$name` 形式のプレースホルダを使う簡素なテンプレート機能。波括弧で囲んだ `${name}` も使える（後ろに英数字が続いて区切りが曖昧なときに便利）。`$` 自体を出力したいなら `$$` でエスケープする。format() の `{}` や f-string とは別の構文で、ユーザー入力をテンプレートにするときに比較的安全（コード実行が制限される）。',
+  },
+  {
+    id: 'lib-template-delimiter-custom', category: '標準ライブラリ',
+    question: 'string.Template のサブクラスでプレースホルダの先頭記号を変えるには?',
+    choices: [
+      'サブクラスのクラス変数 `delimiter` を別の文字に設定する',
+      '不可能（$ 固定）',
+      '引数 prefix を渡す',
+      'ファイル全体を書き換える',
+    ],
+    correct: 0,
+    explanation: 'Template はサブクラス化して `delimiter` クラス変数を上書きすると、プレースホルダの先頭記号を変更できる（例: `delimiter = \'%\'`）。これにより `%name` のような記法を使える。同様に `idpattern`（識別子パターン）も上書き可能で、文化圏ごとや独自記法のテンプレートに対応できる。「Template の delimiter は差し替え可能」。',
+  },
+  {
+    id: 'lib-struct-byte-order', category: '標準ライブラリ',
+    question: '`struct.pack(\'<H\', 513)` の `<` は何を意味する?',
+    choices: [
+      '標準サイズかつリトルエンディアンのバイト順',
+      '比較演算（<）',
+      '入力方向の矢印',
+      'パディングなし指定のみ',
+    ],
+    correct: 0,
+    explanation: 'struct の書式文字列の先頭文字はバイト順序とサイズを指定する: `<` リトルエンディアン（標準サイズ）、`>` ビッグエンディアン（標準サイズ）、`!` ネットワークバイト順（ビッグエンディアン）、`=` ネイティブバイト順（標準サイズ）、`@` ネイティブ（既定、サイズもネイティブ）。`<H` なら2バイトの符号なし16ビット整数をリトルエンディアンで扱う。プロトコル仕様に合わせるとき必須。',
+  },
+  {
+    id: 'lib-thread-queue-coordination', category: '標準ライブラリ',
+    question: '複数スレッドの安全な連携方法として推奨されるパターンは?',
+    choices: [
+      'queue.Queue を介して仕事をやり取りする（共有変数を直接いじらない）',
+      'グローバル変数を直接書き換える',
+      'threading.Lock を一切使わない',
+      'すべてのスレッドが同じファイルに書く',
+    ],
+    correct: 0,
+    explanation: '複数スレッドが共有データを直接読み書きすると競合状態（race condition）が起きやすい。queue.Queue はスレッドセーフな FIFO キューで、生産者・消費者パターンを安全に書ける。Lock や Semaphore を使わず queue に仕事を put/get する設計が推奨されている。「スレッド連携は queue」。Python は GIL があるので CPU バウンドでは並列に動かないが、I/O バウンドなら有効。',
+  },
+  {
+    id: 'lib-logging-default-level', category: '標準ライブラリ',
+    question: 'logging のデフォルト設定で表示されるログレベルは?',
+    choices: [
+      'WARNING, ERROR, CRITICAL のみ（DEBUG と INFO は抑制される）',
+      'すべてのレベル',
+      'DEBUG と INFO のみ',
+      '何も表示されない',
+    ],
+    correct: 0,
+    explanation: 'logging のデフォルト設定では、WARNING 以上（WARNING, ERROR, CRITICAL）が標準エラー出力に表示され、DEBUG と INFO は抑制される。これは「重要な情報だけ出すのが既定、開発時に明示的に有効化する」という思想。`logging.basicConfig(level=logging.DEBUG)` でデフォルトレベルを下げられる。「既定表示は WARNING 以上」。',
+  },
+  {
+    id: 'lib-weakvaluedict-auto-remove', category: '標準ライブラリ',
+    question: 'weakref.WeakValueDictionary の特徴は?',
+    choices: [
+      '値オブジェクトへの強参照を保持しないため、他に参照がなくなると辞書項目も自動的に消える',
+      '通常の dict と完全に同じ',
+      'キーを弱参照で持つ',
+      'すべての項目が永続的に残る',
+    ],
+    correct: 0,
+    explanation: 'WeakValueDictionary は値を弱参照として保持する辞書。他のどこからも値を強参照していない状態になると、値が GC されて辞書項目も自動的に削除される。キャッシュ実装などで「使われている間だけ覚えておく」用途に向く。`d[\'key\'] = obj` の後 `del obj` するとガベージコレクション時に `\'key\' in d` が False になる。「WeakValueDictionary は生存中だけ残る」。',
+  },
+  {
+    id: 'lib-decimal-float-rounding', category: '標準ライブラリ',
+    question: '`round(Decimal(\'0.70\') * Decimal(\'1.05\'), 2)` と `round(.70 * 1.05, 2)` の関係は?',
+    choices: [
+      '結果が異なることがある（前者は 0.74、後者は 0.73 など）',
+      '必ず同じ結果になる',
+      '必ず Decimal の方が大きい',
+      'TypeError',
+    ],
+    correct: 0,
+    explanation: 'float は2進浮動小数点数なので 0.70 や 1.05 を正確に表せない（0.7 ≈ 0.6999999... のようなわずかな誤差を持つ）。Decimal は10進数で正確に表現するので、丸め前の値が違い、結果として round() の結果も違うことがある。`0.70 * 1.05` は理論上 0.735 だが float の誤差で 0.7349... になり round で 0.73。Decimal なら 0.7350 → round で 0.74。「float は2進、Decimal は10進」。',
+  },
 ];

@@ -413,6 +413,16 @@ const QUESTION_META = {
   'lib-doctest-purpose':   { difficulty: 'easy',   concepts: ['guess'] },
   'lib-unittest-purpose':  { difficulty: 'medium', concepts: ['pair-confusion'] },
   'lib-batteries-included':{ difficulty: 'easy',   concepts: ['guess'] },
+
+  // 第11章 標準ライブラリミニツアー その2
+  'lib-textwrap-fill-vs-wrap':{ difficulty: 'medium', concepts: ['pair-confusion'] },
+  'lib-template-dollar-syntax':{ difficulty: 'easy', concepts: ['pair-confusion'] },
+  'lib-template-delimiter-custom':{ difficulty: 'medium', concepts: ['implicit-rule'] },
+  'lib-struct-byte-order': { difficulty: 'hard',   concepts: ['pair-confusion'] },
+  'lib-thread-queue-coordination':{ difficulty: 'medium', concepts: ['implicit-rule'] },
+  'lib-logging-default-level':{ difficulty: 'medium', concepts: ['boundary'] },
+  'lib-weakvaluedict-auto-remove':{ difficulty: 'hard', concepts: ['boundary', 'implicit-rule'] },
+  'lib-decimal-float-rounding':{ difficulty: 'hard', concepts: ['boundary', 'pair-confusion'] },
 };
 
 // デフォルト値（meta が無い問題用）

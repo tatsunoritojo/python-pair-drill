@@ -3255,5 +3255,260 @@ const LOGIC_QUESTIONS = [
     ],
     "correct": 0,
     "explanation": "average([]) は 0/0 を試みて ZeroDivisionError を起こす。assertRaises(ZeroDivisionError) は「このブロックで指定例外が発生したらテスト成功」と判定するので、テストは成功する。wasSuccessful() は失敗もエラーもなければ True。期待された例外が出るのが正しい動作という点を体感する。"
+  },
+  {
+    "id": "logic-reprlib",
+    "source": "11章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import reprlib\ns = set('supercalifragilisticexpialidocious')\nprint('...' in reprlib.repr(s))",
+    "choices": [
+      "True",
+      "False",
+      "TypeError",
+      "何も出力されない"
+    ],
+    "correct": 0,
+    "explanation": "reprlib.repr は大きなコンテナの表現を省略する。長い set の場合、要素を一部だけ示して残りを ... で省略する。'...' in reprlib.repr(s) は省略部分を含むので True。通常の repr では全要素が表示されるので ... は含まれない。「reprlib = 長すぎる repr を縮める」。"
+  },
+  {
+    "id": "logic-pprint-pformat",
+    "source": "11章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import pprint\ndata = {'b': [1, 2, 3], 'a': {'x': 1, 'y': 2}}\ns = pprint.pformat(data, width=20)\nprint(type(s).__name__)\nprint('\\n' in s)",
+    "choices": [
+      "1行目: str / 2行目: True",
+      "1行目: NoneType / 2行目: False",
+      "1行目: dict / 2行目: True",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "pprint.pformat は整形済みの文字列を返す（pprint は print する版）。型は str。width=20 で短い幅を指定したので、自動的に改行が入って \\n が含まれる → True。pprint はネスト構造を読みやすく整形してくれる。"
+  },
+  {
+    "id": "logic-textwrap-fill-wrap-types",
+    "source": "11章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import textwrap\ntext = \"one two three four\"\nprint(type(textwrap.fill(text, width=7)).__name__)\nprint(type(textwrap.wrap(text, width=7)).__name__)",
+    "choices": [
+      "1行目: str / 2行目: list",
+      "1行目: list / 2行目: str",
+      "両方とも str",
+      "両方とも list"
+    ],
+    "correct": 0,
+    "explanation": "fill() は折り返し済みの1つの文字列（str）、wrap() は行ごとのリスト（list）を返す。型を比較するとそれぞれ str と list。「fill = 1文字列、wrap = 行リスト」を体感する典型問題。"
+  },
+  {
+    "id": "logic-template-substitute-missing",
+    "source": "11章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "from string import Template\nt = Template('Return the $item to $owner.')\nd = dict(item='unladen swallow')\nt.substitute(d)",
+    "choices": [
+      "KeyError",
+      "部分置換された文字列が返る",
+      "SyntaxError",
+      "NameError"
+    ],
+    "correct": 0,
+    "explanation": "substitute() は必要なすべてのプレースホルダ（ここでは $item と $owner）が辞書に揃っていないと KeyError を送出する。$owner の値がないので KeyError: 'owner'。欠損があってもエラーにせず未解決のまま残したいなら safe_substitute() を使う。「substitute は厳格」。"
+  },
+  {
+    "id": "logic-template-safe-substitute",
+    "source": "11章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "from string import Template\nt = Template('Return the $item to $owner.')\nd = dict(item='unladen swallow')\nprint(t.safe_substitute(d))",
+    "choices": [
+      "Return the unladen swallow to $owner.",
+      "KeyError",
+      "Return the unladen swallow to None.",
+      "Return the unladen swallow to ."
+    ],
+    "correct": 0,
+    "explanation": "safe_substitute() は欠損プレースホルダを例外にせずそのまま残す。$item は 'unladen swallow' に置換、$owner は値がないので $owner のまま残る。結果: 'Return the unladen swallow to $owner.'。「safe_substitute = 不完全データにやさしい」。"
+  },
+  {
+    "id": "logic-template-custom-delimiter",
+    "source": "11章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "from string import Template\n\nclass BatchRename(Template):\n    delimiter = '%'\n\nt = BatchRename('X_%n%f')\nprint(t.substitute(n=3, f='.jpg'))",
+    "choices": [
+      "X_3.jpg",
+      "X_%n%f",
+      "SyntaxError",
+      "X_3%f"
+    ],
+    "correct": 0,
+    "explanation": "Template のサブクラスで delimiter を % に変更すると、プレースホルダの先頭記号が % になる。%n と %f はそれぞれ n と f のキーで置換される → X_3.jpg。「Template の delimiter は差し替え可能」。"
+  },
+  {
+    "id": "logic-struct-pack-unpack",
+    "source": "11章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import struct\ndata = struct.pack('<H', 513)\nprint(type(data).__name__)\nprint(struct.unpack('<H', data))",
+    "choices": [
+      "1行目: bytes / 2行目: (513,)",
+      "1行目: int / 2行目: 513",
+      "1行目: bytes / 2行目: 513",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "struct.pack(format, value) は bytes を返す。type は 'bytes'。unpack は常にタプルを返すので、(513,) のように1要素のタプル。元の値は完全に復元される。「struct = バイナリの型付き変換、unpack はタプル」。"
+  },
+  {
+    "id": "logic-thread-start-join",
+    "source": "11章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import threading\n\nresult = []\n\nclass Worker(threading.Thread):\n    def run(self):\n        result.append('done')\n\nt = Worker()\nt.start()\nt.join()\nprint(result)",
+    "choices": [
+      "['done']",
+      "[]",
+      "RuntimeError",
+      "'done'"
+    ],
+    "correct": 0,
+    "explanation": "t.start() でスレッドが開始、別スレッドで run() メソッドが実行されて result.append('done') が走る。t.join() でメインスレッドがそのスレッドの完了を待つので、print(result) の時点で確実に 'done' が追加されている。join なしだと race condition になる可能性がある。「start で別スレッド、join で待機」。"
+  },
+  {
+    "id": "logic-logging-default-level",
+    "source": "11章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import logging\nprint(logging.getLogger().getEffectiveLevel() == logging.WARNING)",
+    "choices": [
+      "True",
+      "False",
+      "RuntimeError",
+      "None"
+    ],
+    "correct": 0,
+    "explanation": "ルートロガーのデフォルト有効レベルは WARNING（30）。getEffectiveLevel() でこの値を取得し、logging.WARNING 定数と比較すると True。basicConfig(level=DEBUG) などで変更できる。「既定表示は WARNING 以上」。"
+  },
+  {
+    "id": "logic-weakref-ref",
+    "source": "11章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import weakref\n\nclass A:\n    pass\n\na = A()\nr = weakref.ref(a)\nprint(r() is a)",
+    "choices": [
+      "True",
+      "False",
+      "NameError",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "weakref.ref(a) は a への弱参照を返す。r() で参照先のオブジェクトを取得（a が生きていれば a そのもの、消えていれば None）。r() is a は同一オブジェクトかを比較し、a が生きているので True。「weakref = 見るが保持しない」が、生きている間は通常通りアクセス可能。"
+  },
+  {
+    "id": "logic-weakvaluedict-removal",
+    "source": "11章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import weakref\nimport gc\n\nclass A:\n    def __init__(self, value):\n        self.value = value\n\na = A(10)\nd = weakref.WeakValueDictionary()\nd['primary'] = a\ndel a\ngc.collect()\nprint('primary' in d)",
+    "choices": [
+      "False",
+      "True",
+      "KeyError",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "WeakValueDictionary は値を弱参照で持つ。d['primary'] = a の時点では a への強参照（変数 a）が存在するので項目は残る。del a で a への強参照が消え、gc.collect() でガベージコレクションが走ると、参照のない値オブジェクトが回収され、辞書からも項目が自動的に削除される → False。「WeakValueDictionary は生存中だけ残る」。"
+  },
+  {
+    "id": "logic-array-same-type",
+    "source": "11章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "from array import array\na = array('H', [4000, 10, 700, 22222])\nprint(sum(a))\nprint(a[1:3])",
+    "choices": [
+      "1行目: 26932 / 2行目: array('H', [10, 700])",
+      "1行目: 26932 / 2行目: [10, 700]",
+      "1行目: 36732 / 2行目: array('H', [10, 700])",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "array は同種データの省メモリ配列。'H' は unsigned short (2バイト)。sum は 4000+10+700+22222 = 26932。スライスは新しい array オブジェクトを返す（list ではなく array('H', [...]) 形式で表示される）。型コードは保持される。「array = 同型・省メモリ」。"
+  },
+  {
+    "id": "logic-deque-task-popleft",
+    "source": "11章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "from collections import deque\nd = deque([\"task1\", \"task2\", \"task3\"])\nd.append(\"task4\")\nprint(d.popleft())\nprint(d)",
+    "choices": [
+      "1行目: task1 / 2行目: deque(['task2', 'task3', 'task4'])",
+      "1行目: task4 / 2行目: deque(['task1', 'task2', 'task3'])",
+      "1行目: task1 / 2行目: deque(['task2', 'task3'])",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "deque は両端キュー。append で末尾追加 → ['task1', 'task2', 'task3', 'task4']。popleft で先頭から取り出して返す → 'task1'。残り ['task2', 'task3', 'task4']。FIFO キューの典型挙動。"
+  },
+  {
+    "id": "logic-bisect-insort-tuple",
+    "source": "11章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import bisect\nscores = [(100, 'perl'), (200, 'tcl'), (400, 'lua'), (500, 'python')]\nbisect.insort(scores, (300, 'ruby'))\nprint(scores)",
+    "choices": [
+      "[(100, 'perl'), (200, 'tcl'), (300, 'ruby'), (400, 'lua'), (500, 'python')]",
+      "末尾に追加されて (500, 'python') の後に (300, 'ruby') が来る",
+      "降順で再ソートされる",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "bisect.insort はソート済みリストへ順序を保ったまま挿入する。タプルの比較は最初の要素から行われるので 300 のタプルは 200 と 400 の間に入る。append のように末尾に入るのではない点に注意。「insort = sorted list に秩序ある挿入」。"
+  },
+  {
+    "id": "logic-heapq-min-pop",
+    "source": "11章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "from heapq import heapify, heappop, heappush\ndata = [1, 3, 5, 7, 9, 2, 4, 6, 8, 0]\nheapify(data)\nheappush(data, -5)\nprint([heappop(data) for _ in range(3)])",
+    "choices": [
+      "[-5, 0, 1]",
+      "[0, 1, 2]",
+      "[1, 0, -5]",
+      "[9, 8, 7]"
+    ],
+    "correct": 0,
+    "explanation": "heapify(data) でリストを最小ヒープに整形。heappush(-5) で -5 を追加（最小値が更新）。heappop は最小値を取り出す → -5, 0, 1 の順で取り出される。「heap は最小値先頭」「heapify は完全ソートではなくヒープ順」。"
+  },
+  {
+    "id": "logic-decimal-float-round-diff",
+    "source": "11章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "from decimal import Decimal\nprint(round(Decimal('0.70') * Decimal('1.05'), 2))\nprint(round(.70 * 1.05, 2))",
+    "choices": [
+      "1行目: 0.74 / 2行目: 0.73",
+      "両方 0.74",
+      "両方 0.73",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "Decimal('0.70') * Decimal('1.05') は 0.7350 で、これを round(., 2) すると 0.74。一方 0.70 * 1.05 は float なので誤差が出て約 0.7349999... となり、round で 0.73。「float は2進、Decimal は10進」「丸め前の値が違うので結果も違う」。"
+  },
+  {
+    "id": "logic-decimal-trailing-zeros",
+    "source": "11章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "from decimal import Decimal\nx = Decimal('1.30') + Decimal('1.20')\nprint(x)",
+    "choices": [
+      "2.50",
+      "2.5",
+      "2",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "Decimal は有効桁数（significant digits）を保持するので、'1.30' + '1.20' の結果は '2.50' として表示される（末尾の 0 が消えない）。float なら 1.30 + 1.20 = 2.5 と表示される（trailing zero が落ちる）。Decimal は計算精度の維持と、表示の末尾ゼロを保つ性質を持つ。"
   }
 ];
