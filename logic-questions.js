@@ -3015,5 +3015,245 @@ const LOGIC_QUESTIONS = [
     ],
     "correct": 0,
     "explanation": "zip(xvec, yvec) は (10,7), (20,5), (30,3) を返す。ジェネレータ式 x*y for x, y in zip(...) で 10*7=70, 20*5=100, 30*3=90 を生成し、sum() で 70+100+90 = 260。これがベクトルのドット積（内積）の典型実装。「[] は全部作る、() は必要時生成」。"
+  },
+  {
+    "id": "logic-shutil-vs-os",
+    "source": "10章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import os\nimport shutil\nprint(hasattr(shutil, 'copyfile'))\nprint(hasattr(os, 'copyfile'))",
+    "choices": [
+      "1行目: True / 2行目: False",
+      "1行目: True / 2行目: True",
+      "1行目: False / 2行目: True",
+      "1行目: False / 2行目: False"
+    ],
+    "correct": 0,
+    "explanation": "shutil.copyfile は高水準ファイルコピー関数として存在するので hasattr は True。os モジュールには copyfile が直接ないので False（os.path.copy も存在しない）。「low-level は os、high-level は shutil」を体感する典型問題。なお os には rename はある。"
+  },
+  {
+    "id": "logic-glob-wildcard",
+    "source": "10章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import glob\nopen('tmp10_a.py', 'w').close()\nopen('tmp10_b.txt', 'w').close()\nprint(sorted(glob.glob('tmp10_*')))\nprint(sorted(glob.glob('tmp10_*.py')))",
+    "choices": [
+      "1行目: ['tmp10_a.py', 'tmp10_b.txt'] / 2行目: ['tmp10_a.py']",
+      "1行目: ['tmp10_*'] / 2行目: ['tmp10_*.py']",
+      "1行目: [] / 2行目: []",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "glob はシェル風ワイルドカードでマッチするファイル一覧を返す。tmp10_* は両方のファイルにマッチ、tmp10_*.py は .py ファイルだけにマッチ。sorted で結果を安定化。実行ごとにファイル順序が変わる可能性があるので比較問題では sorted を被せるのが安全。"
+  },
+  {
+    "id": "logic-argparse-parse",
+    "source": "10章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import argparse\nparser = argparse.ArgumentParser(prog='top')\nparser.add_argument('filenames', nargs='+')\nparser.add_argument('-l', '--lines', type=int, default=10)\nargs = parser.parse_args(['--lines=5', 'alpha.txt', 'beta.txt'])\nprint(args.lines)\nprint(args.filenames)",
+    "choices": [
+      "1行目: 5 / 2行目: ['alpha.txt', 'beta.txt']",
+      "1行目: '5' / 2行目: ['alpha.txt', 'beta.txt']",
+      "1行目: 10 / 2行目: ['alpha.txt', 'beta.txt']",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "argparse は宣言的に引数を定義する。--lines=5 は type=int で整数 5 に変換される（文字列 '5' ではない）。nargs='+' の filenames は1個以上の位置引数を受け、リストとして格納される。args.lines, args.filenames で属性アクセス。"
+  },
+  {
+    "id": "logic-stderr-write",
+    "source": "10章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import sys\nn = sys.stderr.write('warn\\n')\nprint(type(n).__name__)",
+    "choices": [
+      "int",
+      "NoneType",
+      "str",
+      "bytes"
+    ],
+    "correct": 0,
+    "explanation": "write() メソッドは書き込んだ文字数（テキストモード）を返す。stdout/stderr は両方ともテキストファイルとして扱えるので、sys.stderr.write('warn\\n') も整数 5 を返す。print は None を返すが、write は文字数を返す違いを覚える。「write は件数を返す」は第7章の論点と同じ。"
+  },
+  {
+    "id": "logic-sys-exit-systemexit",
+    "source": "10章チュートリアル",
+    "domain": "エラーと例外",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import sys\ntry:\n    sys.exit()\nexcept BaseException as e:\n    print(type(e).__name__)",
+    "choices": [
+      "SystemExit",
+      "ValueError",
+      "RuntimeError",
+      "出力なし（プロセス即座終了）"
+    ],
+    "correct": 0,
+    "explanation": "sys.exit() は SystemExit 例外を送出することでプロセスを終了させる。except BaseException で捕まえると終了せずに例外オブジェクトを取得できる（型は SystemExit）。except Exception では捕まえられない（SystemExit は BaseException 直下で Exception の外）。これにより try/finally でクリーンアップが動くようになっている。"
+  },
+  {
+    "id": "logic-re-findall",
+    "source": "10章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import re\nprint(re.findall(r'\\bf[a-z]*', 'which foot or hand fell fastest'))",
+    "choices": [
+      "['foot', 'fell', 'fastest']",
+      "['f', 'f', 'f']",
+      "['foot or hand fell fastest']",
+      "[]"
+    ],
+    "correct": 0,
+    "explanation": "正規表現 \\bf[a-z]* は単語境界 (\\b) の直後に f、続けて0個以上の小文字。'which' の中の f はないが、'foot', 'fell', 'fastest' が単語の頭から f で始まるのでマッチ。'or hand' は f で始まる単語がないのでスキップ。re.findall はすべてのマッチを返す。"
+  },
+  {
+    "id": "logic-re-sub-backref",
+    "source": "10章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import re\nprint(re.sub(r'(\\b[a-z]+) \\1', r'\\1', 'cat in the the hat'))",
+    "choices": [
+      "cat in the hat",
+      "cat in the the hat",
+      "cat in cat hat",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "(\\b[a-z]+) \\1 は単語境界の小文字単語をキャプチャ (\\1)、空白、同じ単語の繰り返しにマッチする。'the the' がこれにマッチして、置換文字列 r'\\1'（後方参照で1つ目のキャプチャ）に置き換えられる結果 'the' になる。よって 'cat in the the hat' → 'cat in the hat'。連続重複語の縮約イディオム。"
+  },
+  {
+    "id": "logic-str-replace",
+    "source": "10章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print('tea for too'.replace('too', 'two'))",
+    "choices": [
+      "tea for two",
+      "tea for too",
+      "two",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "文字列メソッド replace(old, new) は単純な置換。re を使わずに済む典型例。'too' を 'two' に置換 → 'tea for two'。replace() は置換できなかった場合も元の文字列を返すだけでエラーにしない。「単純なら str.replace、複雑なら re.sub」。"
+  },
+  {
+    "id": "logic-random-sample",
+    "source": "10章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import random\nrandom.seed(0)\nresult = random.sample(range(10), 5)\nprint(len(result))\nprint(len(set(result)) == len(result))",
+    "choices": [
+      "1行目: 5 / 2行目: True",
+      "1行目: 5 / 2行目: False",
+      "1行目: 10 / 2行目: True",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "random.sample(population, k) は重複なしで k 個を選ぶ。len(result) は 5。set にしても要素数が変わらない（重複なし）ので、len(set(result)) == len(result) は True。choice や choices と違って重複が出ないことを保証する。seed(0) は再現性のため。"
+  },
+  {
+    "id": "logic-statistics-mean-median",
+    "source": "10章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import statistics\ndata = [2.75, 1.75, 1.25, 0.25, 0.5, 1.25, 3.5]\nprint(statistics.mean(data))\nprint(statistics.median(data))",
+    "choices": [
+      "1行目: 1.6071428571428572 / 2行目: 1.25",
+      "1行目: 1.25 / 2行目: 1.6071428571428572",
+      "1行目: 11.25 / 2行目: 1.25",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "data の合計 11.25 を 7 で割って mean は約 1.6071428571428572。データをソートすると [0.25, 0.5, 1.25, 1.25, 1.75, 2.75, 3.5] で7個の中央 (4番目) は 1.25 → median = 1.25。「mean は平均、median は中央値」。データの偏りに頑健なのは median。"
+  },
+  {
+    "id": "logic-date-diff",
+    "source": "10章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import datetime as dt\na = dt.date(2020, 1, 10)\nb = dt.date(2020, 1, 1)\nage = a - b\nprint(type(age).__name__)\nprint(age.days)",
+    "choices": [
+      "1行目: timedelta / 2行目: 9",
+      "1行目: int / 2行目: 9",
+      "1行目: date / 2行目: 9",
+      "1行目: timedelta / 2行目: 10"
+    ],
+    "correct": 0,
+    "explanation": "date 同士の減算は timedelta を返す。type の名前は 'timedelta'。1月10日と1月1日の差は9日（10-1=9）。timedelta オブジェクトは .days, .seconds, .microseconds 属性を持ち、加減算で日付演算ができる。a + datetime.timedelta(days=30) で30日後など。"
+  },
+  {
+    "id": "logic-strftime",
+    "source": "10章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import datetime as dt\nd = dt.date(2003, 12, 2)\nprint(d.strftime('%m-%d-%y'))",
+    "choices": [
+      "12-02-03",
+      "2003-12-02",
+      "03-12-02",
+      "2003/12/02"
+    ],
+    "correct": 0,
+    "explanation": "strftime の書式指定子 %m は2桁の月、%d は2桁の日、%y は2桁の年。2003年12月2日 → '12-02-03'。%Y なら4桁の年で '2003' になる。月日年の順序は地域慣習（米国式）で、Python は書式文字列を厳密に解釈するだけ。"
+  },
+  {
+    "id": "logic-zlib-compress",
+    "source": "10章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import zlib\ns = b'witch which has which witches wrist watch'\nt = zlib.compress(s)\nprint(type(t).__name__)\nprint(zlib.decompress(t) == s)",
+    "choices": [
+      "1行目: bytes / 2行目: True",
+      "1行目: str / 2行目: True",
+      "1行目: bytes / 2行目: False",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "zlib.compress(bytes) → bytes（圧縮データ）を返す。type は 'bytes'。decompress で展開すると元の bytes が完全復元されるので等価比較は True（可逆圧縮）。文字列を圧縮したい場合は事前に .encode('utf-8') で bytes に変換する必要がある。「zlib は bytes 圧縮」。"
+  },
+  {
+    "id": "logic-zlib-crc32",
+    "source": "10章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import zlib\ns = b'abc'\nprint(type(zlib.crc32(s)).__name__)",
+    "choices": [
+      "int",
+      "str",
+      "bytes",
+      "float"
+    ],
+    "correct": 0,
+    "explanation": "crc32 は CRC32 チェックサムを32ビット非負整数で返す。Python では int として扱われる。文字列ハッシュのような16進文字列が返るのではない点に注意。整合性チェックや単純なハッシュ用途に使える。hex(zlib.crc32(s)) で16進表示できる。"
+  },
+  {
+    "id": "logic-doctest-testmod",
+    "source": "10章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "def average(values):\n    \"\"\"\n    >>> print(average([20, 30, 70]))\n    40.0\n    \"\"\"\n    return sum(values) / len(values)\n\nimport doctest\nresult = doctest.testmod()\nprint(result.failed)\nprint(result.attempted)",
+    "choices": [
+      "1行目: 0 / 2行目: 1",
+      "1行目: 0 / 2行目: 0",
+      "1行目: 1 / 2行目: 1",
+      "1行目: 1 / 2行目: 0"
+    ],
+    "correct": 0,
+    "explanation": "doctest は docstring 内の >>> 例を実行し、出力が一致するか確認する。average([20, 30, 70]) は (20+30+70)/3 = 40.0 で期待値と一致。1個試して0個失敗 → failed=0, attempted=1。testmod() は TestResults(failed=0, attempted=1) を返す。これにより docstring がテストとして機能する。"
+  },
+  {
+    "id": "logic-unittest-assertraises",
+    "source": "10章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import unittest\n\ndef average(values):\n    return sum(values) / len(values)\n\nclass T(unittest.TestCase):\n    def runTest(self):\n        with self.assertRaises(ZeroDivisionError):\n            average([])\n\nresult = unittest.TestResult()\nT().run(result)\nprint(result.wasSuccessful())",
+    "choices": [
+      "True",
+      "False",
+      "ZeroDivisionError がそのまま伝播する",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "average([]) は 0/0 を試みて ZeroDivisionError を起こす。assertRaises(ZeroDivisionError) は「このブロックで指定例外が発生したらテスト成功」と判定するので、テストは成功する。wasSuccessful() は失敗もエラーもなければ True。期待された例外が出るのが正しい動作という点を体感する。"
   }
 ];

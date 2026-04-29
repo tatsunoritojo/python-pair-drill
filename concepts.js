@@ -393,6 +393,26 @@ const QUESTION_META = {
   'cls-yield-generator':   { difficulty: 'easy',   concepts: ['pair-confusion'] },
   'cls-generator-state':   { difficulty: 'medium', concepts: ['implicit-rule'] },
   'cls-genexp-memory':     { difficulty: 'medium', concepts: ['pair-confusion'] },
+
+  // 第10章 標準ライブラリめぐり
+  'lib-os-import-star-bad':{ difficulty: 'medium', concepts: ['implicit-rule', 'pair-confusion'] },
+  'lib-shutil-highlevel':  { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'lib-glob-wildcard':     { difficulty: 'easy',   concepts: ['guess'] },
+  'lib-argparse':          { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'lib-stderr-purpose':    { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'lib-re-use-case':       { difficulty: 'medium', concepts: ['string-regex', 'pair-confusion'] },
+  'lib-math-purpose':      { difficulty: 'easy',   concepts: ['guess'] },
+  'lib-rand-choice-vs-sample':{ difficulty: 'medium', concepts: ['pair-confusion'] },
+  'lib-statistics-features':{ difficulty: 'easy', concepts: ['guess'] },
+  'lib-urlopen-bytes':     { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'lib-smtplib-localhost': { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'lib-date-diff':         { difficulty: 'easy',   concepts: ['guess'] },
+  'lib-strftime':          { difficulty: 'medium', concepts: ['word-order'] },
+  'lib-zlib-purpose':      { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'lib-timeit-scope':      { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'lib-doctest-purpose':   { difficulty: 'easy',   concepts: ['guess'] },
+  'lib-unittest-purpose':  { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'lib-batteries-included':{ difficulty: 'easy',   concepts: ['guess'] },
 };
 
 // デフォルト値（meta が無い問題用）
