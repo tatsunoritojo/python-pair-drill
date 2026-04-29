@@ -2280,5 +2280,290 @@ const LOGIC_QUESTIONS = [
     ],
     "correct": 0,
     "explanation": "importlib.reload(module) はそのモジュールを再読み込みし、再読み込み後のモジュールオブジェクトを返す。__name__ は元のままなので 'math' が出力される。なお `reloaded is math` の真偽は実装依存（sys.modules を介して別オブジェクトに置き換えられる場合がある）ので、reload 後の同一性に依存したコードは書かないほうが安全。reload は開発時に使う機能で、本番コードでは推奨されない。"
+  },
+  {
+    "id": "logic-str-vs-repr",
+    "source": "7章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "s = 'Hello, world.'\nprint(str(s))\nprint(repr(s))",
+    "choices": [
+      "1行目: Hello, world. / 2行目: 'Hello, world.'",
+      "1行目: 'Hello, world.' / 2行目: Hello, world.",
+      "両方とも Hello, world.",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "str() は人間向けの表現で、文字列ならクォートなしで内容そのまま。repr() はインタプリタ向けの表現で、文字列はクォート付き（'Hello, world.'）。print() は str() を経由するので、print(str(s)) と print(s) は同じ結果になる。"
+  },
+  {
+    "id": "logic-repr-escape",
+    "source": "7章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "hello = 'hello, world\\n'\nprint(repr(hello))",
+    "choices": [
+      "'hello, world\\n'（エスケープが見える）",
+      "hello, world (改行付き)",
+      "\"hello, world\\\\n\"",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "repr() は文字列をインタプリタが読める形式（Python リテラルとして記述できる形）で返す。エスケープ文字 \\n は実際の改行ではなく \\n のまま表示され、全体がクォート 'hello, world\\n' で囲まれる。「repr は中身をリテラル表記で見せる」。"
+  },
+  {
+    "id": "logic-fstring-decimal",
+    "source": "7章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import math\nprint(f'{math.pi:.3f}')",
+    "choices": [
+      "3.142",
+      "3.14159",
+      "3.14",
+      ".3f"
+    ],
+    "correct": 0,
+    "explanation": "f-string の書式指定子 :.3f は「小数点以下3桁の浮動小数点数」を意味する。math.pi (3.14159...) を3桁に丸めると 3.142（4桁目が5以上なので切り上げ）。.2f なら 3.14、.0f なら 3。フォーマット指定子は format() メソッドと同じ文法。"
+  },
+  {
+    "id": "logic-fstring-bang-r",
+    "source": "7章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "animals = 'ウナギ'\nprint(f'{animals!r}')",
+    "choices": [
+      "'ウナギ'（クォート付き）",
+      "ウナギ（クォートなし）",
+      "Unicode エスケープ表現",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "f-string の !r は repr() を適用する変換子。文字列の repr は外側にクォートが付く形になる。!s（既定、str 適用）なら ウナギ のままクォートなしで出る。デバッグ表示で「文字列であること」を明示したいときに !r を使う。"
+  },
+  {
+    "id": "logic-fstring-eq",
+    "source": "7章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "bugs = 'roaches'\ncount = 13\nprint(f'{bugs=} {count=}')",
+    "choices": [
+      "bugs='roaches' count=13",
+      "roaches 13",
+      "bugs count",
+      "SyntaxError"
+    ],
+    "correct": 0,
+    "explanation": "f-string の = 指定子は self-documenting expression と呼ばれる機能（Python 3.8+）。f'{expr=}' は expr=値 の形で式と評価結果を一緒に出力する。文字列値の場合は repr 形式（クォート付き）になるのが既定。デバッグ出力で「変数名と値」を簡潔に書ける。"
+  },
+  {
+    "id": "logic-format-positional",
+    "source": "7章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print('{1} and {0}'.format('spam', 'eggs'))",
+    "choices": [
+      "eggs and spam",
+      "spam and eggs",
+      "1 and 0",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "format() の {} 内のインデックスは渡した位置引数の番号を指す。{1} は2番目の引数 'eggs'、{0} は1番目の引数 'spam'。順序を入れ替えたり同じ引数を複数回参照したりできる。{} だけならゼロから順に消費される。"
+  },
+  {
+    "id": "logic-format-dict-unpack",
+    "source": "7章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "table = {'Jack': 4098, 'Sjoerd': 4127}\nprint('Jack: {Jack:d}; Sjoerd: {Sjoerd:d}'.format(**table))",
+    "choices": [
+      "Jack: 4098; Sjoerd: 4127",
+      "Jack: Jack; Sjoerd: Sjoerd",
+      "辞書全体を文字列化",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "**table で辞書のキー/値をキーワード引数として展開し、format() のテンプレートの {Jack} {Sjoerd} プレースホルダに埋まる。:d は整数表示の書式指定子。「**dict で名前付き展開」のイディオムは関数呼び出しと同じ仕組み。"
+  },
+  {
+    "id": "logic-rjust-zfill",
+    "source": "7章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print('12'.rjust(5))\nprint('12'.zfill(5))",
+    "choices": [
+      "1行目:    12 (空白寄せ) / 2行目: 00012 (ゼロ埋め)",
+      "両方ゼロ埋め",
+      "両方空白寄せ",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "rjust(5) は幅5に右寄せ、足りない部分は空白で埋める → '   12'（先頭3空白+12）。zfill(5) は幅5にゼロで左を埋める文字列メソッドで、特に数値文字列でよく使う → '00012'。両方とも長さ5の文字列。「rjust は空白、zfill はゼロ」と区別する。"
+  },
+  {
+    "id": "logic-percent-format",
+    "source": "7章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import math\nprint('%.2f' % math.pi)",
+    "choices": [
+      "3.14",
+      "3.142",
+      "3.14159",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "古い % 書式で文字列フォーマット。%.2f は「小数点以下2桁の float」、% 値 で値が埋め込まれる。math.pi (3.14159...) を2桁に丸めて 3.14。f-string や format() と同じ書式記号 .2f を使うが構文が異なる（% 演算子で対応）。古いコードや一部の文脈で残っている。"
+  },
+  {
+    "id": "logic-write-returns",
+    "source": "7章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "with open('tmp_ch7_a.txt', 'w', encoding='utf-8') as f:\n    n = f.write('abcde')\nprint(n)",
+    "choices": [
+      "5",
+      "None",
+      "'abcde'",
+      "0"
+    ],
+    "correct": 0,
+    "explanation": "f.write(string) は書き込んだ文字数を返す。'abcde' は5文字なので n=5。print(n) は 5 を出力。テキストモードでは文字数（バイト数ではない）を返す点に注意（マルチバイト文字なら文字数とバイト数は違う）。with ブロック終了で自動的に close される。"
+  },
+  {
+    "id": "logic-with-closed",
+    "source": "7章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "with open('tmp_ch7_b.txt', 'w', encoding='utf-8') as f:\n    f.write('x')\nprint(f.closed)",
+    "choices": [
+      "True",
+      "False",
+      "AttributeError",
+      "NameError"
+    ],
+    "correct": 0,
+    "explanation": "with ブロックを抜けると自動的に f.close() が呼ばれるので、f.closed 属性は True になる。f 変数自体はブロック外でも参照可能（with は新しいスコープを作らない）。Python の慣用句として「ファイルを使ったら必ず with」を覚える。"
+  },
+  {
+    "id": "logic-read-eof",
+    "source": "7章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "with open('tmp_ch7_c.txt', 'w', encoding='utf-8') as f:\n    f.write('abc')\nwith open('tmp_ch7_c.txt', 'r', encoding='utf-8') as f:\n    print(f.read())\n    print(repr(f.read()))",
+    "choices": [
+      "1行目: abc / 2行目: ''",
+      "abc / abc",
+      "abc / None",
+      "EOFError"
+    ],
+    "correct": 0,
+    "explanation": "1回目の read() でファイル全体 'abc' が読まれてファイル位置は EOF に達する。2回目の read() は EOF なので空文字列 '' を返す。print(repr('')) で '' と表示される（クォート付きで空であることを明示）。「EOF の read は空文字列」を覚える。"
+  },
+  {
+    "id": "logic-readline-newline",
+    "source": "7章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "with open('tmp_ch7_d.txt', 'w', encoding='utf-8') as f:\n    f.write('line1\\nline2\\n')\nwith open('tmp_ch7_d.txt', 'r', encoding='utf-8') as f:\n    print(repr(f.readline()))\n    print(repr(f.readline()))",
+    "choices": [
+      "1行目: 'line1\\n' / 2行目: 'line2\\n'",
+      "1行目: 'line1' / 2行目: 'line2'",
+      "改行込み全体を1回で",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "readline() は末尾の \\n を含めて1行を返す。repr で表示すると 'line1\\n' のように改行文字が見える形。改行を除きたいなら line.rstrip('\\n') または line.strip() を使う。「readline は通常改行付き」。"
+  },
+  {
+    "id": "logic-iter-file",
+    "source": "7章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "with open('tmp_ch7_e.txt', 'w', encoding='utf-8') as f:\n    f.write('a\\nb\\n')\nwith open('tmp_ch7_e.txt', 'r', encoding='utf-8') as f:\n    for line in f:\n        print(line, end='')",
+    "choices": [
+      "1行目: a / 2行目: b（改行で2行）",
+      "a\\nb\\n",
+      "ab",
+      "3行出力"
+    ],
+    "correct": 0,
+    "explanation": "ファイルオブジェクトの直接反復は行ごとに \\n 付きで取り出す。print の end='' で print 自身の改行を抑止しているので、line 内の \\n だけが効く → a 改行 b 改行で2行出力。「行読みは for line in f」のメモリ効率の良いイディオム。"
+  },
+  {
+    "id": "logic-closed-file-read",
+    "source": "7章チュートリアル",
+    "domain": "エラーと例外",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "f = open('tmp_ch7_f.txt', 'w', encoding='utf-8')\nf.close()\nf.read()",
+    "choices": [
+      "ValueError",
+      "空文字列が返る",
+      "None",
+      "FileNotFoundError"
+    ],
+    "correct": 0,
+    "explanation": "閉じられたファイルへの read/write は ValueError: I/O operation on closed file。EOF（空文字列）と紛らわしいが、ValueError が出るのが正しい挙動。with を使えばこのエラーは起きにくい。close 状態を確認したいなら f.closed 属性を使う。"
+  },
+  {
+    "id": "logic-tell-seek",
+    "source": "7章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "with open('tmp_ch7_g.bin', 'wb') as f:\n    f.write(b'0123456789abcdef')\nwith open('tmp_ch7_g.bin', 'rb') as f:\n    f.seek(5)\n    print(f.tell())\n    print(f.read(1))",
+    "choices": [
+      "1行目: 5 / 2行目: b'5'",
+      "1行目: 6 / 2行目: b'5'",
+      "1行目: 5 / 2行目: b'4'",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "seek(5) で先頭から5バイト目に移動（whence=0 既定）。tell() は現在位置 5 を返す。read(1) でその位置から1バイト読むと b'5'（インデックス5の文字）。バイナリモードなのでバイト数で位置を扱える。「seek してから tell は同じ値、read は次の1文字」。"
+  },
+  {
+    "id": "logic-seek-from-end",
+    "source": "7章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "with open('tmp_ch7_h.bin', 'wb') as f:\n    f.write(b'0123456789abcdef')\nwith open('tmp_ch7_h.bin', 'rb') as f:\n    f.seek(-3, 2)\n    print(f.read(1))",
+    "choices": [
+      "b'd'",
+      "b'c'",
+      "b'e'",
+      "b'f'"
+    ],
+    "correct": 0,
+    "explanation": "seek(-3, 2) は whence=2（終端基準）から -3 バイト = 終端から3バイト戻る。'0123456789abcdef' は16バイト、終端から3戻ると 16-3=13 番目の位置 = 'd'。read(1) で1バイト読んで b'd'。バイナリモードでないと負オフセットの seek は使えない。"
+  },
+  {
+    "id": "logic-json-dumps",
+    "source": "7章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import json\nx = [1, 'simple', 'list']\ns = json.dumps(x)\nprint(type(s).__name__)\nprint(s)",
+    "choices": [
+      "1行目: str / 2行目: [1, \"simple\", \"list\"]",
+      "1行目: list / 2行目: [1, 'simple', 'list']",
+      "1行目: bytes / 2行目: ...",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "json.dumps(x) は Python オブジェクトを JSON 文字列にシリアライズする。type(s).__name__ は 'str'。JSON 文字列は仕様上ダブルクォートなので [1, \"simple\", \"list\"] の形（Python の repr とは違う）。リストはそのまま JSON 配列に、文字列はダブルクォート付きに変換される。"
+  },
+  {
+    "id": "logic-json-dump-load",
+    "source": "7章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import json\ndata = {\"a\": 1, \"b\": [2, 3]}\nwith open('tmp_ch7_i.json', 'w', encoding='utf-8') as f:\n    json.dump(data, f)\nwith open('tmp_ch7_i.json', 'r', encoding='utf-8') as f:\n    loaded = json.load(f)\nprint(loaded)",
+    "choices": [
+      "{'a': 1, 'b': [2, 3]}",
+      "'{\"a\": 1, \"b\": [2, 3]}'（文字列）",
+      "タプル化された結果",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "json.dump(data, f) は data を JSON にシリアライズしてファイルに書き込む。json.load(f) はファイルから JSON を読み込んで Python オブジェクト（dict）に戻す。Python 表現の dict が出力されるので {'a': 1, 'b': [2, 3]}（シングルクォート、JSON とは表記が違う）。"
   }
 ];
