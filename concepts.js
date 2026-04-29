@@ -272,6 +272,22 @@ const QUESTION_META = {
   'list-slice-assign':     { difficulty: 'hard',   concepts: ['boundary', 'implicit-rule'] },
   'syn-while-truthy':      { difficulty: 'medium', concepts: ['implicit-rule'] },
   'syn-multi-assign-rhs':  { difficulty: 'hard',   concepts: ['boundary'] },
+
+  // 第4章 制御フロー・関数引数
+  'iter-for-iterable':     { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'iter-mutate-during':    { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'iter-range-end-exclusive':{ difficulty: 'easy', concepts: ['boundary'] },
+  'iter-range-not-list':   { difficulty: 'medium', concepts: ['pair-confusion', 'implicit-rule'] },
+  'ctrl-break-innermost':  { difficulty: 'medium', concepts: ['boundary'] },
+  'ctrl-loop-else':        { difficulty: 'hard',   concepts: ['pair-confusion', 'boundary'] },
+  'match-first-only':      { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'match-or-pattern':      { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'arg-keyword-duplicate': { difficulty: 'medium', concepts: ['pair-confusion', 'boundary'] },
+  'arg-keyword-only':      { difficulty: 'hard',   concepts: ['word-order', 'pair-confusion'] },
+  'arg-call-double-star':  { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'syn-lambda-single-expr':{ difficulty: 'medium', concepts: ['implicit-rule'] },
+  'syn-lambda-closure':    { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'pep-style-basics':      { difficulty: 'easy',   concepts: ['nonexistent'] },
 };
 
 // デフォルト値（meta が無い問題用）

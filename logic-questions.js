@@ -1665,5 +1665,155 @@ const LOGIC_QUESTIONS = [
     ],
     "correct": 0,
     "explanation": "右辺がすべて評価されてから左辺に代入される。a,b = 0,1 から始まり、各周回で (a,b) → (b, a+b) と推移: (0,1)→(1,1)→(1,2)→(2,3)→(3,5)→(5,8)。5回ループ後は a=5, b=8。「右辺を固めてから左辺に渡す」を追えれば解ける。"
+  },
+  {
+    "id": "logic-range-vs-list",
+    "source": "4章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print(range(5))\nprint(list(range(5)))",
+    "choices": [
+      "1行目: range(0, 5) / 2行目: [0, 1, 2, 3, 4]",
+      "1行目: [0, 1, 2, 3, 4] / 2行目: [0, 1, 2, 3, 4]",
+      "1行目: 0 1 2 3 4 / 2行目: [0, 1, 2, 3, 4]",
+      "1行目: range(5) / 2行目: range(0, 5)"
+    ],
+    "correct": 0,
+    "explanation": "range() はイテラブルで、print すると range(0, 5) の内部表現が出る。list() で実体化すると [0, 1, 2, 3, 4]。Python 3 から range はリストを返さなくなった。"
+  },
+  {
+    "id": "logic-break-inner",
+    "source": "4章チュートリアル",
+    "domain": "制御構文ツール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "for n in range(2, 5):\n    for x in range(2, n):\n        if n % x == 0:\n            print(n, x)\n            break",
+    "choices": [
+      "4 2",
+      "4 2 と 4 3",
+      "2 2 と 3 3 と 4 2",
+      "出力なし"
+    ],
+    "correct": 0,
+    "explanation": "n=2,3 では内側 range(2, n) が空なので何も起こらない。n=4 で x=2 のとき 4%2==0 が真、print(4, 2) した後 break で内側ループだけ抜ける。出力は 4 2 のみ。"
+  },
+  {
+    "id": "logic-loop-else-prime",
+    "source": "4章チュートリアル",
+    "domain": "制御構文ツール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "for n in range(2, 4):\n    for x in range(2, n):\n        if n % x == 0:\n            print('factor')\n            break\n    else:\n        print('prime')",
+    "choices": [
+      "1行目: prime / 2行目: prime",
+      "1行目: prime / 2行目: factor",
+      "1行目: factor / 2行目: prime",
+      "1行目: factor / 2行目: factor"
+    ],
+    "correct": 0,
+    "explanation": "n=2 のとき内側 range(2, 2) は空でループに入らないので break もなし → else が実行されて 'prime'。n=3 のとき内側 range(2, 3) は x=2、3%2 != 0 で if 通らず break なし → else 実行で 'prime'。ループ else は break しないとき実行される。"
+  },
+  {
+    "id": "logic-match-wildcard",
+    "source": "4章チュートリアル",
+    "domain": "制御構文ツール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "def http_error(status):\n    match status:\n        case 400:\n            return 'Bad request'\n        case 404:\n            return 'Not found'\n        case _:\n            return 'Other'\nprint(http_error(418))",
+    "choices": [
+      "Other",
+      "Bad request",
+      "Not found",
+      "418"
+    ],
+    "correct": 0,
+    "explanation": "match 文で 418 は 400 にも 404 にも一致しない。case _: はワイルドカードでどんな値にも一致するので 'Other' が返る。switch の default 相当。なお match 文は Python 3.10 で導入された構文。"
+  },
+  {
+    "id": "logic-default-eval-time",
+    "source": "4章チュートリアル",
+    "domain": "制御構文ツール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "i = 5\ndef f(arg=i):\n    print(arg)\ni = 6\nf()",
+    "choices": [
+      "5",
+      "6",
+      "None",
+      "NameError"
+    ],
+    "correct": 0,
+    "explanation": "デフォルト引数は関数定義時に評価される(呼び出し時ではない)。def f(arg=i): の時点で i=5 が arg のデフォルト値として固定される。後から i=6 に変えても関数オブジェクトに紐づいた値は 5 のまま。「default は定義時に固定」を覚える。"
+  },
+  {
+    "id": "logic-default-none",
+    "source": "4章チュートリアル",
+    "domain": "制御構文ツール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "def f(a, L=None):\n    if L is None:\n        L = []\n    L.append(a)\n    return L\nprint(f(1))\nprint(f(2))",
+    "choices": [
+      "1行目: [1] / 2行目: [2]",
+      "1行目: [1] / 2行目: [1, 2]",
+      "1行目: [1] / 2行目: []",
+      "1行目: [1, 2] / 2行目: [1, 2]"
+    ],
+    "correct": 0,
+    "explanation": "デフォルトを None にして本体で if L is None: L = [] するイディオムは、可変オブジェクト共有の落とし穴を回避する定番パターン。呼び出しごとに新しいリストが作られるので、各回独立した結果になる。L=[] を直接書くと共有問題が発生する。"
+  },
+  {
+    "id": "logic-call-star-unpack",
+    "source": "4章チュートリアル",
+    "domain": "関数引数",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "args = [3, 6]\nprint(list(range(*args)))",
+    "choices": [
+      "[3, 4, 5]",
+      "[3, 6]",
+      "[0, 1, 2, 3, 4, 5]",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "呼び出し側の *args は位置引数アンパック。range(*[3, 6]) は range(3, 6) と同等で、3 から 6 の手前まで生成 → [3, 4, 5]。リスト全体が 1 引数として渡るのではなく、要素が個別の位置引数として展開される。"
+  },
+  {
+    "id": "logic-call-double-star",
+    "source": "4章チュートリアル",
+    "domain": "関数引数",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "def parrot(voltage, state='a stiff', action='voom'):\n    print(voltage, state, action)\nd = {'voltage': 'four million', 'state': 'demised', 'action': 'VOOM'}\nparrot(**d)",
+    "choices": [
+      "four million demised VOOM",
+      "{'voltage': 'four million', 'state': 'demised', 'action': 'VOOM'}",
+      "TypeError",
+      "voltage state action"
+    ],
+    "correct": 0,
+    "explanation": "呼び出し側の **d は辞書のキーと値をキーワード引数として展開。parrot(**d) は parrot(voltage='four million', state='demised', action='VOOM') と同等。辞書全体が 1 引数として渡るわけではない。"
+  },
+  {
+    "id": "logic-lambda-closure",
+    "source": "4章チュートリアル",
+    "domain": "制御構文ツール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "def make_incrementor(n):\n    return lambda x: x + n\nf = make_incrementor(42)\nprint(f(0))\nprint(f(1))",
+    "choices": [
+      "1行目: 42 / 2行目: 43",
+      "1行目: 0 / 2行目: 1",
+      "1行目: NameError / 2行目: NameError",
+      "1行目: 42 / 2行目: 42"
+    ],
+    "correct": 0,
+    "explanation": "lambda は外側スコープの n を取り込む(クロージャ)。make_incrementor(42) で n=42 が固定された関数 f が返り、f(0)=42, f(1)=43。lambda が外側変数を見られないと思い込むと NameError を選んで外す。"
+  },
+  {
+    "id": "logic-annotations",
+    "source": "4章チュートリアル",
+    "domain": "関数引数",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "def f(ham: str, eggs: str = 'eggs') -> str:\n    return ham + ' and ' + eggs\nprint(f.__annotations__['ham'])",
+    "choices": [
+      "<class 'str'>",
+      "str",
+      "'str'",
+      "AttributeError"
+    ],
+    "correct": 0,
+    "explanation": "関数アノテーションは関数オブジェクトの __annotations__ 属性に辞書として格納される。値は class オブジェクトなので、print 表示は <class 'str'> の形式になる。実行時の型チェックは行われない(外部ツール mypy などが静的解析する)。全体表示だと並び方に依存して選択肢を作りにくいので、特定キーで取り出している。"
   }
 ];
