@@ -358,6 +358,22 @@ const QUESTION_META = {
   'json-load-file':        { difficulty: 'easy',   concepts: ['pair-confusion'] },
   'json-utf8-recommended': { difficulty: 'medium', concepts: ['implicit-rule'] },
   'json-pickle-unsafe':    { difficulty: 'hard',   concepts: ['pair-confusion', 'implicit-rule'] },
+
+  // 第8章 エラーと例外
+  'exc-syntax-vs-runtime': { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'exc-runtime-defs':      { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'exc-derived-match':     { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'exc-as-instance':       { difficulty: 'easy',   concepts: ['implicit-rule'] },
+  'exc-base-vs-exception': { difficulty: 'hard',   concepts: ['pair-confusion', 'implicit-rule'] },
+  'exc-broad-exception':   { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'exc-raise-class-or-inst':{ difficulty: 'medium', concepts: ['pair-confusion'] },
+  'exc-bare-raise':        { difficulty: 'easy',   concepts: ['boundary'] },
+  'exc-from-none':         { difficulty: 'hard',   concepts: ['implicit-rule'] },
+  'exc-finally-control-warn':{ difficulty: 'hard', concepts: ['boundary', 'implicit-rule'] },
+  'exc-group-basic':       { difficulty: 'hard',   concepts: ['pair-confusion'] },
+  'exc-star':              { difficulty: 'hard',   concepts: ['pair-confusion', 'boundary'] },
+  'exc-group-instances':   { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'exc-add-note':          { difficulty: 'medium', concepts: ['implicit-rule'] },
 };
 
 // デフォルト値（meta が無い問題用）

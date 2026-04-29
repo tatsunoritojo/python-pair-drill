@@ -2565,5 +2565,185 @@ const LOGIC_QUESTIONS = [
     ],
     "correct": 0,
     "explanation": "json.dump(data, f) は data を JSON にシリアライズしてファイルに書き込む。json.load(f) はファイルから JSON を読み込んで Python オブジェクト（dict）に戻す。Python 表現の dict が出力されるので {'a': 1, 'b': [2, 3]}（シングルクォート、JSON とは表記が違う）。"
+  },
+  {
+    "id": "logic-syntax-error",
+    "source": "8章チュートリアル",
+    "domain": "エラーと例外",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "while True print(\"Hello\")",
+    "choices": [
+      "SyntaxError",
+      "RuntimeError",
+      "無限ループ",
+      "NameError"
+    ],
+    "correct": 0,
+    "explanation": "while 文のコロン (:) が抜けているため SyntaxError が発生。コードは実行されない（parsing 段階で停止）。エラーメッセージは ^ で問題箇所を示し、while True の後に : が必要であることが分かる。実行時例外ではなく構文エラーである点に注意。"
+  },
+  {
+    "id": "logic-name-error",
+    "source": "8章チュートリアル",
+    "domain": "エラーと例外",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print(4 + spam * 3)",
+    "choices": [
+      "NameError",
+      "0",
+      "None",
+      "SyntaxError"
+    ],
+    "correct": 0,
+    "explanation": "spam という変数が定義されていないので NameError: name 'spam' is not defined が発生する。Python は未定義変数を 0 や None として扱わない（厳格）。実行は print 関数の引数評価中に止まる。「未定義変数は NameError」を覚える。"
+  },
+  {
+    "id": "logic-except-first-match",
+    "source": "8章チュートリアル",
+    "domain": "エラーと例外",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "class B(Exception):\n    pass\nclass C(B):\n    pass\n\ntry:\n    raise C()\nexcept B:\n    print(\"B\")\nexcept C:\n    print(\"C\")",
+    "choices": [
+      "B",
+      "C",
+      "B と C 両方",
+      "出力なし"
+    ],
+    "correct": 0,
+    "explanation": "C は B を継承しているので、except B: は C のインスタンスにもマッチする。except は上から順に判定し、最初に一致したものだけが実行される。だから B が出力され、except C: は到達しない（dead code 的な状態）。具体的な型を上に書くのが正しい順序。「except は上から最初の一致だけ」。"
+  },
+  {
+    "id": "logic-bare-raise",
+    "source": "8章チュートリアル",
+    "domain": "エラーと例外",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "try:\n    raise NameError('HiThere')\nexcept NameError:\n    print('passed')\n    raise",
+    "choices": [
+      "passed と表示後、NameError が再送出される",
+      "passed のみ表示",
+      "NameError のみ（passed なし）",
+      "SyntaxError"
+    ],
+    "correct": 0,
+    "explanation": "except 節で 'passed' が出力された後、bare raise で同じ NameError が再送出される。再送出された例外は外側にハンドラがなければプログラム終了時にトレースバックに出る。これは「ログを取ったうえで上位に投げ直す」典型パターン。bare raise は現在処理中の例外を再送出する。"
+  },
+  {
+    "id": "logic-raise-class",
+    "source": "8章チュートリアル",
+    "domain": "エラーと例外",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "raise ValueError",
+    "choices": [
+      "ValueError（引数なしで暗黙にインスタンス化）",
+      "TypeError（クラスは raise できない）",
+      "NameError",
+      "何も起きない"
+    ],
+    "correct": 0,
+    "explanation": "raise ValueError は raise ValueError() の省略形で、引数なしのインスタンスを暗黙的に作って送出する。raise には例外クラスでも例外インスタンスでも渡せる。引数付きなら raise ValueError(\"msg\") のようにインスタンス化形式が必須。"
+  },
+  {
+    "id": "logic-from-none",
+    "source": "8章チュートリアル",
+    "domain": "エラーと例外",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "try:\n    open('database.sqlite')\nexcept OSError:\n    raise RuntimeError from None",
+    "choices": [
+      "RuntimeError（前の OSError は連鎖表示されない）",
+      "FileNotFoundError と RuntimeError の両方が連鎖表示",
+      "OSError のみ",
+      "RuntimeError → OSError の順で表示"
+    ],
+    "correct": 0,
+    "explanation": "open() で存在しないファイルにアクセス → FileNotFoundError（OSError のサブクラス）が発生し、except OSError で捕まえる。raise RuntimeError from None は前の例外を __suppress_context__ で隠すので、トレースバックには RuntimeError のみ表示される。from exc なら原因が表示される。「from None で前の例外を見せない」。"
+  },
+  {
+    "id": "logic-finally-on-exception",
+    "source": "8章チュートリアル",
+    "domain": "エラーと例外",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "try:\n    raise KeyboardInterrupt\nfinally:\n    print('Goodbye, world!')",
+    "choices": [
+      "Goodbye, world! が出力後、KeyboardInterrupt が伝播する",
+      "KeyboardInterrupt のみで Goodbye は出力されない",
+      "Goodbye のみ",
+      "出力なし"
+    ],
+    "correct": 0,
+    "explanation": "finally 節は try で例外が起きても実行される。だから 'Goodbye, world!' が出力された後、KeyboardInterrupt が外側に伝播する（except でキャッチしていないので）。「finally は最後に必ず通る」を覚える。リソースクリーンアップに使う。"
+  },
+  {
+    "id": "logic-finally-return-overrides",
+    "source": "8章チュートリアル",
+    "domain": "エラーと例外",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "def bool_return():\n    try:\n        return True\n    finally:\n        return False\n\nprint(bool_return())",
+    "choices": [
+      "False",
+      "True",
+      "None",
+      "SyntaxError"
+    ],
+    "correct": 0,
+    "explanation": "try 節で return True が実行されようとするが、finally 節があるので先にそちらを実行 → finally の return False が呼ばれて関数が終了。最終的な戻り値は False になる。「finally の return は try の return を上書きする」。これは混乱を招くため、Python 3.14 では SyntaxWarning が出るとされる非推奨パターン。"
+  },
+  {
+    "id": "logic-try-else-success",
+    "source": "8章チュートリアル",
+    "domain": "エラーと例外",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "try:\n    x = 10 / 2\nexcept ZeroDivisionError:\n    print(\"except\")\nelse:\n    print(\"else\")",
+    "choices": [
+      "else",
+      "except",
+      "何も出力されない",
+      "SyntaxError"
+    ],
+    "correct": 0,
+    "explanation": "10 / 2 = 5.0 で例外は発生しない。try 節が成功した場合のみ else 節が実行される。if-else の else とは意味が違う（こちらは「例外なし完走」のとき実行）。「try-else = 例外なし成功時」。"
+  },
+  {
+    "id": "logic-exception-group",
+    "source": "8章チュートリアル",
+    "domain": "エラーと例外",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "def f():\n    excs = [OSError('error 1'), SystemError('error 2')]\n    raise ExceptionGroup('there were problems', excs)\n\ntry:\n    f()\nexcept Exception as e:\n    print(type(e).__name__)\n    print('sub-exceptions' in str(e))",
+    "choices": [
+      "1行目: ExceptionGroup / 2行目: True",
+      "1行目: OSError / 2行目: True",
+      "1行目: ExceptionGroup / 2行目: False",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "ExceptionGroup('msg', [exc1, exc2]) で複数の例外をまとめて送出する。type(e).__name__ は 'ExceptionGroup'。str(e) には \"...sub-exceptions\" のような表現が含まれる。except Exception は ExceptionGroup もキャッチできる（ExceptionGroup は Exception の派生）。"
+  },
+  {
+    "id": "logic-except-star",
+    "source": "8章チュートリアル",
+    "domain": "エラーと例外",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "try:\n    raise ExceptionGroup(\n        \"group1\",\n        [OSError(1), SystemError(2)]\n    )\nexcept* OSError:\n    print(\"There were OSErrors\")\nexcept* SystemError:\n    print(\"There were SystemErrors\")",
+    "choices": [
+      "1行目: There were OSErrors / 2行目: There were SystemErrors",
+      "1行目: There were OSErrors のみ",
+      "1行目: There were SystemErrors のみ",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "except* は ExceptionGroup 内の例外を型別に分けて処理する。OSError 系（OSError(1)）と SystemError 系（SystemError(2)）の両方が ExceptionGroup に含まれているので、両方の except* 節が実行される。通常の except と違い、複数 except* 節が同じ group から異なる型を取り出してそれぞれ動く。"
+  },
+  {
+    "id": "logic-add-note",
+    "source": "8章チュートリアル",
+    "domain": "エラーと例外",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "try:\n    raise TypeError('bad type')\nexcept Exception as e:\n    e.add_note('Add some information')\n    print(type(e).__name__)\n    print(e)",
+    "choices": [
+      "1行目: TypeError / 2行目: bad type",
+      "1行目: TypeError / 2行目: Add some information",
+      "1行目: TypeError / 2行目: bad type Add some information",
+      "TypeError 直後にエラー終了"
+    ],
+    "correct": 0,
+    "explanation": "add_note() は例外に補足情報を追記するメソッドだが、__str__（つまり print(e) の出力）は変更しない。print(e) は元のメッセージ 'bad type' のまま。ノートは __notes__ 属性に保存され、トレースバック表示時に追記される。「add_note は本文を書き換えない、トレースバックに足すだけ」。"
   }
 ];
