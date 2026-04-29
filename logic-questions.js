@@ -1470,5 +1470,65 @@ const LOGIC_QUESTIONS = [
     ],
     "correct": 2,
     "explanation": "isinstance(obj, Class) でインスタンス判定。issubclass はクラス間の継承判定。"
+  },
+  {
+    "id": "logic-int-argv-basic",
+    "source": "インタープリタ章",
+    "domain": "モジュール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import sys\nsys.argv = ['sample.py', 'alpha', 'beta']\nprint(sys.argv[0])\nprint(sys.argv[1])",
+    "choices": [
+      "sample.py / alpha",
+      "alpha / beta",
+      "python / sample.py",
+      "'' / sample.py"
+    ],
+    "correct": 0,
+    "explanation": "sys.argv は [スクリプト名, 引数1, 引数2, ...] というリスト。先頭 argv[0] がスクリプト名、argv[1] が最初のユーザー引数。「最初の引数が argv[0]」と勘違いしないこと。0 番は自分の名前。"
+  },
+  {
+    "id": "logic-int-argv-c-option",
+    "source": "インタープリタ章",
+    "domain": "モジュール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import sys\nsys.argv = ['-c', 'spam']\nprint(sys.argv[0] == '-c')\nprint(sys.argv[1])",
+    "choices": [
+      "True / spam",
+      "False / spam",
+      "True / -c",
+      "エラーが発生する"
+    ],
+    "correct": 0,
+    "explanation": "この問題では実際に -c で起動したわけではなく、その状態を sys.argv への代入で再現している。実際 python -c 'code' で起動すると sys.argv[0] は '-c' という文字列になる（コード文字列ではない）。「コードが 0 番に入る」と勘違いしやすい。0 番は起動方式の印として '-c' が固定で入り、コード文字列以降のユーザー引数は argv[1] から並ぶ。"
+  },
+  {
+    "id": "logic-int-multiline-if",
+    "source": "インタープリタ章",
+    "domain": "気楽な入門編",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "the_world_is_flat = True\nif the_world_is_flat:\n    print(\"Be careful not to fall off!\")",
+    "choices": [
+      "Be careful not to fall off!",
+      "True",
+      "何も出力されない",
+      "SyntaxError"
+    ],
+    "correct": 0,
+    "explanation": "if 文は条件が真ならインデントされたブロックを実行する。対話モードではコロンの後に改行すると ... の継続プロンプトが現れ、インデント込みでブロックを入力する。スクリプトとして書く場合も同じ構造。"
+  },
+  {
+    "id": "logic-int-utf8-japanese",
+    "source": "インタープリタ章",
+    "domain": "気楽な入門編",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "msg = \"こんにちは\"\nprint(msg)",
+    "choices": [
+      "こんにちは",
+      "SyntaxError（coding 宣言が必要）",
+      "UnicodeDecodeError",
+      "NameError"
+    ],
+    "correct": 0,
+    "explanation": "Python 3 のソースコードはデフォルトで UTF-8 として扱われるため、日本語などの非 ASCII 文字を文字列リテラルや識別子・コメントにそのまま書ける。Python 2 時代に必要だった coding 宣言は、UTF-8 を使う限り省略可能。"
   }
 ];

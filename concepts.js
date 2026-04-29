@@ -131,6 +131,9 @@ const QUESTION_META = {
   'int-underscore':    { difficulty: 'medium', concepts: ['implicit-rule'] },
   'int-jupyter-kernel':{ difficulty: 'medium', concepts: ['pair-confusion'] },
   'int-bpython':       { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'int-mode-trigger':  { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'int-argv-zero':     { difficulty: 'medium', concepts: ['implicit-rule', 'boundary'] },
+  'int-argv-zero-special':{ difficulty: 'hard',concepts: ['boundary', 'pair-confusion'] },
 
   // 例外
   'exc-order':         { difficulty: 'easy',   concepts: ['word-order'] },

@@ -826,6 +826,37 @@ const QUESTIONS = [
     correct: 0,
     explanation: 'bpython は標準の対話モードを拡張した CLI ツール。色付き表示、関数シグネチャ表示、自動補完が強化されている。`pip install bpython` でインストール、`bpython` で起動。Webブラウザで動くノートブックは Jupyter、Python 本体実装は CPython と別カテゴリ。',
   },
+  {
+    id: 'int-mode-trigger', category: 'インタープリタ',
+    question: '通常、引数なしで Python を起動したとき、対話モードになるのはどんなとき？',
+    choices: [
+      '標準入力が端末（tty）に接続されているとき',
+      '引数なし起動なら必ず対話モードになる',
+      '環境変数 PYTHON_INTERACTIVE が設定されているとき',
+      '標準入力をファイルからリダイレクトしたとき',
+    ],
+    correct: 0,
+    explanation: '通常、Python は標準入力が tty に接続されていると対話モードでコマンドを読み込む。一方、ファイル名引数がある場合や、標準入力からファイルを流し込む場合（`python < script.py` など）は、その内容をスクリプトとして実行する。なお `-i` オプションを使うと、script.py・-c・-m の実行後でも対話モードに入れる。「対話モードになる条件」は厳密には tty だけではなく -i もある、という二重ルートを押さえておく。',
+  },
+  {
+    id: 'int-argv-zero', category: 'インタープリタ',
+    question: '`python script.py alpha beta` で起動したとき、`sys.argv[0]` の値は？',
+    choices: ['script.py', 'alpha', 'python', '空文字列'],
+    correct: 0,
+    explanation: '`sys.argv` はコマンドライン引数のリストで、先頭の `argv[0]` はスクリプト名、`argv[1]` 以降が実際のユーザー引数になる。「最初の引数が argv[0] にあるはず」と思い込んで `argv[1]` を `argv[0]` と書いてしまうのが典型的な誤答。「0番は自分の名前、1番から本番」と覚える。argparse などの引数パーサもこの前提で動いている。なお `argv[0]` が絶対パスかファイル名だけかは OS や起動方法によって異なる点も覚えておく。',
+  },
+  {
+    id: 'int-argv-zero-special', category: 'インタープリタ',
+    question: 'スクリプトも引数も指定せず `python` だけで起動したとき、`sys.argv[0]` の値は？',
+    choices: [
+      "空文字列 ''",
+      "'python'",
+      "'-'",
+      'sys.argv 自体が存在しない',
+    ],
+    correct: 0,
+    explanation: '`sys.argv` には少なくとも1要素が必ず存在し、Python が空のリストを返すことはない。スクリプト名がない起動（対話モードや `python` 単独）では `argv[0]` は空文字列 `\'\'` になる。他にも標準入力 `-` を使うと `argv[0]` は `\'-\'`、`-c "code"` 起動なら `\'-c\'` になる。`-m` を使った起動では `argv[0]` は通常のスクリプト実行時とは異なる特別な値になるため、「argv[0] は常にファイル名」と決め打ちしないことが重要である。',
+  },
 
   // ====== 模擬演習4で出た新規論点（弱点の補強）======
   {
