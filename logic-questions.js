@@ -2085,5 +2085,200 @@ const LOGIC_QUESTIONS = [
     ],
     "correct": 0,
     "explanation": "辞書式比較で先頭から要素を比べる。1行目: 0番目 1==1, 1番目 2==2, 2番目 3<4 で True。2行目: 0番目 1==1, 1番目 2==2、ここで左が要素切れ → 短いほうが小さいので True。「先頭から比べ、共通部分が等しければ短いほうが小さい」を覚える。"
+  },
+  {
+    "id": "logic-mod-import-basic",
+    "source": "6章チュートリアル",
+    "domain": "モジュール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import math\nprint(math.sqrt(16))",
+    "choices": [
+      "4.0",
+      "4",
+      "16",
+      "NameError"
+    ],
+    "correct": 0,
+    "explanation": "import math 後は math.sqrt() のようにモジュール名経由でアクセスする。math.sqrt(16) は 4.0 を返す（/ と同じく結果は float）。sqrt(16) だけでは NameError。"
+  },
+  {
+    "id": "logic-mod-from-import",
+    "source": "6章チュートリアル",
+    "domain": "モジュール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "from math import sqrt\nprint(sqrt(25))\nprint('math' in globals())",
+    "choices": [
+      "1行目: 5.0 / 2行目: False",
+      "1行目: 5.0 / 2行目: True",
+      "1行目: 25 / 2行目: True",
+      "NameError"
+    ],
+    "correct": 0,
+    "explanation": "from math import sqrt は sqrt だけを名前空間に追加する。math モジュール名は globals() に入らないので False。「from import は中身だけ」を確認する典型問題。"
+  },
+  {
+    "id": "logic-mod-as",
+    "source": "6章チュートリアル",
+    "domain": "モジュール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import math as m\nprint(m.pi > 3)\nprint(round(m.pi, 2))",
+    "choices": [
+      "1行目: True / 2行目: 3.14",
+      "1行目: False / 2行目: 3.14",
+      "1行目: True / 2行目: 3.1",
+      "NameError"
+    ],
+    "correct": 0,
+    "explanation": "import math as m は math モジュールを m という別名で扱う。m.pi は math.pi と同じで約 3.14159、3 より大きいので True。round(m.pi, 2) は小数点以下2桁で 3.14。as はコピーではなく別名を付けるだけ。"
+  },
+  {
+    "id": "logic-mod-name-main",
+    "source": "6章チュートリアル",
+    "domain": "モジュール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print(__name__)",
+    "choices": [
+      "__main__",
+      "script",
+      "module",
+      "NameError"
+    ],
+    "correct": 0,
+    "explanation": "このコードをスクリプトとして直接実行したとき、トップレベルの __name__ には \"__main__\" が設定される。これは Python が起動時に自動的に決める変数で、別のファイルから import された場合は逆にそのモジュール名が入る。"
+  },
+  {
+    "id": "logic-mod-main-guard",
+    "source": "6章チュートリアル",
+    "domain": "モジュール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "if __name__ == \"__main__\":\n    print(\"run as script\")\nelse:\n    print(\"imported\")",
+    "choices": [
+      "run as script",
+      "imported",
+      "何も出力されない",
+      "SyntaxError"
+    ],
+    "correct": 0,
+    "explanation": "このコードをスクリプトとして直接実行したとき (python script.py) は __name__ == \"__main__\" が真なので「run as script」が出る。一方、別のファイルから import されたときは __name__ がモジュール名になり else 側が実行される。これが「main ガード」と呼ばれる慣用句で、ファイルをスクリプトとしても import 可能なモジュールとしても使える。"
+  },
+  {
+    "id": "logic-sys-path-list",
+    "source": "6章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import sys\nn = len(sys.path)\nsys.path.append(\"/tmp/example\")\nprint(len(sys.path) == n + 1)",
+    "choices": [
+      "True",
+      "False",
+      "TypeError",
+      "AttributeError"
+    ],
+    "correct": 0,
+    "explanation": "sys.path はモジュール検索パスのリストで、append できる（リストとして扱える）。append 後は要素が1つ増えるので、新しい len は元 + 1 と一致して True。検索パスを動的に追加したいときに使うが、副作用に注意。"
+  },
+  {
+    "id": "logic-sys-ps12",
+    "source": "6章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import sys\nprint(hasattr(sys, \"ps1\") or hasattr(sys, \"ps2\"))",
+    "choices": [
+      "False",
+      "True",
+      ">>>",
+      "AttributeError"
+    ],
+    "correct": 0,
+    "explanation": "このコードをスクリプトとして実行したとき、sys.ps1 / sys.ps2 はインタプリタによって定義されないため、hasattr は両方 False を返し or の結果も False になる。これらは対話モード (REPL) 起動時にだけインタプリタが定義する属性。「対話モード時だけ定義される」を覚える。"
+  },
+  {
+    "id": "logic-dir-module",
+    "source": "6章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import math\nprint(\"sqrt\" in dir(math))\nprint(\"pi\" in dir(math))",
+    "choices": [
+      "1行目: True / 2行目: True",
+      "1行目: False / 2行目: False",
+      "1行目: True / 2行目: False",
+      "1行目: False / 2行目: True"
+    ],
+    "correct": 0,
+    "explanation": "dir(math) は math モジュールで定義されているすべての名前（関数・定数）をソート済み文字列リストで返す。math モジュールには sqrt 関数も pi 定数も含まれているので両方 True。"
+  },
+  {
+    "id": "logic-dir-current",
+    "source": "6章チュートリアル",
+    "domain": "モジュール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "x = 10\nprint(\"x\" in dir())",
+    "choices": [
+      "True",
+      "False",
+      "'x'",
+      "NameError"
+    ],
+    "correct": 0,
+    "explanation": "引数なしの dir() は現在の名前空間の名前を列挙する。x = 10 で x が定義されたので、dir() の結果に \"x\" が含まれて True。dir() はインタラクティブな探索や変数確認の定番ツール。"
+  },
+  {
+    "id": "logic-dir-builtins",
+    "source": "6章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import builtins\nprint(\"len\" in dir(builtins))\nprint(\"Exception\" in dir(builtins))",
+    "choices": [
+      "1行目: True / 2行目: True",
+      "1行目: False / 2行目: False",
+      "1行目: True / 2行目: False",
+      "1行目: False / 2行目: True"
+    ],
+    "correct": 0,
+    "explanation": "builtins モジュールには len や print などの組み込み関数、Exception や ValueError などの組み込み例外がすべて定義されている。普段 import なしで使えるのは Python が暗黙的に builtins の名前を解決しているため。組み込みの一覧を確認したいときは dir(builtins)。"
+  },
+  {
+    "id": "logic-mod-name-attr",
+    "source": "6章チュートリアル",
+    "domain": "モジュール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import math\nprint(math.__name__)",
+    "choices": [
+      "math",
+      "__main__",
+      "math.py",
+      "AttributeError"
+    ],
+    "correct": 0,
+    "explanation": "import 済みモジュールの __name__ 属性はそのモジュール名。math なら 'math' が入る。スクリプトとして直接実行された側の __name__ が \"__main__\" になるのとは対比的。「__name__ は実行主体の名前で、import されたら自分のモジュール名」と覚える。"
+  },
+  {
+    "id": "logic-from-collections-deque",
+    "source": "6章チュートリアル",
+    "domain": "モジュール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "from collections import deque\nq = deque([1, 2])\nq.appendleft(0)\nprint(list(q))",
+    "choices": [
+      "[0, 1, 2]",
+      "[1, 2, 0]",
+      "[2, 1, 0]",
+      "NameError"
+    ],
+    "correct": 0,
+    "explanation": "from collections import deque は deque だけを名前空間に追加する（collections は入らない）。deque([1, 2]) で初期化、appendleft(0) で先頭に 0 が追加されて [0, 1, 2]。list() で表示用に変換。「from package import specific_submodule」の典型例。"
+  },
+  {
+    "id": "logic-importlib-reload",
+    "source": "6章チュートリアル",
+    "domain": "モジュール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import importlib\nimport math\nreloaded = importlib.reload(math)\nprint(reloaded.__name__)",
+    "choices": [
+      "math",
+      "__main__",
+      "importlib",
+      "AttributeError"
+    ],
+    "correct": 0,
+    "explanation": "importlib.reload(module) はそのモジュールを再読み込みし、再読み込み後のモジュールオブジェクトを返す。__name__ は元のままなので 'math' が出力される。なお `reloaded is math` の真偽は実装依存（sys.modules を介して別オブジェクトに置き換えられる場合がある）ので、reload 後の同一性に依存したコードは書かないほうが安全。reload は開発時に使う機能で、本番コードでは推奨されない。"
   }
 ];

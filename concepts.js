@@ -309,6 +309,24 @@ const QUESTION_META = {
   'syn-chained-compare':   { difficulty: 'medium', concepts: ['word-order'] },
   'syn-short-circuit':     { difficulty: 'medium', concepts: ['boundary', 'implicit-rule'] },
   'type-seq-lex-compare':  { difficulty: 'hard',   concepts: ['boundary'] },
+
+  // 第6章 モジュール
+  'mod-from-import-name':  { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'mod-from-star-underscore':{ difficulty: 'medium', concepts: ['implicit-rule', 'pair-confusion'] },
+  'mod-import-as':         { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'mod-init-once':         { difficulty: 'medium', concepts: ['boundary', 'implicit-rule'] },
+  'mod-namespace':         { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'mod-name-attribute':    { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'mod-shadow-stdlib':     { difficulty: 'hard',   concepts: ['boundary', 'implicit-rule'] },
+  'mod-pyc-pycache':       { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'mod-sys-builtin':       { difficulty: 'easy',   concepts: ['guess'] },
+  'mod-dir-module':        { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'mod-builtins':          { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'mod-import-vs-from':    { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'mod-from-specific':     { difficulty: 'medium', concepts: ['guess'] },
+  'mod-all-no-auto':       { difficulty: 'hard',   concepts: ['implicit-rule', 'boundary'] },
+  'mod-abs-rel-both':      { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'mod-rel-main':          { difficulty: 'hard',   concepts: ['boundary'] },
 };
 
 // デフォルト値（meta が無い問題用）
