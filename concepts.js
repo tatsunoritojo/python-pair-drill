@@ -374,6 +374,25 @@ const QUESTION_META = {
   'exc-star':              { difficulty: 'hard',   concepts: ['pair-confusion', 'boundary'] },
   'exc-group-instances':   { difficulty: 'medium', concepts: ['pair-confusion'] },
   'exc-add-note':          { difficulty: 'medium', concepts: ['implicit-rule'] },
+
+  // 第9章 クラス
+  'cls-legb':              { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'cls-class-namespace':   { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'cls-instance-attr-create':{difficulty: 'easy',  concepts: ['implicit-rule'] },
+  'cls-method-equiv':      { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'cls-bound-method-save': { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'cls-inherit-attr-search':{ difficulty: 'easy',  concepts: ['pair-confusion'] },
+  'cls-virtual-method':    { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'cls-isinstance-derived':{ difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'cls-mro-role':          { difficulty: 'hard',   concepts: ['implicit-rule', 'boundary'] },
+  'cls-private-vs-mangling':{difficulty: 'medium', concepts: ['pair-confusion'] },
+  'cls-dataclass':         { difficulty: 'medium', concepts: ['guess'] },
+  'cls-for-iter-next':     { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'cls-iter-protocol':     { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'cls-next-stopiteration':{ difficulty: 'easy',   concepts: ['boundary'] },
+  'cls-yield-generator':   { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'cls-generator-state':   { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'cls-genexp-memory':     { difficulty: 'medium', concepts: ['pair-confusion'] },
 };
 
 // デフォルト値（meta が無い問題用）

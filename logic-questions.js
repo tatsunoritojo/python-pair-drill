@@ -2745,5 +2745,275 @@ const LOGIC_QUESTIONS = [
     ],
     "correct": 0,
     "explanation": "add_note() は例外に補足情報を追記するメソッドだが、__str__（つまり print(e) の出力）は変更しない。print(e) は元のメッセージ 'bad type' のまま。ノートは __notes__ 属性に保存され、トレースバック表示時に追記される。「add_note は本文を書き換えない、トレースバックに足すだけ」。"
+  },
+  {
+    "id": "logic-cls-nonlocal",
+    "source": "9章チュートリアル",
+    "domain": "制御構文ツール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "def scope_test():\n    def do_local():\n        spam = \"local spam\"\n\n    def do_nonlocal():\n        nonlocal spam\n        spam = \"nonlocal spam\"\n\n    spam = \"test spam\"\n    do_local()\n    print(spam)\n    do_nonlocal()\n    print(spam)\n\nscope_test()",
+    "choices": [
+      "1行目: test spam / 2行目: nonlocal spam",
+      "1行目: local spam / 2行目: nonlocal spam",
+      "1行目: nonlocal spam / 2行目: nonlocal spam",
+      "1行目: test spam / 2行目: test spam"
+    ],
+    "correct": 0,
+    "explanation": "do_local() は内側に新しい spam を作るだけで外側に影響しないので、最初の print は 'test spam'。do_nonlocal() は nonlocal spam で外側関数の spam を再束縛するので、2回目の print は 'nonlocal spam'。「nonlocal は外側関数のスコープを書き換える」。"
+  },
+  {
+    "id": "logic-cls-global",
+    "source": "9章チュートリアル",
+    "domain": "制御構文ツール",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "def scope_test():\n    def do_global():\n        global spam\n        spam = \"global spam\"\n\n    spam = \"test spam\"\n    do_global()\n    print(spam)\n\nscope_test()\nprint(spam)",
+    "choices": [
+      "1行目: test spam / 2行目: global spam",
+      "1行目: global spam / 2行目: global spam",
+      "1行目: test spam / 2行目: test spam",
+      "NameError"
+    ],
+    "correct": 0,
+    "explanation": "do_global() は global spam でモジュールレベルの spam を作る。scope_test 内の spam は別スコープなので影響なし。1回目の print は 'test spam'（scope_test 内のローカル）。scope_test の外で print(spam) すると、do_global で作られたモジュールグローバルが見えて 'global spam'。「global はモジュールトップ、nonlocal は外側関数」。"
+  },
+  {
+    "id": "logic-cls-init-complex",
+    "source": "9章チュートリアル",
+    "domain": "クラス",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "class Complex:\n    def __init__(self, realpart, imagpart):\n        self.r = realpart\n        self.i = imagpart\n\nx = Complex(3.0, -4.5)\nprint(x.r, x.i)",
+    "choices": [
+      "3.0 -4.5",
+      "(3.0, -4.5)",
+      "TypeError",
+      "AttributeError"
+    ],
+    "correct": 0,
+    "explanation": "Complex(3.0, -4.5) でインスタンス化すると、Python が自動的に __init__ を呼び出して self.r=3.0, self.i=-4.5 を設定する。print(x.r, x.i) で 3.0 -4.5 が表示される。__init__ はインスタンス生成直後に自動的に呼ばれる初期化メソッド（コンストラクタに近い役割）。"
+  },
+  {
+    "id": "logic-cls-attr-counter",
+    "source": "9章チュートリアル",
+    "domain": "クラス",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "class MyClass:\n    pass\n\nx = MyClass()\nx.counter = 1\nwhile x.counter < 10:\n    x.counter = x.counter * 2\nprint(x.counter)",
+    "choices": [
+      "16",
+      "10",
+      "8",
+      "AttributeError"
+    ],
+    "correct": 0,
+    "explanation": "クラス本体で counter を宣言していなくても、`x.counter = 1` で動的にインスタンス属性が作られる。while ループで 1 → 2 → 4 → 8 → 16 と倍化し、16 で while 条件 (< 10) が False になって終了。「インスタンス属性は代入で生える」。"
+  },
+  {
+    "id": "logic-cls-bound-method",
+    "source": "9章チュートリアル",
+    "domain": "クラス",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "class MyClass:\n    def f(self):\n        return 'hello world'\n\nx = MyClass()\nxf = x.f\nprint(xf())",
+    "choices": [
+      "hello world",
+      "TypeError（self が渡されない）",
+      "'<bound method ...>'",
+      "NameError"
+    ],
+    "correct": 0,
+    "explanation": "x.f は bound method で、x への参照を保持している。変数 xf に代入してもこの束縛は維持されるので、xf() を呼ぶと自動的に self=x が渡される。結果として 'hello world' が返り print される。「bound method は self を保持する」。"
+  },
+  {
+    "id": "logic-cls-class-var-share",
+    "source": "9章チュートリアル",
+    "domain": "クラス",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "class Dog:\n    kind = 'canine'\n\n    def __init__(self, name):\n        self.name = name\n\nd = Dog('Fido')\ne = Dog('Buddy')\nprint(d.kind)\nprint(e.kind)\nprint(d.name)\nprint(e.name)",
+    "choices": [
+      "canine / canine / Fido / Buddy",
+      "canine / canine / Fido / Fido",
+      "Fido / Buddy / canine / canine",
+      "AttributeError"
+    ],
+    "correct": 0,
+    "explanation": "kind はクラス変数なので全インスタンスで共有 → d.kind も e.kind も 'canine'。name はインスタンス変数なので各インスタンス固有 → d.name='Fido', e.name='Buddy'。「class に置けば共有、self に置けば個別」。"
+  },
+  {
+    "id": "logic-cls-isinstance-issubclass",
+    "source": "9章チュートリアル",
+    "domain": "クラス",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print(isinstance(True, int))\nprint(issubclass(bool, int))\nprint(issubclass(float, int))",
+    "choices": [
+      "1行目: True / 2行目: True / 3行目: False",
+      "1行目: False / 2行目: False / 3行目: False",
+      "1行目: True / 2行目: True / 3行目: True",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "Python では bool は int の派生クラスなので、isinstance(True, int) は True、issubclass(bool, int) も True。一方 float は int の派生ではないので issubclass(float, int) は False。「isinstance は個体、issubclass は型」「bool は int の派生」が同時に問われる典型問題。"
+  },
+  {
+    "id": "logic-cls-method-override",
+    "source": "9章チュートリアル",
+    "domain": "クラス",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "class Base:\n    def greet(self):\n        return \"base\"\n\nclass Derived(Base):\n    def greet(self):\n        return \"derived\"\n\nx = Derived()\nprint(x.greet())",
+    "choices": [
+      "derived",
+      "base",
+      "base derived",
+      "AttributeError"
+    ],
+    "correct": 0,
+    "explanation": "Derived.greet() が Base.greet() をオーバーライドしている。x = Derived() のインスタンスから greet() を呼ぶと、派生クラス側のメソッドが呼ばれる。「派生クラスが基底クラスを上書きする」のが継承の基本。"
+  },
+  {
+    "id": "logic-cls-base-explicit-call",
+    "source": "9章チュートリアル",
+    "domain": "クラス",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "class Base:\n    def greet(self):\n        return \"base\"\n\nclass Derived(Base):\n    def greet(self):\n        return Base.greet(self) + \"-derived\"\n\nx = Derived()\nprint(x.greet())",
+    "choices": [
+      "base-derived",
+      "derived-base",
+      "base",
+      "derived"
+    ],
+    "correct": 0,
+    "explanation": "Derived.greet() の中で Base.greet(self) を明示的に呼んで、その結果に '-derived' を連結している。'base' + '-derived' = 'base-derived'。super().greet() でも同じ結果になる（多重継承では super() のほうが安全）。「Base.method(self) は明示呼び出し」。"
+  },
+  {
+    "id": "logic-cls-single-underscore",
+    "source": "9章チュートリアル",
+    "domain": "クラス",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "class C:\n    def __init__(self):\n        self._x = 10\n\nc = C()\nprint(c._x)",
+    "choices": [
+      "10",
+      "AttributeError",
+      "0",
+      "_x"
+    ],
+    "correct": 0,
+    "explanation": "先頭1個のアンダースコア _x は「非公開 API として扱う」慣習だけで、Python 自身は何の制限も加えない。c._x は通常通り参照できる。慣習として「_ で始まるものは内部用、外部から触らない」と理解する。「_ は慣習、__ は変形」。"
+  },
+  {
+    "id": "logic-cls-double-underscore-mangling",
+    "source": "9章チュートリアル",
+    "domain": "クラス",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "class Mapping:\n    def __init__(self):\n        self.__x = 1\n\nm = Mapping()\nprint(hasattr(m, '__x'))\nprint(hasattr(m, '_Mapping__x'))",
+    "choices": [
+      "1行目: False / 2行目: True",
+      "1行目: True / 2行目: True",
+      "1行目: True / 2行目: False",
+      "AttributeError"
+    ],
+    "correct": 0,
+    "explanation": "クラス内の __x は名前マングリングで _Mapping__x に変換される。だから外部から hasattr(m, '__x') は False、hasattr(m, '_Mapping__x') は True。これは厳密な private ではなく「事故防止の名前変形」で、外から _Mapping__x で参照できる。"
+  },
+  {
+    "id": "logic-cls-dataclass-basic",
+    "source": "9章チュートリアル",
+    "domain": "クラス",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "from dataclasses import dataclass\n\n@dataclass\nclass Employee:\n    name: str\n    dept: str\n    salary: int\n\njohn = Employee('john', 'computer lab', 1000)\nprint(john.dept)\nprint(john.salary)",
+    "choices": [
+      "1行目: computer lab / 2行目: 1000",
+      "1行目: john / 2行目: 1000",
+      "TypeError",
+      "AttributeError"
+    ],
+    "correct": 0,
+    "explanation": "@dataclass デコレータが __init__ を自動生成するので、Employee('john', 'computer lab', 1000) で位置引数として name, dept, salary が割り当てられる。john.dept は 'computer lab'、john.salary は 1000。手書きで __init__ を書く必要がない。「素朴な record なら dataclass」。"
+  },
+  {
+    "id": "logic-iter-next-basic",
+    "source": "9章チュートリアル",
+    "domain": "イテレーション",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "s = 'abc'\nit = iter(s)\nprint(next(it))\nprint(next(it))\nprint(next(it))",
+    "choices": [
+      "1行目: a / 2行目: b / 3行目: c",
+      "1行目: abc / 2行目: 空 / 3行目: 空",
+      "1行目: a / 2行目: a / 3行目: a",
+      "StopIteration"
+    ],
+    "correct": 0,
+    "explanation": "iter(s) は文字列の各文字を順に返すイテレータを作る。next(it) を呼ぶたびに 'a' → 'b' → 'c' と1文字ずつ進む。これが for 文の内部動作で、for char in s: は iter() + next() + StopIteration の組み合わせで動いている。"
+  },
+  {
+    "id": "logic-iter-stop-iteration",
+    "source": "9章チュートリアル",
+    "domain": "エラーと例外",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "s = 'a'\nit = iter(s)\nprint(next(it))\nnext(it)",
+    "choices": [
+      "1行目: a / 2行目: StopIteration",
+      "1行目: a / 2行目: None",
+      "1行目: a / 2行目: a",
+      "1行目: StopIteration / 2行目: None"
+    ],
+    "correct": 0,
+    "explanation": "1回目の next() で 'a' が返り、文字列が尽きる。2回目の next() は要素がないので StopIteration 例外を送出する。これが for 文がループを終える仕組み。「終了通知は StopIteration」。None を返すのではない点に注意。"
+  },
+  {
+    "id": "logic-iter-reverse-class",
+    "source": "9章チュートリアル",
+    "domain": "クラス",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "class Reverse:\n    def __init__(self, data):\n        self.data = data\n        self.index = len(data)\n\n    def __iter__(self):\n        return self\n\n    def __next__(self):\n        if self.index == 0:\n            raise StopIteration\n        self.index -= 1\n        return self.data[self.index]\n\nrev = Reverse('spam')\nprint(iter(rev) is rev)\nfor char in rev:\n    print(char)",
+    "choices": [
+      "1行目: True / 2-5行目: m, a, p, s",
+      "1行目: False / 2-5行目: s, p, a, m",
+      "1行目: True / 2-5行目: s, p, a, m",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "Reverse は __iter__ で self を返すので、iter(rev) は rev 自身 → 'iter(rev) is rev' は True。__next__ は index を減らしながら data[index] を返すので 'spam' を逆順に m, a, p, s と出力する。「iterator protocol = iter + next」の典型実装。"
+  },
+  {
+    "id": "logic-yield-reverse",
+    "source": "9章チュートリアル",
+    "domain": "イテレーション",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "def reverse(data):\n    for index in range(len(data)-1, -1, -1):\n        yield data[index]\n\nfor char in reverse('golf'):\n    print(char)",
+    "choices": [
+      "f, l, o, g（4行）",
+      "g, o, l, f（4行）",
+      "golf（1行）",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "reverse() は yield を使うジェネレータ関数。range(3, -1, -1) で index は 3,2,1,0 と進み、'golf'[3]='f', [2]='l', [1]='o', [0]='g' を順に yield する。クラスベースのイテレータ（前問の Reverse）と同じ機能を1関数で簡潔に書ける。「yield は返して止まり、次回続きから」。"
+  },
+  {
+    "id": "logic-genexp-square-sum",
+    "source": "9章チュートリアル",
+    "domain": "イテレーション",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print(sum(i*i for i in range(10)))",
+    "choices": [
+      "285",
+      "100",
+      "45",
+      "SyntaxError"
+    ],
+    "correct": 0,
+    "explanation": "ジェネレータ式 i*i for i in range(10) で 0², 1², 2², ..., 9² = 0, 1, 4, 9, 16, 25, 36, 49, 64, 81 を生成し、sum() で合計 = 285。関数呼び出しの引数として渡す場合、ジェネレータ式の括弧は省略できる。リスト内包と違って中間リストを作らないのでメモリ効率がよい。"
+  },
+  {
+    "id": "logic-genexp-zip-dot",
+    "source": "9章チュートリアル",
+    "domain": "イテレーション",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "xvec = [10, 20, 30]\nyvec = [7, 5, 3]\nprint(sum(x*y for x, y in zip(xvec, yvec)))",
+    "choices": [
+      "260",
+      "180",
+      "60",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "zip(xvec, yvec) は (10,7), (20,5), (30,3) を返す。ジェネレータ式 x*y for x, y in zip(...) で 10*7=70, 20*5=100, 30*3=90 を生成し、sum() で 70+100+90 = 260。これがベクトルのドット積（内積）の典型実装。「[] は全部作る、() は必要時生成」。"
   }
 ];
