@@ -296,7 +296,6 @@ const QUESTION_META = {
   'iter-comp-list':        { difficulty: 'easy',   concepts: ['guess'] },
   'iter-comp-order':       { difficulty: 'hard',   concepts: ['word-order', 'boundary'] },
   'iter-comp-tuple-paren': { difficulty: 'medium', concepts: ['word-order', 'nonexistent'] },
-  'iter-zip-transpose':    { difficulty: 'medium', concepts: ['pair-confusion'] },
   'syn-del-no-return':     { difficulty: 'medium', concepts: ['pair-confusion'] },
   'syn-del-name':          { difficulty: 'medium', concepts: ['boundary'] },
   'tuple-unpack-count':    { difficulty: 'medium', concepts: ['boundary'] },

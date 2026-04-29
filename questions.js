@@ -2371,18 +2371,6 @@ const QUESTIONS = [
     explanation: '内包表記の式部分でタプルを作るときは丸括弧が必須。`[x, x**2 for x in range(5)]` は SyntaxError になる（カンマがあると内包表記の構文と区別がつかなくなるため）。`[(x, x**2) for x in range(5)]` のように明示的に括弧で囲む。タプル自体はカンマで作られるが、内包表記の中ではこの判別のために括弧が要る、というルール。',
   },
   {
-    id: 'iter-zip-transpose', category: '標準ライブラリ',
-    question: '行列 `[[1,2,3],[4,5,6]]` の転置を得る簡潔な方法は?',
-    choices: [
-      'list(zip(*matrix))',
-      'matrix.transpose()',
-      '[col for col in matrix]',
-      'reversed(matrix)',
-    ],
-    correct: 0,
-    explanation: '`zip(*matrix)` は各行をアンパックして zip に渡し、対応する位置の要素を組にすることで転置を実現する。結果は [(1,4), (2,5), (3,6)]。ネストしたリスト内包 `[[row[i] for row in matrix] for i in range(len(matrix[0]))]` でも書けるが、zip(*) のほうが宣言的で読みやすい。NumPy がない素の Python での転置イディオムとして定番。「* で展開、zip で噛み合わせ」を組み合わせて転置。',
-  },
-  {
     id: 'syn-del-no-return', category: '構文',
     question: '`a = [1, 2, 3]; x = del a[0]` を実行するとどうなる?',
     choices: [
