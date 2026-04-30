@@ -3572,18 +3572,18 @@ const LOGIC_QUESTIONS = [
     "explanation": "pip install -r requirements.txt で requirements ファイルから一括インストール。'-r' が含まれるので True。split() で空白分割した最後の要素は 'requirements.txt'。-r を付けないと 'requirements.txt' というパッケージ名でインストールしようとして失敗する。「-r でファイル指定」。"
   },
   {
-    "id": "logic-pkg-pip-show-vs-list",
+    "id": "logic-pkg-pip-freeze-vs-list",
     "source": "12章チュートリアル",
     "domain": "パッケージ",
     "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
-    "code": "cmds = [\"pip show requests\", \"pip list\"]\nprint(cmds[0].split()[1])\nprint(cmds[1].split()[1])",
+    "code": "freeze_output = \"requests==2.31.0\"\nlist_output = \"requests 2.31.0\"\nprint(\"==\" in freeze_output)\nprint(\"==\" in list_output)",
     "choices": [
-      "1行目: show / 2行目: list",
-      "1行目: list / 2行目: show",
-      "両方 show",
-      "TypeError"
+      "1行目: True / 2行目: False",
+      "1行目: False / 2行目: True",
+      "両方 True",
+      "両方 False"
     ],
     "correct": 0,
-    "explanation": "cmds[0] は 'pip show requests'、split() で ['pip', 'show', 'requests']、index 1 は 'show'。cmds[1] は 'pip list'、split() で ['pip', 'list']、index 1 は 'list'。「show は個別詳細、list は一覧」と用途で使い分ける。"
+    "explanation": "pip freeze は package==version 形式（requirements.txt にそのまま使える機械可読形式）で出力する。pip list はスペース区切りの表形式（人間向け）。同じパッケージ情報でも出力形式が違うので、'==' を含むかで両者を区別できる。「list は人間向け、freeze は再現用」と用途で使い分ける。"
   }
 ];

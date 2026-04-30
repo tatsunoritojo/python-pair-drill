@@ -3816,7 +3816,7 @@ const QUESTIONS = [
     id: 'pkg-pip-purpose', category: 'パッケージ',
     question: 'pip の用途は?',
     choices: [
-      'Python パッケージの検索・インストール・アップグレード・削除を行う標準的なツール',
+      'Python パッケージのインストール・アップグレード・削除・一覧表示などを行う標準的なツール',
       'Python 標準ライブラリの管理専用',
       'Python 本体のインストーラ',
       'Python のコンパイラ',
@@ -3827,7 +3827,7 @@ const QUESTIONS = [
 
   // ====== 第13章: さあ何を？（学習案内） ======
   {
-    id: 'doc-tutorial-13-purpose', category: '標準ライブラリ',
+    id: 'doc-tutorial-13-purpose', category: 'ドキュメント',
     question: 'Python 公式チュートリアル第13章「さあ何を？」の章の役割は?',
     choices: [
       'チュートリアル後に参照すべき公式文書や周辺リソースを案内する章',
@@ -3839,7 +3839,7 @@ const QUESTIONS = [
     explanation: '第13章は新しい構文や API を追加で教える章ではなく、「チュートリアルを読み終えたあと、次に何を読むべきか」を案内するナビゲーション章。標準ライブラリリファレンス、Python 言語リファレンス、PyPI、Python Cookbook、PyVideo、SciPy、FAQ などへの参照ガイドが中心。「13章 = 次に何を読むか」と覚える。',
   },
   {
-    id: 'doc-stdlib-reference', category: '標準ライブラリ',
+    id: 'doc-stdlib-reference', category: 'ドキュメント',
     question: 'Python の「標準ライブラリ」リファレンス文書の位置づけは?',
     choices: [
       '組み込み型・組み込み関数・標準ライブラリの各モジュールについての完全なリファレンス',
@@ -3875,7 +3875,7 @@ const QUESTIONS = [
     explanation: 'Python 言語リファレンスは、構文（grammar）、字句解析、データモデル（特殊メソッド・スロット）、実行モデル、表現、文、複合文、トップレベル要素などの完全ガイド。チュートリアルが学習者向けの入門なのに対し、言語リファレンスは仕様書。`for` ループや `class` 文の正確な定義、演算子の優先順位の完全な順序などを引きたいときに参照する。',
   },
   {
-    id: 'doc-docs-python-org', category: '標準ライブラリ',
+    id: 'doc-docs-python-org', category: 'ドキュメント',
     question: 'Python 公式ドキュメントへの素早いアクセス入口は?',
     choices: [
       'docs.python.org（ドキュメント全体への公式入口）',
@@ -3887,7 +3887,7 @@ const QUESTIONS = [
     explanation: 'docs.python.org は Python 公式ドキュメント全体への入口で、チュートリアル・言語リファレンス・標準ライブラリ・HOWTO・FAQ などすべてここから辿れる。`python.org` は Python プロジェクト全体のサイトでダウンロードやニュースが中心、`docs.python.org` はドキュメントに特化。「docs は文書、python.org は総合入口」。',
   },
   {
-    id: 'doc-cookbook', category: '標準ライブラリ',
+    id: 'doc-cookbook', category: 'ドキュメント',
     question: 'Python 公式チュートリアル第13章で「コード例・モジュール・実用的スクリプトの大きなコレクション」として紹介されているのは?',
     choices: [
       'Python Cookbook',
@@ -3899,7 +3899,7 @@ const QUESTIONS = [
     explanation: 'Python Cookbook は、実用的なコード例とモジュールを集めた大規模なコレクション。「こういう処理をやりたいときどう書くか」のレシピ集として機能する。公式チュートリアル第13章で、次の学習リソースの1つとして紹介されている。書籍版（David Beazley 著の Python Cookbook）も有名で、よくあるパターンの実装例が豊富。「Cookbook = 実用レシピ集」。',
   },
   {
-    id: 'doc-pyvideo', category: '標準ライブラリ',
+    id: 'doc-pyvideo', category: 'ドキュメント',
     question: '公式チュートリアル第13章で「Python 関連の学会やユーザーグループ会合などの動画リンク集」として紹介されているのは?',
     choices: [
       'PyVideo',
@@ -3911,7 +3911,7 @@ const QUESTIONS = [
     explanation: 'PyVideo は、PyCon などの学会やユーザーグループ会合での発表動画へのリンクを集めたサイト。Python の高度な話題や実装事例を映像で学ぶ入口として、第13章で紹介されている。「動画を探すなら PyVideo」と覚える。最新の議論や実践例を学ぶのに有用。',
   },
   {
-    id: 'doc-scipy', category: '標準ライブラリ',
+    id: 'doc-scipy', category: 'ドキュメント',
     question: '「高速配列計算、線形代数、フーリエ変換、統計分析などを提供する Scientific Python プロジェクト」として第13章で紹介されているのは?',
     choices: [
       'SciPy',
@@ -3923,7 +3923,7 @@ const QUESTIONS = [
     explanation: 'SciPy は科学技術計算向けの主要プロジェクトで、配列計算（NumPy ベース）、線形代数、フーリエ変換、最適化、統計分析、信号処理など豊富な機能を提供。標準ライブラリではなく外部パッケージ（`pip install scipy`）。標準ライブラリの `statistics` や `math` で物足りないとき、本格的な数値計算をするなら SciPy 系（NumPy / SciPy / pandas）に進む。',
   },
   {
-    id: 'doc-faq-first', category: '標準ライブラリ',
+    id: 'doc-faq-first', category: 'ドキュメント',
     question: 'Python に関する質問や問題報告を行う前に、最初に確認することが勧められているのは?',
     choices: [
       'FAQ（Frequently Asked Questions）',
