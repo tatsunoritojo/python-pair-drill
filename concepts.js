@@ -441,6 +441,12 @@ const QUESTION_META = {
   'doc-pyvideo':           { difficulty: 'medium', concepts: ['guess'] },
   'doc-scipy':             { difficulty: 'medium', concepts: ['guess'] },
   'doc-faq-first':         { difficulty: 'easy',   concepts: ['implicit-rule'] },
+
+  // 第14章 対話入力編集と履歴置換
+  'int-readline-edit':     { difficulty: 'medium', concepts: ['guess'] },
+  'int-attr-completion':   { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'int-completion-getattr':{ difficulty: 'hard',   concepts: ['implicit-rule'] },
+  'int-repl-alternatives': { difficulty: 'easy',   concepts: ['guess'] },
 };
 
 // デフォルト値（meta が無い問題用）
