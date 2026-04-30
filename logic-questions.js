@@ -3585,5 +3585,200 @@ const LOGIC_QUESTIONS = [
     ],
     "correct": 0,
     "explanation": "pip freeze は package==version 形式（requirements.txt にそのまま使える機械可読形式）で出力する。pip list はスペース区切りの表形式（人間向け）。同じパッケージ情報でも出力形式が違うので、'==' を含むかで両者を区別できる。「list は人間向け、freeze は再現用」と用途で使い分ける。"
+  },
+  {
+    "id": "logic-flt-three-tenths-eq",
+    "source": "15章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print(0.1 + 0.1 + 0.1 == 0.3)",
+    "choices": [
+      "False",
+      "True",
+      "TypeError",
+      "環境による"
+    ],
+    "correct": 0,
+    "explanation": "0.1 と 0.3 はそれぞれ float で最も近い近似値として格納される。0.1 を3回足した結果は 0.30000000000000004 になり、0.3 の近似値（0.29999999999999998...）とは厳密に等しくならず False。これが float 比較の典型的な落とし穴で、== の代わりに math.isclose() を使うか、Decimal を使う。"
+  },
+  {
+    "id": "logic-flt-round-not-fix",
+    "source": "15章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print(round(0.1, 1) + round(0.1, 1) + round(0.1, 1) == round(0.3, 1))",
+    "choices": [
+      "False",
+      "True",
+      "TypeError",
+      "RuntimeError"
+    ],
+    "correct": 0,
+    "explanation": "0.1 は float リテラル時点で最も近い値に近似されているので、round(0.1, 1) は同じ近似値を返す。実質 0.1+0.1+0.1 == 0.3 と同じ比較で False。「round で float 比較が解決する」は誤解。「round は万能修正ではない」。"
+  },
+  {
+    "id": "logic-flt-isclose",
+    "source": "15章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import math\nprint(math.isclose(0.1 + 0.1 + 0.1, 0.3))",
+    "choices": [
+      "True",
+      "False",
+      "TypeError",
+      "RuntimeError"
+    ],
+    "correct": 0,
+    "explanation": "math.isclose は相対誤差と絶対誤差の両方を考慮して「実用上等しい」を判定する。0.1+0.1+0.1 は 0.30000000000000004、0.3 との差は 4e-17 で十分小さいので True。== だと False、isclose だと True で結果が違う。"
+  },
+  {
+    "id": "logic-flt-format-precision",
+    "source": "15章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import math\nprint(format(math.pi, '.12g'))\nprint(format(math.pi, '.2f'))",
+    "choices": [
+      "1行目: 3.14159265359 / 2行目: 3.14",
+      "1行目: 3.141592653589793 / 2行目: 3.14",
+      "1行目: 3.14 / 2行目: 3.14159265359",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": ".12g は有効桁数12桁の一般形式、.2f は小数点以下2桁の固定小数点形式。同じ math.pi (3.141592653589793...) でも書式指定子で表示が変わる。format は表示用の文字列を返すだけで、math.pi 自体の値は変わらない。"
+  },
+  {
+    "id": "logic-flt-repr-pi",
+    "source": "15章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import math\nprint(repr(math.pi))",
+    "choices": [
+      "3.141592653589793",
+      "3.14",
+      "3.14159265358979323846",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "repr(float) は「eval(repr(x)) == x」を満たす最短の10進表現を返す。math.pi は IEEE 754 double で 3.141592653589793 として表される（17桁程度）。format('.2f') のように丸めて短くするのとは違い、復元可能性を重視した表示。"
+  },
+  {
+    "id": "logic-flt-as-integer-ratio",
+    "source": "15章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "x = 3.14159\nratio = x.as_integer_ratio()\nprint(type(ratio).__name__)\nprint(x == ratio[0] / ratio[1])",
+    "choices": [
+      "1行目: tuple / 2行目: True",
+      "1行目: list / 2行目: True",
+      "1行目: tuple / 2行目: False",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "as_integer_ratio() は (numerator, denominator) のタプルを返す。型は 'tuple'。返された分数は元の float の正確な有理数表現なので、ratio[0] / ratio[1] は元の x と完全に一致する → True。「内部 float の正確な分数化」。"
+  },
+  {
+    "id": "logic-flt-hex-roundtrip",
+    "source": "15章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "x = 3.14159\nh = x.hex()\nprint(type(h).__name__)\nprint(x == float.fromhex(h))",
+    "choices": [
+      "1行目: str / 2行目: True",
+      "1行目: bytes / 2行目: True",
+      "1行目: str / 2行目: False",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "float.hex() は IEEE 754 の正確な16進表現を文字列で返す（型は str）。float.fromhex() で完全に元の値に復元できるロスレス変換なので、x == float.fromhex(h) は True。設定ファイル等に float を保存して後で正確に読み戻すときに有用。"
+  },
+  {
+    "id": "logic-flt-sum-vs-single",
+    "source": "15章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print(0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 == 1.0)\nprint(sum([0.1] * 10) == 1.0)",
+    "choices": [
+      "1行目: False / 2行目: True",
+      "両方 True",
+      "両方 False",
+      "1行目: True / 2行目: False"
+    ],
+    "correct": 0,
+    "explanation": "単純な逐次加算では各ステップで丸め誤差が累積し、結果は 0.9999999999999999 となって 1.0 と等しくならない（False）。一方 sum() は内部実装で精度ロスをある程度緩和しているので、sum([0.1] * 10) == 1.0 は True になる。「合計は sum を優先」。"
+  },
+  {
+    "id": "logic-flt-fsum-vs-sum",
+    "source": "15章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "import math\nfrom fractions import Fraction\n\narr = [-0.10430216751806065, -266310978.67179024, 143401161448607.16,\n       -143401161400469.7, 266262841.31058735, -0.003244936839808227]\n\nprint(math.fsum(arr))\nprint(sum(arr))\nprint(float(sum(map(Fraction, arr))))",
+    "choices": [
+      "1行目: 8.042173697819788e-13 / 2行目: 8.042178034628478e-13 / 3行目: 8.042173697819788e-13",
+      "全部同じ値",
+      "全部 0.0",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "大きな値の相殺がある数列では、単純な sum() は累積丸め誤差で 8.042178... のようにわずかにずれる。math.fsum() は失われた桁を追跡してより正確な 8.042173... を返す。Fraction で正確に合計したものを float 化すると math.fsum と同じ結果になる。「精度優先の合計は fsum」。"
+  },
+  {
+    "id": "logic-flt-fraction-from-float",
+    "source": "15章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "from fractions import Fraction\nprint(Fraction.from_float(0.1))",
+    "choices": [
+      "3602879701896397/36028797018963968",
+      "1/10",
+      "Fraction(1, 10)",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "Fraction.from_float(0.1) は float の内部値を正確な分数として表現する。0.1 の内部近似値は 3602879701896397/36028797018963968 という巨大な分数（分母が 2^55）で、これがそのまま表示される。リテラル 1/10 を期待すると外す。Fraction('0.1') なら文字列パースで Fraction(1, 10) になる点と区別する。"
+  },
+  {
+    "id": "logic-flt-decimal-from-float",
+    "source": "15章チュートリアル",
+    "domain": "標準ライブラリめぐり",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "from decimal import Decimal\nprint(Decimal.from_float(0.1))",
+    "choices": [
+      "0.1000000000000000055511151231257827021181583404541015625",
+      "0.1",
+      "Decimal('0.1')",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "Decimal.from_float(0.1) は float の内部近似値を正確な10進数として表現する。0.1 の真の内部値は厳密には 0.1000000000000000055511151231257827021181583404541015625 で、Decimal でこれを完全な10進表記として可視化できる。一方 Decimal('0.1') は文字列から作られるので厳密に 0.1。両者の違いを体感する典型問題。"
+  },
+  {
+    "id": "logic-flt-format-17f",
+    "source": "15章チュートリアル",
+    "domain": "入出力",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print(format(0.1, '.17f'))",
+    "choices": [
+      "0.10000000000000001",
+      "0.1",
+      "0.10000000000000000",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": ".17f は小数点以下17桁の固定小数点形式で、float の真の姿が見える。0.1 の内部近似値は厳密には 0.1000000000000000055511... で、17桁表示すると 0.10000000000000001（末尾の 5511... が四捨五入で 1 に丸められる）。短い書式（既定の repr など）では 0.1 と表示されるが、十分な桁数を指定すると誤差が露見する。"
+  },
+  {
+    "id": "logic-flt-zero-one-ratio",
+    "source": "15章チュートリアル",
+    "domain": "データ構造",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "print((0.1).as_integer_ratio())",
+    "choices": [
+      "(3602879701896397, 36028797018963968)",
+      "(1, 10)",
+      "(0.1, 1)",
+      "(0.1, 1.0)"
+    ],
+    "correct": 0,
+    "explanation": "0.1 の内部値は 2 のべき乗を分母とする巨大な分数 3602879701896397/36028797018963968。リテラル通り (1, 10) になると思い込みやすいが、実際には (1, 10) ではない（float が2進表現だから）。これが 0.1 の「真の姿」。"
   }
 ];

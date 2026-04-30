@@ -447,6 +447,21 @@ const QUESTION_META = {
   'int-attr-completion':   { difficulty: 'medium', concepts: ['pair-confusion'] },
   'int-completion-getattr':{ difficulty: 'hard',   concepts: ['implicit-rule'] },
   'int-repl-alternatives': { difficulty: 'easy',   concepts: ['guess'] },
+
+  // 第15章 浮動小数点演算、その問題と制限
+  'flt-binary-cant-represent':{ difficulty: 'easy', concepts: ['implicit-rule'] },
+  'flt-display-vs-internal':{ difficulty: 'medium', concepts: ['pair-confusion'] },
+  'flt-round-not-fix':     { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'flt-isclose':           { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'flt-format-display':    { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'flt-repr-roundtrip':    { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'flt-fractions-rational':{ difficulty: 'medium', concepts: ['pair-confusion'] },
+  'flt-as-integer-ratio':  { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'flt-hex-roundtrip':     { difficulty: 'medium', concepts: ['pair-confusion'] },
+  'flt-sum-precision':     { difficulty: 'medium', concepts: ['implicit-rule'] },
+  'flt-fsum-high-precision':{ difficulty: 'hard',  concepts: ['pair-confusion', 'boundary'] },
+  'flt-practical':         { difficulty: 'medium', concepts: ['guess'] },
+  'flt-binary-not-python-bug':{ difficulty: 'easy', concepts: ['guess'] },
 };
 
 // デフォルト値（meta が無い問題用）
