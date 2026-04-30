@@ -423,6 +423,13 @@ const QUESTION_META = {
   'lib-logging-default-level':{ difficulty: 'medium', concepts: ['boundary'] },
   'lib-weakvaluedict-auto-remove':{ difficulty: 'hard', concepts: ['boundary', 'implicit-rule'] },
   'lib-decimal-float-rounding':{ difficulty: 'hard', concepts: ['boundary', 'pair-confusion'] },
+
+  // 第12章 仮想環境とパッケージ
+  'pkg-venv-isolated-tree':{ difficulty: 'medium', concepts: ['implicit-rule'] },
+  'pkg-venv-base-python':  { difficulty: 'medium', concepts: ['boundary'] },
+  'pkg-venv-activate-effect':{ difficulty: 'easy', concepts: ['pair-confusion'] },
+  'pkg-venv-no-activate-fullpath':{ difficulty: 'medium', concepts: ['implicit-rule'] },
+  'pkg-pip-purpose':       { difficulty: 'easy',   concepts: ['guess'] },
 };
 
 // デフォルト値（meta が無い問題用）

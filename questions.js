@@ -3762,4 +3762,66 @@ const QUESTIONS = [
     correct: 0,
     explanation: 'float は2進浮動小数点数なので 0.70 や 1.05 を正確に表せない（0.7 ≈ 0.6999999... のようなわずかな誤差を持つ）。Decimal は10進数で正確に表現するので、丸め前の値が違い、結果として round() の結果も違うことがある。`0.70 * 1.05` は理論上 0.735 だが float の誤差で 0.7349... になり round で 0.73。Decimal なら 0.7350 → round で 0.74。「float は2進、Decimal は10進」。',
   },
+
+  // ====== 第12章: 仮想環境とパッケージ ======
+  {
+    id: 'pkg-venv-isolated-tree', category: 'パッケージ',
+    question: '仮想環境（venv）の実体は?',
+    choices: [
+      '特定バージョンの Python と追加パッケージを含む自己完結的なディレクトリツリー',
+      '設定ファイルだけで Python 本体は共有',
+      'メモリ上の状態（ディスクに残らない）',
+      'パッケージのリストだけを記録するメタファイル',
+    ],
+    correct: 0,
+    explanation: 'venv は単なる設定ではなく、対象 Python のコピー（または symlink）と独立した site-packages ディレクトリを持つ自己完結的なディレクトリツリー。`tutorial-env/` の中に `bin/python` (Linux/Mac) または `Scripts/python.exe` (Windows)、`lib/site-packages/` などが作られ、その中で `pip install` したパッケージはこの `site-packages` に入る。「venv は独立した Python 実行環境」。',
+  },
+  {
+    id: 'pkg-venv-base-python', category: 'パッケージ',
+    question: '`python3.12 -m venv .venv` のように venv を作ったとき、仮想環境内の Python のバージョンは?',
+    choices: [
+      '実行した python3.12（同じバージョン）になる',
+      '常にシステム最新版になる',
+      'ランダムに決まる',
+      'venv コマンドで指定し直す必要がある',
+    ],
+    correct: 0,
+    explanation: 'venv は実行元の Python バージョンをそのまま使って仮想環境を作る。`python3.12 -m venv .venv` なら 3.12 系、`python3.10 -m venv .venv` なら 3.10 系で作られる。複数バージョンの Python が共存している環境では、どの python コマンドで venv を作るかが重要。`tutorial-env/bin/python --version` で確認できる。「どの python で作るかが重要」。',
+  },
+  {
+    id: 'pkg-venv-activate-effect', category: 'パッケージ',
+    question: '仮想環境を `activate` した後、シェルで `python` や `pip` を実行するとどうなる?',
+    choices: [
+      '仮想環境内の python/pip 実行ファイルが使われる（PATH の先頭に venv のディレクトリが追加される）',
+      '表示プロンプトが変わるだけで実行ファイルは同じ',
+      'システムの python/pip が常に優先される',
+      'python と pip が完全に置き換えられる（解除不可）',
+    ],
+    correct: 0,
+    explanation: 'activate スクリプトは PATH 環境変数の先頭に仮想環境の `bin`（Unix）または `Scripts`（Windows）ディレクトリを追加する。これにより、シェルで `python` と打つと仮想環境内の python が使われる。プロンプトに `(env_name)` が表示されるのは視覚的な目印。`deactivate` を実行すれば PATH が元に戻る。「activate 後の python/pip は venv 内部」。',
+  },
+  {
+    id: 'pkg-venv-no-activate-fullpath', category: 'パッケージ',
+    question: '`activate` せずに仮想環境内の Python を使うことは可能?',
+    choices: [
+      '可能（仮想環境内の python 実行ファイルをフルパス指定すれば動く）',
+      '不可能（activate が必須）',
+      '可能だが pip は使えない',
+      'セキュリティ上禁止されている',
+    ],
+    correct: 0,
+    explanation: 'activate は PATH を書き換えるだけのスクリプトなので、`./tutorial-env/bin/python script.py` のように仮想環境内の Python をフルパス（または相対パス）で直接呼べば、activate せずに使える。CI/CD や Docker、cron では activate が冗長で、フルパス指定の方が確実。`tutorial-env/bin/pip install requests` で pip も同様に呼べる。「activate は便利機能、必須条件ではない」。',
+  },
+  {
+    id: 'pkg-pip-purpose', category: 'パッケージ',
+    question: 'pip の用途は?',
+    choices: [
+      'Python パッケージの検索・インストール・アップグレード・削除を行う標準的なツール',
+      'Python 標準ライブラリの管理専用',
+      'Python 本体のインストーラ',
+      'Python のコンパイラ',
+    ],
+    correct: 0,
+    explanation: 'pip は「Pip Installs Packages」の再帰的な略で、Python パッケージマネージャ。PyPI（Python Package Index）からパッケージをダウンロードして site-packages に配置する。`pip install`、`pip uninstall`、`pip list`、`pip show`、`pip freeze`、`pip install --upgrade` などのサブコマンドを持つ。標準ライブラリは Python に同梱されているので pip 不要。「外部パッケージ管理は pip」。',
+  },
 ];

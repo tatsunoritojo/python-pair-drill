@@ -3510,5 +3510,80 @@ const LOGIC_QUESTIONS = [
     ],
     "correct": 0,
     "explanation": "Decimal は有効桁数（significant digits）を保持するので、'1.30' + '1.20' の結果は '2.50' として表示される（末尾の 0 が消えない）。float なら 1.30 + 1.20 = 2.5 と表示される（trailing zero が落ちる）。Decimal は計算精度の維持と、表示の末尾ゼロを保つ性質を持つ。"
+  },
+  {
+    "id": "logic-pkg-venv-create-cmd",
+    "source": "12章チュートリアル",
+    "domain": "パッケージ",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "cmd = \"python -m venv tutorial-env\"\nprint(\"venv\" in cmd)\nprint(cmd.startswith(\"python -m\"))",
+    "choices": [
+      "1行目: True / 2行目: True",
+      "1行目: True / 2行目: False",
+      "1行目: False / 2行目: True",
+      "両方 False"
+    ],
+    "correct": 0,
+    "explanation": "python -m venv tutorial-env は仮想環境を作成する標準コマンド。'venv' は含まれるので True。'python -m' で始まるので startswith も True。pip venv create のような存在しないコマンドではない点に注意。「venv 作成は python -m venv」。"
+  },
+  {
+    "id": "logic-pkg-venv-base-version",
+    "source": "12章チュートリアル",
+    "domain": "パッケージ",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "base = \"python3.12\"\ncmd = f\"{base} -m venv .venv\"\nprint(\"python3.12\" in cmd)\nprint(cmd.endswith(\".venv\"))",
+    "choices": [
+      "1行目: True / 2行目: True",
+      "1行目: True / 2行目: False",
+      "1行目: False / 2行目: True",
+      "両方 False"
+    ],
+    "correct": 0,
+    "explanation": "f-string で base 変数の 'python3.12' がコマンドに埋め込まれる。'python3.12' は含まれるので True。コマンドは .venv で終わるので endswith も True。複数 Python バージョンが共存する環境では python3.12 -m venv のようにバージョン指定が重要。"
+  },
+  {
+    "id": "logic-pkg-pip-freeze-format",
+    "source": "12章チュートリアル",
+    "domain": "パッケージ",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "lines = [\n    \"requests==2.31.0\",\n    \"urllib3==2.2.1\",\n]\nprint(all(\"==\" in line for line in lines))\nprint(lines[0].split(\"==\")[0])",
+    "choices": [
+      "1行目: True / 2行目: requests",
+      "1行目: False / 2行目: requests",
+      "1行目: True / 2行目: 2.31.0",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "pip freeze は package==version 形式の行を出力する。各行に '==' が含まれるので all() は True。split('==')[0] で == の前のパッケージ名 'requests' が取れる。pip list（人間向け表形式）と違って、機械可読な形式。「freeze = 固定して再現」。"
+  },
+  {
+    "id": "logic-pkg-pip-install-r",
+    "source": "12章チュートリアル",
+    "domain": "パッケージ",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "cmd = \"pip install -r requirements.txt\"\nprint(\"-r\" in cmd)\nprint(cmd.split()[-1])",
+    "choices": [
+      "1行目: True / 2行目: requirements.txt",
+      "1行目: False / 2行目: requirements.txt",
+      "1行目: True / 2行目: pip",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "pip install -r requirements.txt で requirements ファイルから一括インストール。'-r' が含まれるので True。split() で空白分割した最後の要素は 'requirements.txt'。-r を付けないと 'requirements.txt' というパッケージ名でインストールしようとして失敗する。「-r でファイル指定」。"
+  },
+  {
+    "id": "logic-pkg-pip-show-vs-list",
+    "source": "12章チュートリアル",
+    "domain": "パッケージ",
+    "question": "次のコードを実行した結果として、適切な選択肢を選択してください。",
+    "code": "cmds = [\"pip show requests\", \"pip list\"]\nprint(cmds[0].split()[1])\nprint(cmds[1].split()[1])",
+    "choices": [
+      "1行目: show / 2行目: list",
+      "1行目: list / 2行目: show",
+      "両方 show",
+      "TypeError"
+    ],
+    "correct": 0,
+    "explanation": "cmds[0] は 'pip show requests'、split() で ['pip', 'show', 'requests']、index 1 は 'show'。cmds[1] は 'pip list'、split() で ['pip', 'list']、index 1 は 'list'。「show は個別詳細、list は一覧」と用途で使い分ける。"
   }
 ];
