@@ -430,6 +430,17 @@ const QUESTION_META = {
   'pkg-venv-activate-effect':{ difficulty: 'easy', concepts: ['pair-confusion'] },
   'pkg-venv-no-activate-fullpath':{ difficulty: 'medium', concepts: ['implicit-rule'] },
   'pkg-pip-purpose':       { difficulty: 'easy',   concepts: ['guess'] },
+
+  // 第13章 さあ何を？（学習案内）
+  'doc-tutorial-13-purpose':{ difficulty: 'easy', concepts: ['guess'] },
+  'doc-stdlib-reference':  { difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'doc-installing-modules':{ difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'doc-language-reference':{ difficulty: 'easy',   concepts: ['pair-confusion'] },
+  'doc-docs-python-org':   { difficulty: 'easy',   concepts: ['guess'] },
+  'doc-cookbook':          { difficulty: 'medium', concepts: ['guess'] },
+  'doc-pyvideo':           { difficulty: 'medium', concepts: ['guess'] },
+  'doc-scipy':             { difficulty: 'medium', concepts: ['guess'] },
+  'doc-faq-first':         { difficulty: 'easy',   concepts: ['implicit-rule'] },
 };
 
 // デフォルト値（meta が無い問題用）
