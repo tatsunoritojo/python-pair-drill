@@ -1,0 +1,2 @@
+# Playwright MCP の一時出力（スクリーンショット撮影時に生成される）
+.playwright-mcp/
