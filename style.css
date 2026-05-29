@@ -1226,3 +1226,52 @@ input[type="password"]:focus-visible, input[type="text"]:focus-visible, select:f
 .history-score { font-variant-numeric: tabular-nums; }
 .history-row.pass .history-score strong { color: var(--success); }
 .history-row.fail .history-score strong { color: var(--error); }
+
+/* PWA: ホーム画面追加バナー（下端固定・セーフエリア対応） */
+.a2hs-banner {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 0.875rem;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.22);
+  font-size: 0.875rem;
+  animation: a2hs-in 0.25s ease;
+}
+@keyframes a2hs-in {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.a2hs-msg { flex: 1; line-height: 1.45; }
+.a2hs-action {
+  flex: 0 0 auto;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.5rem 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.a2hs-action:hover { background: var(--primary-hover); }
+.a2hs-close {
+  flex: 0 0 auto;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0.25rem;
+}
+@media (max-width: 480px) {
+  .a2hs-banner { font-size: 0.8125rem; }
+}
