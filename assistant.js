@@ -2,6 +2,7 @@
 'use strict';
 
 const ASSISTANT_STORAGE_KEY = 'python-pair-drill-assistant-v1';
+const API_KEY_STORAGE_KEY = 'python-pair-drill-assistant-key-v1';
 const SHARED_STORAGE_KEY = 'python-pair-drill-v1';
 
 const API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
@@ -44,22 +45,59 @@ ${userName ? `相手は ${userName}さん。${addr}と呼びかけてくださ�
 }
 
 // ========== 設定の永続化 ==========
+// API キーは本体設定とは別スロットに保管する。
+// persistKey が true なら localStorage（端末に永続）、false なら sessionStorage（タブを閉じると消える）。
 function loadSettings() {
+  let base = {};
   try {
     const raw = localStorage.getItem(ASSISTANT_STORAGE_KEY);
-    return Object.assign({
-      apiKey: '',
-      model: 'gemini-2.0-flash',
-      useContext: true,
-      userName: '',
-      messages: [],
-    }, raw ? JSON.parse(raw) : {});
+    base = raw ? JSON.parse(raw) : {};
   } catch {
-    return { apiKey: '', model: 'gemini-2.0-flash', useContext: true, userName: '', messages: [] };
+    base = {};
   }
+
+  // キーは別スロット優先。旧形式（本体設定に同梱）からは移行的に拾う。
+  let apiKey = '';
+  try {
+    apiKey = sessionStorage.getItem(API_KEY_STORAGE_KEY)
+          || localStorage.getItem(API_KEY_STORAGE_KEY)
+          || base.apiKey || '';
+  } catch {
+    apiKey = base.apiKey || '';
+  }
+
+  return {
+    apiKey,
+    model: base.model || 'gemini-2.0-flash',
+    useContext: base.useContext !== undefined ? base.useContext : true,
+    userName: base.userName || '',
+    messages: Array.isArray(base.messages) ? base.messages : [],
+    persistKey: base.persistKey !== undefined ? base.persistKey : true,
+  };
 }
 function saveSettings(s) {
-  localStorage.setItem(ASSISTANT_STORAGE_KEY, JSON.stringify(s));
+  // 本体設定（API キーは含めない）
+  const base = {
+    model: s.model,
+    useContext: s.useContext,
+    userName: s.userName,
+    messages: s.messages,
+    persistKey: s.persistKey,
+  };
+  try {
+    localStorage.setItem(ASSISTANT_STORAGE_KEY, JSON.stringify(base));
+  } catch {}
+
+  // API キーは保存方針に応じて片方のストレージにのみ置く
+  try {
+    if (s.persistKey) {
+      localStorage.setItem(API_KEY_STORAGE_KEY, s.apiKey || '');
+      sessionStorage.removeItem(API_KEY_STORAGE_KEY);
+    } else {
+      sessionStorage.setItem(API_KEY_STORAGE_KEY, s.apiKey || '');
+      localStorage.removeItem(API_KEY_STORAGE_KEY);
+    }
+  } catch {}
 }
 
 // ========== テーマ ==========
@@ -131,7 +169,8 @@ function buildContextSummary(userName) {
 
 // ========== Gemini API 呼び出し ==========
 async function callGemini(messages, settings) {
-  const url = `${API_BASE}/${settings.model}:generateContent?key=${encodeURIComponent(settings.apiKey)}`;
+  // キーは URL クエリではなくヘッダーで送る（履歴・ログ等への漏洩面を縮小）
+  const url = `${API_BASE}/${settings.model}:generateContent`;
 
   const basePrompt = buildSystemPrompt(settings.userName);
   const systemPrompt = settings.useContext
@@ -154,7 +193,10 @@ async function callGemini(messages, settings) {
 
   const res = await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'x-goog-api-key': settings.apiKey,
+    },
     body: JSON.stringify(body),
   });
 
@@ -258,11 +300,13 @@ document.getElementById('setup-save-btn').addEventListener('click', () => {
   const model = document.getElementById('model-select').value;
   const useContext = document.getElementById('use-context').checked;
   const userName = document.getElementById('user-name').value.trim();
+  const persistKey = document.getElementById('persist-key').checked;
   const cur = loadSettings();
   cur.apiKey = apiKey;
   cur.model = model;
   cur.useContext = useContext;
   cur.userName = userName;
+  cur.persistKey = persistKey;
   saveSettings(cur);
   showScreen('chat-screen');
   renderAllMessages();
@@ -298,6 +342,7 @@ document.getElementById('chat-settings-btn').addEventListener('click', () => {
   document.getElementById('model-select').value = s.model;
   document.getElementById('use-context').checked = s.useContext;
   document.getElementById('user-name').value = s.userName || '';
+  document.getElementById('persist-key').checked = s.persistKey !== false;
   showScreen('setup-screen');
 });
 

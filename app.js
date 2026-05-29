@@ -277,6 +277,9 @@ const EXPORT_KEYS = {
   examHistory: 'python-pair-drill-exam-history-v1',
   assistantData: 'python-pair-drill-assistant-v1',
 };
+// API キーは本体設定とは別スロットに保管（assistant.js と同じキー）。
+// 保存方針により localStorage か sessionStorage のどちらかに置かれる。
+const ASSISTANT_API_KEY_STORE = 'python-pair-drill-assistant-key-v1';
 
 function collectExportData(includeApiKey) {
   const data = { version: 1, exportedAt: new Date().toISOString() };
@@ -289,12 +292,19 @@ function collectExportData(includeApiKey) {
       data[field] = null;
     }
   }
+  // API キーは別スロット保管。assistantData 同梱の旧形式も移行的に拾う（mutate 前に読む）。
+  let storedKey = '';
+  try {
+    storedKey = sessionStorage.getItem(ASSISTANT_API_KEY_STORE)
+             || localStorage.getItem(ASSISTANT_API_KEY_STORE)
+             || (data.assistantData && data.assistantData.apiKey) || '';
+  } catch {}
   // AI会話履歴はデバイス間引き継ぎ対象外（文脈が切れて価値が薄い、容量も食う）
+  // キーは includeApiKey のときだけ assistantData に同梱して書き出す。
   if (data.assistantData) {
-    data.assistantData = { ...data.assistantData, messages: [] };
-  }
-  if (!includeApiKey && data.assistantData && data.assistantData.apiKey) {
-    data.assistantData = { ...data.assistantData, apiKey: '' };
+    data.assistantData = { ...data.assistantData, messages: [], apiKey: includeApiKey ? storedKey : '' };
+  } else if (includeApiKey && storedKey) {
+    data.assistantData = { apiKey: storedKey, messages: [] };
   }
   return data;
 }
@@ -336,10 +346,31 @@ function applyImportData(data) {
   }
   let count = 0;
   for (const [field, key] of Object.entries(EXPORT_KEYS)) {
-    if (data[field] !== undefined && data[field] !== null) {
-      localStorage.setItem(key, JSON.stringify(data[field]));
-      count++;
+    if (data[field] === undefined || data[field] === null) continue;
+    let value = data[field];
+    // assistantData 同梱の API キーは別スロットへ復元し、本体設定からは除く（二重化防止）。
+    // 「上書きインポート」なのでキー状態も確定させる: キー無しのデータなら既存キーは残さない。
+    if (field === 'assistantData' && value && typeof value === 'object') {
+      const { apiKey, ...rest } = value;
+      value = rest;
+      const persist = rest.persistKey !== false;
+      try {
+        if (apiKey) {
+          if (persist) {
+            localStorage.setItem(ASSISTANT_API_KEY_STORE, apiKey);
+            sessionStorage.removeItem(ASSISTANT_API_KEY_STORE);
+          } else {
+            sessionStorage.setItem(ASSISTANT_API_KEY_STORE, apiKey);
+            localStorage.removeItem(ASSISTANT_API_KEY_STORE);
+          }
+        } else {
+          localStorage.removeItem(ASSISTANT_API_KEY_STORE);
+          sessionStorage.removeItem(ASSISTANT_API_KEY_STORE);
+        }
+      } catch {}
     }
+    localStorage.setItem(key, JSON.stringify(value));
+    count++;
   }
   return count;
 }
@@ -547,13 +578,9 @@ function importAllData(file) {
     }
     if (!confirm('現在のデータを上書きしてインポートします。よろしいですか？')) return;
 
-    let count = 0;
-    for (const [field, key] of Object.entries(EXPORT_KEYS)) {
-      if (data[field] !== undefined && data[field] !== null) {
-        localStorage.setItem(key, JSON.stringify(data[field]));
-        count++;
-      }
-    }
+    // 保存・キー復元ロジックは applyImportData に集約（text/QR/URL import と共通）
+    const count = applyImportData(data);
+    if (count === false) return;
     alert(`${count}件のデータを読み込みました。ページを再読み込みします。`);
     location.reload();
   };
@@ -565,6 +592,11 @@ function wipeAllData() {
   if (!confirm('すべてのドリル統計・模擬履歴・アシスタント設定（APIキー含む）を削除します。元に戻せません。')) return;
   if (!confirm('本当に削除しますか？')) return;
   Object.values(EXPORT_KEYS).forEach((key) => localStorage.removeItem(key));
+  // API キーは別スロット保管なので両ストレージから明示的に消す
+  try {
+    localStorage.removeItem(ASSISTANT_API_KEY_STORE);
+    sessionStorage.removeItem(ASSISTANT_API_KEY_STORE);
+  } catch {}
   alert('すべて削除しました。ページを再読み込みします。');
   location.reload();
 }
